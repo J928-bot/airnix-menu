@@ -5,7 +5,8 @@
 ## 中身
 - `prototype/index.html` … 試作の画面（見本データのみ）。ダウンロードしてブラウザで開くと動きます
 - `liff-app/` … LINEミニアプリ版のコード（未公開）。公開手順は `liff-app/README.md`
-- `docs/` … 機能説明PDF・スマホ表示イメージ
+- `docs/guide.pdf` … 機能説明PDF／`docs/screen.png` … スマホ表示イメージ
+- 試作をブラウザで見る：https://j928-bot.github.io/airnix-menu/prototype/
 
 ## 今後の変更（2026-10-05 宮内さんの方針）
 - AIRNIXはメニュー作りに専念。運動動画はナイキトレーニングクラブ、食事はあすけん、記録はヘルスケア
