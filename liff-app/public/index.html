@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AIRNIX 個別メニュー</title>
+<link rel="stylesheet" href="/app.css">
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script src="/common.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <h1>AIRNIX 個別メニュー</h1>
+    <p class="sub" id="hello">読み込み中…</p>
+  </div>
+  <div id="state"></div>
+
+  <!-- 1. 目標と進捗 -->
+  <section class="card" id="goalCard" hidden>
+    <h2>目標と進捗</h2>
+    <p class="sub" id="goalText"></p>
+    <div id="wChart"></div>
+    <div id="cChart"></div>
+    <p class="sub">体重・ウエストは、来店直後・運動前にスタッフが測ります。</p>
+  </section>
+
+  <!-- 2. 今日のメニュー（歩く／筋トレ） -->
+  <section class="card" id="menuCard" hidden>
+    <div class="chips" id="kindTabs"></div>
+    <div id="menuBody"></div>
+  </section>
+
+  <section class="card" id="form" hidden>
+    <h2 id="formTitle">トレーニングの報告</h2>
+    <div class="field" id="machineField"><span>使ったマシン</span><div class="chips" id="machine"></div></div>
+    <div class="field"><span>達成度（メニュー通りできた割合）</span><div class="chips" id="done"></div></div>
+    <div class="field"><span>途中の変更</span><div class="chips" id="change"></div></div>
+    <div class="field"><span>きつさ（1＝楽 〜 10＝限界）</span><div class="chips" id="rpe"></div></div>
+    <div class="field"><span>痛みや体調の変化</span><div class="chips" id="pain"></div></div>
+    <label class="field"><span>感想（任意）</span><textarea id="comment" maxlength="300" placeholder="程よく疲れた"></textarea></label>
+    <p class="err" id="err" hidden></p>
+    <button class="primary" id="send" type="button">送信して次回メニューを受け取る</button>
+  </section>
+  <section class="card" id="result" hidden></section>
+
+  <!-- 3. 食事（カロリー） -->
+  <section class="card" id="mealCard" hidden>
+    <h2>食事（カロリー）</h2>
+    <p class="sub">食事の内容は「あすけん」で記録し、1日の摂取カロリーだけここに入れてください。</p>
+    <div class="grid2">
+      <label class="field"><span>今日の摂取カロリー</span><input id="kcal" type="number" inputmode="numeric" placeholder="1600"></label>
+      <label class="field"><span>あすけんの目標カロリー</span><input id="kcalTarget" type="number" inputmode="numeric" placeholder="1500"></label>
+    </div>
+    <p class="err" id="mealErr" hidden></p>
+    <button class="ghost" id="mealSave" type="button">保存</button>
+    <p class="sub" id="mealSummary"></p>
+  </section>
+</div>
+
+<script>
+const state = { machine: null, done: null, change: null, rpe: null, pain: null };
+let me = null, kind = "walk";
+const $ = (id) => document.getElementById(id);
+function chips(id, vals, key, fmt) {
+  const box = $(id); box.innerHTML = "";
+  vals.forEach((v) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = fmt ? fmt(v) : String(v); b.setAttribute("aria-pressed", "false");
+    b.onclick = () => { state[key] = v; [...box.children].forEach((c) => c.setAttribute("aria-pressed", c === b ? "true" : "false")); $("err").hidden = true; };
+    box.appendChild(b);
+  });
+}
+chips("machine", ["A","B","C","D","E","F","G"], "machine");
+chips("done", [100, 90, 80, 70, 60, 50], "done", (v) => v + "%");
+chips("change", ["なし", "あり"], "change");
+chips("rpe", [1,2,3,4,5,6,7,8,9,10], "rpe");
+chips("pain", ["なし", "あり"], "pain");
+
+const tabs = $("kindTabs");
+[["walk", "歩くメニュー"], ["strength", "筋トレメニュー"]].forEach(([k, label]) => {
+  const b = document.createElement("button"); b.type = "button"; b.textContent = label;
+  b.onclick = () => { kind = k; renderMenu(); }; tabs.appendChild(b);
+});
+
+function renderMenu() {
+  [...tabs.children].forEach((c, i) => c.setAttribute("aria-pressed", (i === 0) === (kind === "walk") ? "true" : "false"));
+  $("menuBody").innerHTML = kind === "walk"
+    ? (me.menu ? menuHTML(me.menuNo, me.menu, me.isFinal) : `<p class="sub">歩くメニューはスタッフが準備中です。</p>`)
+    : strengthHTML(me.strength) + `<p class="sub">スタジオで行う自重の筋トレです。フォームが崩れたら回数を減らしてください。</p>`;
+  $("machineField").hidden = kind !== "walk";
+  $("formTitle").textContent = kind === "walk" ? "歩くメニューの報告" : "筋トレの報告";
+  $("result").hidden = true;
+}
+
+function show(d) {
+  me = d;
+  $("hello").textContent = d.status === "pending" ? "" : `${d.name || ""}様　歩く ${Math.min(d.count, d.goal)}/${d.goal}回・筋トレ ${d.strengthCount}回`;
+  const st = $("state");
+  ["goalCard", "menuCard", "form", "mealCard"].forEach((id) => ($(id).hidden = true));
+  if (d.status === "pending") { st.innerHTML = `<div class="notice n-warn">ご登録ありがとうございます。来店時にスタッフと目標を決めると、ここに目標と初回メニューが表示されます。</div>`; return; }
+  if (d.status === "check") st.innerHTML = `<div class="notice n-danger">体調のご報告ありがとうございます。スタッフが確認してから、次回メニューをお届けします。</div>`;
+  else if (d.status === "done") st.innerHTML = `<div class="notice n-ok">モニター期間は終了しました。お疲れさまでした。次回ご来店時に、体重とウエストを測定します。</div>`;
+  else st.innerHTML = "";
+
+  const tg = d.target || {};
+  const parts = [];
+  if (tg.weight != null) parts.push(`体重 ${tg.startWeight}kg → ${tg.weight}kg`);
+  if (tg.waist != null) parts.push(`ウエスト ${tg.startWaist}cm → ${tg.waist}cm`);
+  $("goalText").textContent = (tg.date ? `${tg.date.replace(/-/g, "/")}までに ` : "") + parts.join("、");
+  $("wChart").innerHTML = tg.weight != null || d.measurements.some((m) => m.weight != null) ? `<p class="meta">体重</p>` + trendSVG(d.measurements, "weight", tg.weight, "kg") : "";
+  $("cChart").innerHTML = tg.waist != null || d.measurements.some((m) => m.waist != null) ? `<p class="meta">ウエスト</p>` + trendSVG(d.measurements, "waist", tg.waist, "cm") : "";
+  $("goalCard").hidden = false;
+
+  if (d.status === "active") { $("menuCard").hidden = false; $("form").hidden = false; renderMenu(); }
+  if (d.status !== "done") $("mealCard").hidden = false;
+  $("kcal").value = d.todayKcal ?? ""; $("kcalTarget").value = d.kcalTarget ?? "";
+  const days = d.meals.length;
+  const avg = days ? Math.round(d.meals.reduce((a, m) => a + Number(m.kcal), 0) / days) : null;
+  $("mealSummary").textContent = days ? `直近${days}日の平均 ${avg}kcal` + (d.kcalTarget ? `（目標 ${d.kcalTarget}kcal）` : "") : "";
+}
+
+$("send").onclick = async () => {
+  const names = { machine: "マシン", done: "達成度", change: "途中の変更", rpe: "きつさ", pain: "痛みや体調の変化" };
+  const need = kind === "walk" ? Object.keys(names) : ["done", "change", "rpe", "pain"];
+  const miss = need.filter((k) => state[k] === null);
+  if (miss.length) { $("err").textContent = "未入力：" + miss.map((k) => names[k]).join("・"); $("err").hidden = false; return; }
+  const btn = $("send"); btn.disabled = true; btn.textContent = "次回メニューを作成しています…";
+  const out = $("result");
+  try {
+    const r = await api("/api/report", { method: "POST", body: JSON.stringify({ kind, ...state, comment: $("comment").value.trim() }) });
+    if (r.stopped) out.innerHTML = `<div class="notice n-danger">ご報告ありがとうございます。体調を優先するため、次回メニューはスタッフが確認してからお届けします。</div>`;
+    else if (r.finished) out.innerHTML = `<div class="notice n-ok">モニター最終回、お疲れさまでした。次回ご来店時に、体重とウエストを測定します。</div>`;
+    else if (r.kind === "strength") out.innerHTML = `<h2>次回の筋トレメニュー</h2>` + strengthHTML(r.strength);
+    else out.innerHTML = `<h2>次回の歩くメニュー</h2>` + menuHTML(r.menuNo, r.menu, r.isFinal) +
+      (r.isFinal ? `<p class="sub">次回が最終回です。来店時に体重とウエストを測定します。</p>` : `<p class="sub">めまい・息苦しさ・吐き気などがあれば、すぐに歩く速さを落としてスタッフに声をかけてください。</p>`);
+    out.hidden = false; $("form").hidden = true;
+    show(await api("/api/me")); $("form").hidden = true; out.hidden = false;
+  } catch (e) { $("err").textContent = e.message; $("err").hidden = false; }
+  finally { btn.disabled = false; btn.textContent = "送信して次回メニューを受け取る"; }
+};
+
+$("mealSave").onclick = async () => {
+  const b = $("mealSave"); b.disabled = true; $("mealErr").hidden = true;
+  try { await api("/api/meal", { method: "POST", body: JSON.stringify({ kcal: $("kcal").value, kcalTarget: $("kcalTarget").value }) }); show(await api("/api/me")); b.textContent = "保存しました"; setTimeout(() => (b.textContent = "保存"), 1500); }
+  catch (e) { $("mealErr").textContent = e.message; $("mealErr").hidden = false; }
+  finally { b.disabled = false; }
+};
+
+(async () => {
+  try { if (!(await boot())) return; show(await api("/api/me")); }
+  catch (e) { $("hello").textContent = e.message; }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+name = "airnix-menu"
+pages_build_output_dir = "public"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# LINE LoginチャネルのチャネルID（LIFFアプリを作ったチャネル）
+LINE_CHANNEL_ID = "ここにチャネルID"
+# スタッフ画面を開けるLINEユーザーID（カンマ区切り）
+STAFF_USER_IDS = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "airnix-menu"
+database_id = "ここにD1のdatabase_id"
+
+# ANTHROPIC_API_KEY はシークレットで登録する：
+#   npx wrangler pages secret put ANTHROPIC_API_KEY
