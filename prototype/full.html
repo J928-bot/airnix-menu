@@ -136,18 +136,18 @@ textarea{min-height:52px;resize:vertical}
 </style>
 
 <nav id="topnav" style="max-width:1080px;margin:0 auto;padding:12px 16px 0;display:flex;gap:6px">
-<a href="./" style="flex:1;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:14px;font-weight:700">仕組みを見る</a>
-<a href="full.html?view=cust" data-v="cust" style="flex:1;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:14px;font-weight:700">お客様の画面</a>
-<a href="full.html?view=staff" data-v="staff" style="flex:1;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:14px;font-weight:700">店長の画面</a>
+<a href="./" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">仕組みを見る</a>
+<a href="full.html?view=cust" data-v="cust" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">お客様の画面</a>
+<a href="full.html?view=staff" data-v="staff" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">スタッフの画面</a>
 </nav>
 <div class="wrap">
   <div class="top">
     <div>
       <p class="brandmark">AIRNIX</p>
       <h1>個別メニュー（試作 第8版）</h1>
-      <p class="sub">お客様は携帯で「今週の来店・今日のメニュー・報告」、スタッフの作業はなし。店長は週1回まとめを見るだけ。画面の方はすべて見本です。</p>
+      <p class="sub">お客様は携帯で「今週の来店・今日のメニュー・報告」、スタッフは週1回まとめを見るだけ。画面の方はすべて見本です。</p>
     </div>
-    <div class="seg" role="tablist" id="viewTabs"><button type="button" data-view="cust">お客様の画面</button><button type="button" data-view="staff">店長の画面</button></div>
+    <div class="seg" role="tablist" id="viewTabs"><button type="button" data-view="cust">お客様の画面</button><button type="button" data-view="staff">スタッフの画面</button></div>
   </div>
   <p class="status" id="conn">データに接続しています…</p>
 
@@ -247,7 +247,7 @@ textarea{min-height:52px;resize:vertical}
   </section>
 
   <!-- スタッフ -->
-  <section id="staffView" class="sect" aria-label="店長の画面" hidden>
+  <section id="staffView" class="sect" aria-label="スタッフの画面" hidden>
     <div class="sum" id="sum"></div>
     <div class="sect">
       <div class="top"><h2>全員</h2><div class="acts"><button class="ghost" id="regOpen" type="button">＋ 新しい人を登録</button><button class="ghost" id="reset" type="button" hidden>見本を初期状態に戻す</button></div></div>
@@ -298,7 +298,7 @@ textarea{min-height:52px;resize:vertical}
     </div>
 
     <div class="panel rules">
-      <h3 style="color:var(--ink)">店長の画面に出る印の条件</h3>
+      <h3 style="color:var(--ink)">スタッフの画面に出る印の条件</h3>
       <p><span class="pill p-w">痛みの申告</span> 直近の報告で痛み・体調変化「あり」（メニューは自動で少し下げて続ける）</p>
       <p><span class="pill p-w">きつさ注意</span> きつさ8以上が2回続いた</p>
       <p><span class="pill p-d">21日来店なし</span><span class="pill p-w">10日来店なし</span> 最終来店からの日数</p>
@@ -696,7 +696,7 @@ $("reset").onclick=async()=>{const b=$("reset");b.disabled=true;members=seeds();
 $("sSave").onclick=async()=>{const w=$("sW").value,c=$("sC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);$("sErr").hidden=true;
  if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("sErr").textContent="体重かウエストを数字で入力してください";$("sErr").hidden=false;return}
  const id=$("who").value;const p=clone(members[id]);p.measurements=[...(p.measurements||[]).filter(m=>m.date!==today()),{date:today(),weight:wn,waist:cn}].slice(-30);members[id]=p;$("sW").value="";$("sC").value="";await save(id);$("sSave").textContent="記録しました";setTimeout(()=>$("sSave").textContent="記録する",1500)};
-members=seeds();renderAll();showView(PV);$("viewTabs").hidden=true;document.title=PV==="staff"?"AIRNIX 店長の画面":"AIRNIX お客様の画面";document.querySelectorAll("#topnav a[data-v]").forEach(a=>{if(a.dataset.v===PV){a.style.background="#24395c";a.style.borderColor="#24395c";a.style.color="#fff"}});
+members=seeds();renderAll();showView(PV);$("viewTabs").hidden=true;document.title=PV==="staff"?"AIRNIX スタッフの画面":"AIRNIX お客様の画面";document.querySelectorAll("#topnav a[data-v]").forEach(a=>{if(a.dataset.v===PV){a.style.background="#24395c";a.style.borderColor="#24395c";a.style.color="#fff"}});
 (async()=>{try{sample=await window.claude?.use("sample")}catch(e){sample=null}
  try{db=await window.claude?.use("db")}catch(e){db=null}
  if(!db){$("conn").textContent="見本データで動いています（入力は保存されません）。";return}
