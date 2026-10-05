@@ -98,6 +98,46 @@ details[open] summary::after{content:"－"}
 .ntclogo{background:#111;color:#d7ff3a;font-weight:900;font-size:12px;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
 .ntcn{margin:0;font-size:17px;font-weight:900}
 .ntcp{margin:2px 0 0;font-size:12px;color:var(--sub)}
+/* NTC風の見た目 */
+:root{--bg:#fff;--card:#fff;--ink:#111;--sub:#707072;--line:#e5e5e5;--navy:#111;--walk:#cfcfcf;--orange:#ff5a1f;--green:#111;--greenbg:#f5f5f5;--amberbg:#f5f5f5;--redbg:#fdecea}
+body{font-family:"Helvetica Neue",Helvetica,"Noto Sans JP",system-ui,sans-serif}
+.wrap{padding-top:16px}
+.brand{color:#111;letter-spacing:.3em}
+h1{font-size:28px;letter-spacing:-.02em}
+.tabs a{border-radius:999px;border-color:#e5e5e5;background:#f5f5f5;font-weight:700}
+.tabs a[aria-current]{background:#111;color:#fff}
+.steps li{border:0;background:#f5f5f5;border-radius:999px}
+.steps li.on{background:#111;color:#fff;box-shadow:none}
+.steps li.done{color:#111}
+.card{border:0;padding:0;margin-bottom:24px}
+.card h2{font-size:22px;font-weight:900;letter-spacing:-.01em}
+.hero{background:linear-gradient(160deg,#2b2b2b,#000 70%);color:#fff;border-radius:16px;padding:22px 18px 18px;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;margin-bottom:14px}
+.hero .hk{margin:0;font-size:12px;color:#bdbdbd;font-weight:700}
+.hero .ht{margin:2px 0 10px;font-size:32px;font-weight:900;line-height:1.15;letter-spacing:-.02em}
+.hero .badge{align-self:flex-start;background:#d7ff3a;color:#111;border-radius:999px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}
+.stats div{display:flex;flex-direction:column}
+.stats b{font-size:17px;font-weight:900}
+.stats span{font-size:12px;color:var(--sub)}
+.bar{border-radius:999px;height:14px}
+.row .t{font-size:17px}
+.row .n{font-size:16px}
+.btn{border-radius:999px;background:#111;padding:16px}
+.btn.sub{border-color:#cacacb;color:#111;background:#fff}
+.pick button{border-radius:14px;border-color:#e5e5e5;background:#f5f5f5}
+.pick button[aria-pressed="true"]{background:#111;color:#fff;box-shadow:none}
+.pick button[aria-pressed="true"] small{color:#ccc}
+.chips button{border-radius:999px;background:#f5f5f5;border-color:#f5f5f5}
+.chips button[aria-pressed="true"]{background:#111;border-color:#111}
+.ntcbox{border:0;background:#111;color:#fff;border-radius:16px;padding:16px}
+.ntcbox .ntcp{color:#bdbdbd}
+.ntclogo{background:#d7ff3a;color:#111}
+.change{background:#f5f5f5;border-radius:16px}
+.verdict{border-radius:16px}
+details{border:0;border-top:1px solid var(--line);border-radius:0;padding:4px 0;margin:0}
+.ladder li{border-radius:12px}
+.ladder li.cur{background:#111;color:#fff;box-shadow:none}
+.ladder li.cur span{color:#d7ff3a}
 </style>
 </head>
 <body>
@@ -119,8 +159,16 @@ details[open] summary::after{content:"－"}
   </ol>
 
   <section class="card" id="s1">
-    <div class="who"><span>サンプル様（見本）</span><span class="badge" id="visit"></span></div>
-    <h2>今日のメニュー（店内・トレッドミル30分）</h2>
+    <div class="hero">
+      <p class="hk">今日のメニュー・サンプル様（見本）</p>
+      <p class="ht">低酸素ウォーク</p>
+      <span class="badge" id="visit"></span>
+    </div>
+    <div class="stats">
+      <div><b>30分</b><span>時間</span></div>
+      <div><b id="stLv">①</b><span>段階</span></div>
+      <div><b>トレッドミル</b><span>器具</span></div>
+    </div>
     <div id="menu1"></div>
     <div id="ntc1"></div>
     <button class="btn" type="button" id="toReport">トレーニングした → 報告へ</button>
@@ -191,7 +239,7 @@ details[open] summary::after{content:"－"}
       <li><b>できなかった</b> → そのまま。2回続いたら1つ戻す</li>
     </ul>
   </details>
-  <p class="foot">試作 第10版（見本データ・保存されません）</p>
+  <p class="foot">試作 第11版（見本データ・保存されません）</p>
 </div>
 
 <script>
@@ -261,7 +309,7 @@ function setStep(n){
   [...$("steps").children].forEach(li=>{const s=+li.dataset.s;li.className=s===n?"on":s<n?"done":""});
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function render1(){$("visit").textContent=`${L.count}回目・段階${"①②③④"[L.wl-1]}`;$("menu1").innerHTML=menuHTML(L);$("ntc1").innerHTML=ntcHTML(L,"次の来店までに（NTC）");renderLadder()}
+function render1(){$("visit").textContent=`${L.count}回目`;$("stLv").textContent="①②③④"[L.wl-1];$("menu1").innerHTML=menuHTML(L);$("ntc1").innerHTML=ntcHTML(L,"次の来店までに（NTC）");renderLadder()}
 const canSend=()=>{$("send").disabled=!pick||(L.count>=2&&!npick)};
 
 $("toReport").onclick=()=>{
