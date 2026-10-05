@@ -93,84 +93,13 @@ details[open] summary::after{content:"－"}
 .chk input{width:20px;height:20px}
 .change{font-size:18px;font-weight:900;margin:0 0 10px;text-align:center;background:var(--bg);border-radius:10px;padding:10px}
 .change .arr{color:var(--green)}
-.ntcbox{margin-top:16px;border:2px solid #111;border-radius:12px;padding:12px 14px;background:#f4f4f4}
-.ntch{margin:0 0 6px;font-weight:900;font-size:15px;display:flex;align-items:center;gap:8px}
-.ntclogo{background:#111;color:#d7ff3a;font-weight:900;font-size:12px;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
-.ntcn{margin:0;font-size:17px;font-weight:900}
-.ntcp{margin:2px 0 0;font-size:12px;color:var(--sub)}
-.ntcopen{display:block;text-align:center;margin:12px 0 6px;padding:12px;border-radius:999px;background:#d7ff3a;color:#111;font-weight:900;text-decoration:none}
-/* NTCの実画面に合わせた見た目（2026-10-05 ジェイさんのスクショ：黒背景・写真の上に白タイトル・2列の情報・灰色の説明・白い丸ボタン） */
-:root{--bg:#1f1f1f;--card:#1f1f1f;--ink:#fff;--sub:#8e8e93;--line:#3a3a3c;--navy:#fff;--walk:#5a5a5e;--orange:#ff6a3d;--green:#fff;--greenbg:#2c2c2e;--amberbg:#2c2c2e;--redbg:#3a2321}
-body{font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink)}
-.wrap{padding:0 0 120px;max-width:480px}
-.brand{color:#fff;letter-spacing:.3em;padding:16px 20px 0}
-h1{font-size:22px;font-weight:500;padding:0 20px}
-.lead{color:var(--sub);padding:0 20px}
-.tabs{padding:0 20px}
-.tabs a{border-radius:999px;border:1px solid #fff;background:transparent;color:#fff;font-weight:500}
-.tabs a[aria-current]{background:#fff;color:#111}
-.steps{padding:0 20px}
-.steps li{border:0;background:transparent;color:var(--sub);font-weight:500}
-.steps li.on{color:#fff;box-shadow:inset 0 -2px 0 #fff;border-radius:0}
-.steps li.done{color:#c7c7cc}
-.card{border:0;background:transparent;padding:0 20px;margin-bottom:28px}
-.card h2{font-size:22px;font-weight:500;color:#fff}
-.hint,.q small{color:var(--sub)}
-.hero{position:relative;margin:0 -20px 24px;height:420px;background:#000 url(hero.jpg) center/cover;display:flex;flex-direction:column;justify-content:flex-end;padding:0 20px 22px}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.65))}
-.hero>*{position:relative;z-index:1}
-.hero .hk{margin:0 0 4px;font-size:13px;color:#e5e5ea}
-.hero .ht{margin:0 0 14px;font-size:40px;font-weight:500;line-height:1.2;color:#fff}
-.hero .badge{align-self:flex-start;background:transparent;border:1px solid #fff;color:#fff;border-radius:999px;padding:6px 14px;font-weight:500;font-size:14px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:26px 12px;padding:4px 0 22px;margin-bottom:18px;border-bottom:1px solid var(--line)}
-.stats div{display:flex;align-items:center;gap:10px;flex-direction:row}
-.stats svg{flex:none;width:22px;height:22px;fill:#fff}
-.stats b{font-size:17px;font-weight:400;color:#fff}
-.stats span{display:none}
-.bar{border-radius:4px;height:10px;background:#2c2c2e}
-.bar span{border-right-color:#1f1f1f}
-.legend{color:var(--sub)}
-.rows{border-top:1px solid var(--line)}
-.row{border-bottom:1px solid var(--line)}
-.row .t{font-size:16px;font-weight:600;color:#fff}
-.row .n{font-size:16px;font-weight:500;color:#fff}
-.row .p{color:var(--sub)}
-.btn{position:sticky;bottom:24px;z-index:5;border-radius:999px;background:#fff;color:#111;padding:17px;font-weight:600;font-size:17px;box-shadow:0 -24px 24px -4px var(--bg)}
-.btn.sub{position:static;box-shadow:none;background:transparent;color:#fff;border:1px solid #fff;font-weight:500}
-.pick button{border-radius:12px;border:1px solid var(--line);background:transparent;color:#fff;font-weight:500}
-.pick button small{color:var(--sub)}
-.pick button[aria-pressed="true"]{background:#fff;color:#111;box-shadow:none;border-color:#fff}
-.pick button[aria-pressed="true"] small{color:#555}
-.q{color:#fff;font-weight:600}
-.chips button{border-radius:999px;background:transparent;border:1px solid var(--line);color:#fff}
-.chips button[aria-pressed="true"]{background:#fff;border-color:#fff;color:#111;font-weight:600}
-.chk{color:#fff}
-.ntcbox{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;color:#fff;padding:20px 0 0;margin-top:22px}
-.ntch{font-size:13px;font-weight:600;color:#fff}
-.ntclogo{background:#fff;color:#111;border-radius:4px}
-.ntcn{font-size:22px;font-weight:500;color:#fff;margin:4px 0}
-.ntcp{color:var(--sub);font-size:14px}
-.ntcopen{display:block;text-align:center;margin:14px 0 8px;padding:13px;border-radius:999px;background:transparent;border:1px solid #fff;color:#fff;font-weight:600;text-decoration:none}
-.change{background:#2c2c2e;color:#fff;border-radius:12px;font-weight:600}
-.change .arr{color:#fff}
-.verdict{border-radius:12px;color:#fff}
-.verdict.up,.verdict.keep,.verdict.down{background:#2c2c2e}
-.verdict.stop{background:var(--redbg)}
-.verdict .why{color:var(--sub)}
-details{background:transparent;border:0;border-top:1px solid var(--line);border-radius:0;margin:0 20px;padding:4px 0;color:#fff}
-summary{font-weight:600}
-.ladder li{border:0;border-radius:0;padding:10px 0;border-bottom:1px solid var(--line);color:var(--sub)}
-.ladder li span{color:#fff}
-.ladder li.cur{color:#fff;box-shadow:none;font-weight:600}
-.rule{color:#c7c7cc}
-.foot{color:var(--sub)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brand">AIRNIX</div>
   <h1>個別メニュー（試作）</h1>
-  <p class="lead">店内のトレッドミルと、次の来店までのNTC（ナイキの無料アプリ）をセットで指定。報告すると、次回のメニューが自動で変わります。</p>
+  <p class="lead">報告すると、次回のメニューが自動で変わります。</p>
 
   <nav class="tabs">
     <a href="./" aria-current="page">仕組みを見る</a>
@@ -185,21 +114,9 @@ summary{font-weight:600}
   </ol>
 
   <section class="card" id="s1">
-    <div class="hero">
-      <p class="hk">サンプル様（見本）</p>
-      <p class="ht">今日の<br>低酸素ウォーク</p>
-      <span class="badge" id="visit"></span>
-    </div>
-    <div class="stats">
-      <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm1 9V8h-2v6h5v-2h-3zM9 1h6v2H9z"/></svg><b>30分</b></div>
-      <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h11l3 3v15H5V3zm3 9 2.5 2.5L16 9l-1.4-1.4-4.1 4.1-1.1-1.1L8 12z"/></svg><b>段階 <span id="stLv" style="display:inline">①</span></b></div>
-      <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h4v-6H3v6zm7 0h4V9h-4v11zm7 0h4V4h-4v16z"/></svg><b>トレッドミル</b></div>
-      <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm-1 8v10h12V10H6z"/></svg><b id="stNtc">NTC 週3回</b></div>
-    </div>
+    <div class="who"><span>サンプル様（見本）</span><span class="badge" id="visit"></span></div>
+    <h2>今日のメニュー（30分）</h2>
     <div id="menu1"></div>
-    <div id="ntc1"></div>
-    <p class="q">目的 <small>（入会時にスタッフが選ぶ・NTCの順番が変わる）</small></p>
-    <div class="chips" id="track"></div>
     <button class="btn" type="button" id="toReport">トレーニングした → 報告へ</button>
   </section>
 
@@ -210,21 +127,6 @@ summary{font-weight:600}
       <button type="button" data-k="ok">ちょうどよかった<small>最後までできた</small></button>
       <button type="button" data-k="hard">きつかった<small>途中で止まった・限界</small></button>
     </div>
-    <div id="ntcAsk">
-      <p class="q" id="ntcQ"></p>
-      <div class="chips" id="ntcCount"></div>
-      <p class="q">今週、あすけんで食事を記録した日は？ <small>目標 3食×毎日</small></p>
-      <div class="chips" id="askenDays"><button type="button" data-k="0">0日</button><button type="button" data-k="1">1日</button><button type="button" data-k="2">2日</button><button type="button" data-k="3">3日</button><button type="button" data-k="4">4日</button><button type="button" data-k="5">5日</button><button type="button" data-k="6">6日</button><button type="button" data-k="7">7日</button></div>
-      <div id="ntcFeelBox" hidden>
-        <p class="q">NTCのきつさは？</p>
-        <div class="chips" id="ntcFeel">
-          <button type="button" data-k="easy">楽</button>
-          <button type="button" data-k="ok">ちょうど</button>
-          <button type="button" data-k="hard">きつい</button>
-        </div>
-      </div>
-    </div>
-    <p class="hint" id="ntcFirst">NTCの報告は2回目の来店から</p>
     <label class="chk"><input type="checkbox" id="pain">痛みや体調の変化があった</label>
     <button class="btn" type="button" id="send" disabled>報告する</button>
   </section>
@@ -234,7 +136,6 @@ summary{font-weight:600}
     <p class="change" id="change"></p>
     <h2>次回のメニュー</h2>
     <div id="nextMenu"></div>
-    <div id="ntc3"></div>
     <button class="btn" type="button" id="nextVisit">次の来店へ（もう一度試す）</button>
     <button class="btn sub" type="button" id="reset">最初に戻す</button>
   </section>
@@ -243,11 +144,6 @@ summary{font-weight:600}
     <summary>メニューの段階（①〜④）</summary>
     <ol class="ladder" id="ladder"></ol>
     <p class="hint">④の先は、きつめの抵抗を＋1 → 早歩きを＋0.2km/h。</p>
-  </details>
-  <details>
-    <summary>NTCのプログラム（目的別の順番）</summary>
-    <div id="ntcTracks"></div>
-    <p class="hint">プログラムの中の段階（ステージ）はNTCが進めます。AIRNIXが決めるのは「どのプログラムか」と「次へ進むか、もう1回か」だけです。</p>
   </details>
   <details>
     <summary>初回の決め方</summary>
@@ -265,25 +161,16 @@ summary{font-weight:600}
       <li>14日あいたら1つ軽く、28日あいたら①から</li>
       <li>最初の4回は、きつめの区間を入れない</li>
     </ul>
-    <p class="q">NTC</p>
-    <ul class="rule">
-      <li>来店ごとに「今週何回できたか」と「きつさ」を報告（1回の報告＝1週）</li>
-      <li>プログラムが終わったら、<b>実施率70%以上</b>で、きつい週が半分以下 → 次のプログラムへ</li>
-      <li>それ以外 → 同じプログラムをもう1回</li>
-      <li><b>2週続けて0回</b> → 短いプログラム（毎日の運動チャレンジ 5〜10分）に切り替え</li>
-      <li>痛み・体調の変化あり → NTCはお休みして同じ週をもう一度</li>
-    </ul>
   </details>
-  <p class="foot">試作 第13版（見本データ・保存されません） ・ <a href="../versions/" style="color:inherit">過去の版</a></p>
+  <p class="foot">試作 第9版（見本データ・保存されません）</p>
 </div>
 
-<script src="ntc.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const r1=n=>Math.round(n*10)/10;
 const f1=n=>n.toFixed(1);
 const START={wl:1,wp:4.5,fp:5.5,hr:3,fp0:5.5,hr0:3,count:1};
-let L,N,pick=null,ncount=null,nfeel=null,adays=null,track="base";
+let L,pick=null;
 
 function build(l){
   const W=m=>({min:m,a:"ゆっくり",pace:[l.wp,r1(l.wp+.5)],res:1,k:"w"});
@@ -314,51 +201,31 @@ function menuHTML(l){
   const rows=m.body.u.map((s,i)=>`<div class="row"><div class="t">${i===0?"×"+m.body.reps:""}</div><div><div class="n">${s.a} ${s.min}分</div><div class="p">${f1(s.pace[0])}〜${f1(s.pace[1])}km/h・抵抗${s.res}</div></div></div>`).join("");
   return bar+leg+`<div class="rows"><div class="row"><div class="t">5分</div><div class="n">ウォーミングアップ</div></div>${rows}<div class="row"><div class="t">5分</div><div class="n">クールダウン</div></div></div>`;
 }
-function renderLadder(){
-  $("ladder").innerHTML=STAGE.map((n,i)=>`<li class="${L.wl===i+1?"cur":""}"><span>${"①②③④"[i]}</span>${n}</li>`).join("");
-  $("ntcTracks").innerHTML=Object.entries(NTC_TRACKS).map(([k,t])=>`<p class="q">${t.label}</p><ol class="ladder">${t.list.map((id,i)=>{const p=NTC_PROGRAMS[id];return`<li class="${N.track===k&&N.idx===i?"cur":""}"><span>${i+1}</span>${p.name}（${p.weeks}週・週${p.per}回）</li>`}).join("")}</ol>`).join("");
-}
-function renderTrack(){$("track").innerHTML=Object.entries(NTC_TRACKS).map(([k,t])=>`<button type="button" data-k="${k}" aria-pressed="${N.track===k}">${t.label}</button>`).join("");
-  [...$("track").children].forEach(b=>b.onclick=()=>{N=ntcNew(b.dataset.k);render1()})}
+function renderLadder(){$("ladder").innerHTML=STAGE.map((n,i)=>`<li class="${L.wl===i+1?"cur":""}"><span>${"①②③④"[i]}</span>${n}</li>`).join("")}
 function setStep(n){
   ["s1","s2","s3"].forEach((id,i)=>$(id).hidden=i+1!==n);
   [...$("steps").children].forEach(li=>{const s=+li.dataset.s;li.className=s===n?"on":s<n?"done":""});
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function render1(){$("visit").textContent=`${L.count}回目`;$("stLv").textContent="①②③④"[L.wl-1];$("stNtc").textContent=`NTC 週${ntcProg(N).per}回`;$("menu1").innerHTML=menuHTML(L);$("ntc1").innerHTML=ntcCardHTML(N,"次の来店までに");renderTrack();renderLadder()}
-const press=(box,v)=>[...box.children].forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===String(v)));
-const canSend=()=>{$("send").disabled=!pick||(L.count>=2&&(ncount===null||adays===null||(ncount>0&&!nfeel)))};
+function render1(){$("visit").textContent=`${L.count}回目・段階${"①②③④"[L.wl-1]}`;$("menu1").innerHTML=menuHTML(L);renderLadder()}
 
-$("toReport").onclick=()=>{
-  pick=null;ncount=null;nfeel=null;adays=null;press($("askenDays"),"");$("pain").checked=false;
-  const p=ntcProg(N);
-  $("ntcQ").innerHTML=`今週のNTC（${p.name}）は何回できましたか？ <small>目標 週${p.per}回</small>`;
-  $("ntcCount").innerHTML=Array.from({length:p.per+1},(_,i)=>`<button type="button" data-k="${i}">${i}回</button>`).join("");
-  [...$("ntcCount").children].forEach(b=>b.onclick=()=>{ncount=+b.dataset.k;press($("ntcCount"),ncount);$("ntcFeelBox").hidden=ncount===0;canSend()});
-  press($("pick"),"");press($("ntcFeel"),"");$("ntcFeelBox").hidden=true;
-  $("ntcAsk").hidden=L.count<2;$("ntcFirst").hidden=L.count>=2;canSend();setStep(2);
-};
-[...$("pick").children].forEach(b=>b.onclick=()=>{pick=b.dataset.k;press($("pick"),pick);canSend()});
-[...$("askenDays").children].forEach(b=>b.onclick=()=>{adays=+b.dataset.k;press($("askenDays"),adays);canSend()});
-[...$("ntcFeel").children].forEach(b=>b.onclick=()=>{nfeel=b.dataset.k;press($("ntcFeel"),nfeel);canSend()});
+$("toReport").onclick=()=>{pick=null;$("pain").checked=false;$("send").disabled=true;[...$("pick").children].forEach(b=>b.setAttribute("aria-pressed","false"));setStep(2)};
+[...$("pick").children].forEach(b=>b.onclick=()=>{pick=b.dataset.k;[...$("pick").children].forEach(x=>x.setAttribute("aria-pressed",x===b));$("send").disabled=false});
 $("send").onclick=()=>{
   const pain=$("pain").checked;const kind=pain||pick==="hard"?"down":pick==="easy"?"up":"keep";
   const next={...L};let chg=null,big,cls=kind,why="";
   if(kind==="up"){chg=stepUp(next);big=chg?"次回は1つ上げます":"今回はそのまま";if(!chg){cls="keep";why="最初の4回は、きつめの区間を入れないため"}}
   if(kind==="down"){chg=stepDown(next);big=chg?"次回は1つ軽くします":"今回はそのまま";if(!chg)why="いちばん軽い段階のため"}
-  const nd=L.count>=2?ntcAdvance(N,ncount,nfeel,pain):null;
-  if(kind==="keep")big="トレッドミルは同じメニュー";
+  if(kind==="keep")big="次回も同じメニュー";
   if(pain)why=(why?why+"。":"")+"「無理せずお休みしてください」と表示します";
   $("verdict").innerHTML=`<div class="verdict ${pain?"stop":cls}"><p class="big">${big}</p>${why?`<p class="why">${why}</p>`:""}</div>`;
-  const anote=L.count>=2?`<br><span style="font-size:15px">あすけん：今週${adays}日記録${adays<3?"（次回、スタッフが記録のコツを案内）":""}</span>`:"";
-  const nchg=anote+`<br><span style="font-size:15px">NTC：${nd||(L.count<2?`${ntcProg(N).name}を開始`:`${ntcProg(N).name} ${N.week}週目へ`)}</span>`;
-  $("change").innerHTML=(chg||"トレッドミル 変更なし")+nchg;
+  $("change").innerHTML=chg||"変更なし";
   next.count=L.count+1;L=next;
-  $("nextMenu").innerHTML=menuHTML(L);$("ntc3").innerHTML=ntcCardHTML(N,"次の来店までに");renderLadder();setStep(3);
+  $("nextMenu").innerHTML=menuHTML(L);renderLadder();setStep(3);
 };
 $("nextVisit").onclick=()=>{render1();setStep(1)};
-$("reset").onclick=()=>{L={...START};N=ntcNew("base");render1();setStep(1)};
-L={...START};N=ntcNew("base");render1();setStep(1);
+$("reset").onclick=()=>{L={...START};render1();setStep(1)};
+L={...START};render1();setStep(1);
 </script>
 </body>
 </html>

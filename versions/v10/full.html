@@ -134,77 +134,17 @@ textarea{min-height:52px;resize:vertical}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 [hidden]{display:none!important}
 </style>
-<style>
-/* NTCの実画面に合わせた見た目（黒背景・白文字・灰色の説明・白い丸ボタン） */
-:root{--bg:#1f1f1f;--soft:#2c2c2e;--card:#1f1f1f;--ink:#fff;--sub:#8e8e93;--line:#3a3a3c;--brand:#fff;--brand-soft:#2c2c2e;--amber:#fff;--amber-soft:#2c2c2e;--goal:#8e8e93;
-  --ok:#8fd19e;--ok-soft:#2c2c2e;--warn:#f2b866;--warn-soft:#3a3123;--danger:#ff6b5e;--danger-soft:#3a2321;
-  --f-display:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;--f-body:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;color-scheme:dark}
-body{background:var(--bg);color:var(--ink)}
-h1,h2,h3{font-weight:500}
-h1{font-size:24px}h2{font-size:22px}h3{font-size:18px}
-.brandmark{color:#fff;letter-spacing:.3em}
-#topnav a{border-radius:999px!important;border:1px solid #fff!important;background:transparent!important;color:#fff!important;font-weight:500!important}
-#topnav a.on{background:#fff!important;color:#111!important}
-.phone{background:transparent;border:0;border-radius:0;padding:0;gap:0}
-.hello{padding:0 0 12px}.hello b{font-size:26px;font-weight:500}
-.card{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;padding:22px 0}
-.card h3 small{color:var(--sub)}
-.streak{background:var(--soft);color:#fff}.streak .big{color:#fff}
-.days span{background:var(--soft);color:var(--sub)}
-.days span.on{background:#fff;color:#111}
-.days span.today{outline-color:#fff}
-.stampMsg{background:var(--soft);color:#fff}
-.menu{border:1px solid var(--line);border-radius:12px;background:transparent}
-.menu header{background:transparent;border-bottom:1px solid var(--line);color:#fff;font-size:15px;font-weight:600;padding:12px 14px}
-.menu td{border-top-color:var(--line)}
-.menu tr.rep td{background:var(--soft)}
-.menu tfoot td{background:transparent;color:var(--sub)}
-.prof{background:transparent}
-.diff{background:var(--soft);color:#fff}
-.kindTabs button,.chips button{border-radius:999px;background:transparent;border:1px solid var(--line);color:#fff}
-.kindTabs button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:#fff;border-color:#fff;color:#111;font-weight:600}
-.primary{border-radius:999px;background:#fff;color:#111;padding:17px;font-weight:600}
-.ghost,.stamps button{border-radius:999px;background:transparent;border:1px solid #fff;color:#fff}
-.stamps button[aria-pressed="true"]{background:#fff;color:#111}
-input,select,textarea{border-radius:10px;background:var(--soft);border-color:var(--line);color:#fff}
-.okbox{background:var(--soft);color:#fff}
-.badge .disc{background:var(--soft);border:2px dashed var(--line);color:var(--sub)}
-.badge.got .disc{background:#fff;color:#111;border-color:#fff}
-.panel{border:0;background:transparent;border-top:1px solid var(--line);border-radius:0}
-.sum div{background:var(--soft);border-radius:12px}
-.sum .o b,.sum .a b{color:#fff}
-.mcard{border:1px solid var(--line);background:transparent;border-radius:12px}
-.mcard.alert{border-color:var(--danger)}
-.mhead b{font-size:19px;font-weight:500}
-.p-b{background:#fff;color:#111}
-.bar{background:var(--soft)}.bar i{background:#fff}
-.say{background:var(--soft);color:#fff}
-.seg{background:var(--soft);border-color:var(--line);border-radius:999px}.seg button{border-radius:999px;color:var(--sub)}
-.seg button[aria-pressed="true"]{background:#fff;color:#111}
-.ntcbox{background:transparent;color:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
-.ntch{margin:0 0 6px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px}
-.ntclogo{background:#fff;color:#111;font-weight:700;font-size:12px;border-radius:4px;padding:2px 7px}
-.ntcn{margin:0;font-size:20px;font-weight:500}
-.ntcp{margin:4px 0 0;font-size:13px;color:var(--sub)}
-.ntcopen{display:block;text-align:center;margin:14px 0 8px;padding:13px;border-radius:999px;background:transparent;border:1px solid #fff;color:#fff;font-weight:600;text-decoration:none}
-#openRep{background:transparent!important;color:#fff!important;border:1px solid #fff;margin:0 0 18px}
-#repBody{background:#1f1f1f!important;color:#fff}
-#repBody [style*="background:#f5f5f5"]{background:#2c2c2e!important}
-#repBody [style*="background:#111"]{background:#2c2c2e!important}
-#repBody [style*="color:#d7ff3a"]{color:#fff!important}
-</style>
 
 <nav id="topnav" style="max-width:1080px;margin:0 auto;padding:12px 16px 0;display:flex;gap:6px">
 <a href="./" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">仕組みを見る</a>
 <a href="full.html?view=cust" data-v="cust" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">お客様の画面</a>
 <a href="full.html?view=staff" data-v="staff" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">スタッフの画面</a>
-<a href="../versions/" style="flex:0 0 auto;text-align:center;padding:9px 12px;white-space:nowrap;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700">過去の版</a>
 </nav>
 <div class="wrap">
   <div class="top">
     <div>
       <p class="brandmark">AIRNIX</p>
-      <h1>個別メニュー（試作 第13版）</h1>
+      <h1>個別メニュー（試作 第8版）</h1>
       <p class="sub">お客様は携帯で「今週の来店・今日のメニュー・報告」、スタッフは週1回まとめを見るだけ。画面の方はすべて見本です。</p>
     </div>
     <div class="seg" role="tablist" id="viewTabs"><button type="button" data-view="cust">お客様の画面</button><button type="button" data-view="staff">スタッフの画面</button></div>
@@ -218,7 +158,6 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
       <div class="phone">
         <div class="hello"><div><p class="tiny">AIRNIX 用賀店</p><b id="hName"></b></div><span class="pill p-b" id="hPlan"></span></div>
         <div id="custState"></div>
-        <button class="primary" type="button" id="openRep" >今月の効果レポートを見る</button>
 
         <div class="card" id="weekCard">
           <h3>今週の来店<small id="weekRange"></small></h3>
@@ -252,12 +191,12 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
           <div class="field" id="machineField"><span>使ったマシン</span><div class="chips" id="machine"></div></div>
           <div class="field" id="doneField"><span>最後までできた？</span><div class="chips" id="done"></div></div>
           <div class="field" id="changeField"><span>途中で速さや抵抗を変えた？</span><div class="chips" id="change"></div></div>
-          <div class="field" id="strField"><span id="ntcQ2"></span><div class="chips" id="ntcCnt"></div><div id="ntcFeel2Box" hidden><span>NTCのきつさ</span><div class="chips" id="ntcFeel2"><button type="button" data-v="easy">楽</button><button type="button" data-v="ok">ちょうど</button><button type="button" data-v="hard">きつい</button></div></div></div>
-          <div class="field" id="rpeField"><span>きつさ（1 楽 〜 10 限界）</span><div class="chips rpe" id="rpe"></div></div>
+          <div class="field" id="strField"><span>種目ごとに（楽＝12回やって余裕がある／ちょうど／きつい＝8回できない・フォームが崩れる）</span><div id="strRows" style="display:flex;flex-direction:column;gap:6px"></div></div>
+          <div class="field"><span>きつさ（1 楽 〜 10 限界）</span><div class="chips rpe" id="rpe"></div></div>
           <div class="field"><span>痛みや体調の変化</span><div class="chips" id="pain"></div></div>
           <label class="field" id="kmField"><span>トレッドミルの距離（km・終了画面の数字・任意）</span><input id="km" type="number" step="0.01" inputmode="decimal" placeholder="2.80"></label>
           <label class="field"><span>ひとこと（任意）</span><textarea id="comment" placeholder="程よく疲れた／途中で休みたい など"></textarea></label>
-          <div class="field" id="nextField"><span>次回は（任意）</span><div class="chips" id="next"><button type="button" data-v="もう少しきつく">もう少しきつく</button><button type="button" data-v="このまま">このまま</button><button type="button" data-v="少し楽に">少し楽に</button></div></div>
+          <div class="field"><span>次回は（任意）</span><div class="chips" id="next"><button type="button" data-v="もう少しきつく">もう少しきつく</button><button type="button" data-v="このまま">このまま</button><button type="button" data-v="少し楽に">少し楽に</button></div></div>
           <p class="err" id="err" hidden></p>
           <button class="primary" id="send" type="button">送信して次回メニューを受け取る</button>
           </div>
@@ -272,10 +211,11 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
           <p class="tiny">運動の前に、同じ条件で測るのがおすすめです。</p>
         </div>
         <div class="card">
-          <h3>食事<small>あすけんで記録</small></h3>
-          <p style="font-size:14px">食事はあすけん（無料アプリ）で、朝・昼・夕の3食を写真かバーコードで記録してください。AIRNIXでは「今週何日記録したか」だけを伺います。</p>
-          <a class="ntcopen" href="https://apps.apple.com/jp/app/id687287242" target="_blank" rel="noopener">あすけんを開く</a>
-          <div class="field"><span>今週、あすけんで記録した日</span><div class="chips" id="askenDays"></div></div>
+          <h3>食事のカロリー<small>あすけんの合計を転記</small></h3>
+          <div class="two"><label class="field"><span>今日のkcal</span><input id="kcal" type="number" inputmode="numeric" placeholder="1600"></label>
+          <label class="field"><span>あすけんの目標kcal</span><input id="kcalT" type="number" inputmode="numeric" placeholder="1500"></label></div>
+          <p class="err" id="mealErr" hidden></p>
+          <button class="ghost" id="mealSave" type="button">保存</button>
           <p class="tiny" id="mealSum"></p>
         </div>
         <div class="card">
@@ -300,7 +240,7 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
         <p>上げるのは楽にできたとき（きつさ4以下・最後まで・変更なし。人ごとに「じっくり／ふつう／積極的」）か、本人が「もう少しきつく」を選んだとき。きつさ8以上・達成80%未満・「少し楽に」のときは1つ戻します。</p>
         <p>前回から14日あいたら1つ軽く、28日あいたら最初の段階から。速さは機種で違うため目安です。</p>
         <p>痛み・体調の変化が「あり」のときは、次回を1つ軽くします。</p>
-        <p>筋トレ・ストレッチ・ヨガはNTC（ナイキ トレーニング クラブ・無料アプリ）のプログラムに任せます。AIRNIXは目的別の順番でプログラムを指定し（基本：基礎からはじめるフィットネス → トータル ストレングス ビルダー入門 → タラと一緒にHIIT＆筋力）、来店ごとに「今週何回できたか」を聞きます。終了時に実施率70%以上なら次へ、それ以外はもう1回。2週続けて0回なら短いプログラム（毎日の運動チャレンジ）に切り替えます。</p>
+        <p>筋トレ（スタジオ）は脚・お尻・押す・引く・体幹の5種目。種目ごとに「楽」が2回続いたらセットを増やし（1→2→3）、3セットでも楽なら次の段階へ。「きつい」なら1つ戻します。</p>
         <p>表示するのは本人の記録の数字だけで、効果をお約束するものではありません。</p>
       </div>
     </aside>
@@ -364,22 +304,28 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
       <p><span class="pill p-d">21日来店なし</span><span class="pill p-w">10日来店なし</span> 最終来店からの日数</p>
       <p><span class="pill p-w">連続が途切れた</span> 先週の来店がなく、連続週が0に戻った</p>
       <p><span class="pill p-w">測定なし</span> 本人の体重・ウエストの入力が14日以上ない</p>
-      <p><span class="pill p-a">案内のタイミング</span> 週の来店目標を4週続けて達成／8週連続／目標に到達／終了 → 効果レポート（直近30日）を見せて案内。ライト・メイン→プレミアム（9,800円・1日2回）、プレミアム→スタジオ。案内したら30日は出さない</p>
+      <p><span class="pill p-a">案内のタイミング</span> 週の来店目標を4週続けて達成／8週連続／目標に到達／終了 → ダブル枠（プレミアム）・スタジオを案内する時期</p>
       <p>来店率＝直近4週の来店回数 ÷ 週の来店目標×4。低い人が上に並びます。</p>
     </div>
   </section>
 </div>
 
-<div id="rep" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;overflow:auto;padding:16px">
- <div id="repBody" style="max-width:420px;margin:0 auto;background:#fff;border-radius:20px;padding:20px 18px;display:flex;flex-direction:column;gap:14px"></div>
-</div>
-<script src="ntc.js"></script>
 <script>
 const PV=new URLSearchParams(location.search).get("view")==="staff"?"staff":"cust";
 /* ---------- 定数 ---------- */
 const ACTIONS=["ウォーキング","早歩き","きつめの早歩き","ランニング"];
 const PLANS={"ライト":"ライト（1日1回）","メイン":"メイン（1日1回）","プレミアム":"プレミアム（1日2回・ダブル枠可）"};
-const ntcOf=p=>p.ntc||ntcNew("base");
+const S=(name,sets,reps,sec,note)=>({name,sets,reps:reps||null,sec:sec||null,note:note||""});
+const STR_CATS=[["leg","脚"],["glute","お尻"],["push","押す"],["pull","引く・背中"],["core","体幹"]];
+const STR={leg:["椅子からの立ち座り","浅いスクワット","スクワット","バックランジ","スプリットスクワット"],
+ glute:["ヒップリフト","ヒップリフト（足を閉じる）","ヒップリフト（上で3秒止める）","片脚ヒップリフト（補助あり）","片脚ヒップリフト"],
+ push:["壁腕立て","台に手をつく腕立て","膝つき腕立て","膝つき腕立て（ゆっくり下ろす）","腕立て伏せ"],
+ pull:["うつ伏せで腕を後ろへ引く","うつ伏せでY字に腕を上げる","Y字・T字を交互に","タオルを使って引く","Y字・T字・W字"],
+ core:["デッドバグ","バードドッグ","膝つきプランク","プランク","プランク＋脚上げ"]};
+const strDose=(k,lv)=>k==="core"&&lv>=3?"20〜40秒":(k==="core"?"左右交互 8〜12回":"8〜12回");
+function strInit(p){if(p.str)return p.str;const lv=Math.min(5,Math.max(1,p.strengthLevel||1));const o={};STR_CATS.forEach(([k])=>o[k]={lv,sets:1,streak:0});return o}
+function strUp(c){if(c.sets<3){c.sets++;return`${c.sets}セットに`}if(c.lv<5){c.lv++;c.sets=1;return`段階${c.lv}へ（1セットから）`}return null}
+function strDown(c){if(c.sets>1){c.sets--;return`${c.sets}セットに`}if(c.lv>1){c.lv--;c.sets=2;return`段階${c.lv}へ戻す`}return null}
 const STAMPS=["ナイス継続！","いいペースです","無理せずいきましょう","目標まであと少し"];
 
 /* ---------- 日付 ---------- */
@@ -404,7 +350,7 @@ function seeds(){const t=today();
  const a={ver:3,name:"サンプルA様",plan:"メイン",weekly:2,goal:24,count:14,status:"active",strengthLevel:2,strengthCount:2,kcalTarget:1500,
   start:{weight:59.1,waist:80.3},target:{weight:57.0,waist:77.0,date:addDays(t,78)},
   measurements:[{date:addDays(t,-46),weight:59.1,waist:80.3},{date:addDays(t,-25),weight:58.6,waist:79.4},{date:addDays(t,-8),weight:58.2,waist:78.8}],
-  meals:[],asken:[{week:addDays(weekStart(t),-21),days:3},{week:addDays(weekStart(t),-14),days:4},{week:addDays(weekStart(t),-7),days:5},{week:weekStart(t),days:2}],
+  meals:[{date:addDays(t,-3),kcal:1650},{date:addDays(t,-2),kcal:1520},{date:addDays(t,-1),kcal:1580}],
   history:visitsBack(A_off,t),stamp:{text:STAMPS[0],date:addDays(t,-1)},todayFlag:t,
   lad:{wl:4,wp:4.5,fp:5.5,fp0:5.1,hr:3,hr0:3},
   prevMenu:{no:14,...buildResist({wl:4,wp:4.5,fp:5.3,hr:3},"A")},
@@ -461,16 +407,12 @@ function chips(id,vals,key,fmt){const box=$(id);box.innerHTML="";vals.forEach(v=
 chips("machine",["A","B","C","D","E","F","G"],"machine");chips("done",[100,90,80,70,60],"done",v=>v+"%");chips("change",["なし","あり"],"change");chips("rpe",[1,2,3,4,5,6,7,8,9,10],"rpe");chips("pain",["なし","あり"],"pain");
 function press(id,t){[...$(id).children].forEach(c=>c.setAttribute("aria-pressed",c.textContent===t?"true":"false"))}
 function preset(){Object.assign(state,{machine:"A",done:90,change:"なし",rpe:6,pain:"なし",next:null});[...$("next").children].forEach(c=>c.setAttribute("aria-pressed","false"));press("machine","A");press("done","90%");press("change","なし");press("rpe","6");press("pain","なし");$("comment").value="";$("km").value=""}
-let nres={c:null,f:null};function buildStrRows(){const p=members[$("who").value];if(!p||!p.name)return;const g=ntcProg(ntcOf(p));if(nres.c>g.per)nres.c=null;
- $("ntcQ2").textContent=`今週のNTC（${g.name}）は何回できましたか？（目標 週${g.per}回）`;
- $("ntcCnt").innerHTML=Array.from({length:g.per+1},(_,i)=>`<button type="button" data-v="${i}" aria-pressed="${nres.c===i}">${i}回</button>`).join("");
- [...$("ntcCnt").children].forEach(b=>b.onclick=()=>{nres.c=+b.dataset.v;buildStrRows()});
- [...$("ntcFeel2").children].forEach(b=>{b.setAttribute("aria-pressed",b.dataset.v===nres.f?"true":"false");b.onclick=()=>{nres.f=b.dataset.v;buildStrRows()}});
- $("ntcFeel2Box").hidden=!(nres.c>0)}
-buildStrRows();
+const sres={};function buildStrRows(){$("strRows").innerHTML=STR_CATS.map(([k,l])=>`<div class="pref"><span>${l}</span><div class="chips" data-sk="${k}">${["楽","ちょうど","きつい"].map(v=>`<button type="button" data-v="${v}" aria-pressed="${sres[k]===v}">${v}</button>`).join("")}</div></div>`).join("");
+ $("strRows").querySelectorAll("[data-sk]").forEach(box=>[...box.children].forEach(b=>b.onclick=()=>{sres[box.dataset.sk]=b.dataset.v;[...box.children].forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"))}))}
+STR_CATS.forEach(([k])=>sres[k]="ちょうど");buildStrRows();
 preset();
 $("openReport").onclick=()=>{const b=$("reportBody");b.hidden=!b.hidden;$("openReport").textContent=b.hidden?"終わったら報告する（1分）":"閉じる";$("openReport").className=b.hidden?"primary":"ghost"};
-const kt=$("kindTabs");[["walk","歩く（店内）"],["strength","NTC"]].forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.onclick=()=>{kind=k;$("result").innerHTML="";renderCustomer()};kt.appendChild(b)});
+const kt=$("kindTabs");[["walk","歩く"],["strength","筋トレ（スタジオ）"]].forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.onclick=()=>{kind=k;$("result").innerHTML="";renderCustomer()};kt.appendChild(b)});
 
 const LVL={"休憩":0,"ウォーキング":1,"早歩き":2,"きつめの早歩き":3,"ランニング":4};
 const sameSeg=(a,b)=>a.min===b.min&&a.action===b.action&&a.pace[0]===b.pace[0]&&a.pace[1]===b.pace[1]&&a.resistance===b.resistance;
@@ -531,7 +473,7 @@ function menuHTML(no,m){const r=/^[ABC]$/.test(m.machine);const total=m.segments
   if(b.between){const x=b.items[0],y=b.between;return `<tr class="rep"><td class="tm">×${b.reps}<span class="tiny">${mins}分</span></td><td>${it(x)}<div class="tiny">あいだに${esc(y.action)} ${y.min}分（${paceTxt(y,r)}）</div></td></tr>`}
   return `<tr class="rep"><td class="tm">×${b.reps}<span class="tiny">${mins}分</span></td><td>${b.items.map(x=>it(x)).join("")}</td></tr>`}).join("");
  return `<div class="menu"><header><span>${no}回目</span><span>マシン${esc(m.machine)}</span></header>${profileSVG(m.segments)}<table><tbody>${rows}</tbody><tfoot><tr><td colspan="2">合計${total}分　<span class="tiny" style="font-weight:500">速さは目安（km/h）</span></td></tr></tfoot></table></div>`}
-function strengthHTML(p){return ntcCardHTML(ntcOf(p),"次の来店までに")}
+function strengthHTML(p){const st=strInit(p);return `<div class="menu"><header><span>筋トレ（スタジオ）</span><span>30分</span></header><table><tbody><tr><td class="tm">5分</td><td><div class="mi"><span>ウォームアップ</span><span class="tiny">足踏み・肩回しなど軽く体を温める</span></div></td></tr>${STR_CATS.map(([k,l])=>{const c=st[k];return `<tr class="rep"><td class="tm">${c.sets}<span class="tiny">セット</span></td><td><div class="mi"><span>${esc(STR[k][c.lv-1])}</span><span class="tiny">${l}・段階${c.lv}・${strDose(k,c.lv)}</span></div></td></tr>`}).join("")}<tr><td class="tm">5分</td><td><div class="mi"><span>ストレッチ</span><span class="tiny">使った筋肉をゆっくり伸ばす</span></div></td></tr></tbody><tfoot><tr><td colspan="2">上から順に。セットの間は60〜90秒休む。あと2〜3回できる余力で止める</td></tr></tfoot></table></div>`}
 function menuDiff(prev,cur){if(!prev||!cur)return"";for(let i=0;i<Math.min(prev.segments.length,cur.segments.length);i++){const a=prev.segments[i],b=cur.segments[i];
  if(a.action!==b.action||a.min!==b.min)return"構成が変わりました";
  if(a.pace[0]!==b.pace[0]||a.pace[1]!==b.pace[1])return `${b.action}：${f1(a.pace[0])}〜${f1(a.pace[1])} → ${f1(b.pace[0])}〜${f1(b.pace[1])}km/h`;
@@ -562,16 +504,14 @@ function renderCustomer(){const ga=gapAdjust(members[$("who").value]||{});const 
  else st.innerHTML="";
  [...kt.children].forEach((c,i)=>c.setAttribute("aria-pressed",(i===0)===(kind==="walk")?"true":"false"));
  if(kind==="walk"){$("menuBody").innerHTML=p.menu?menuHTML(p.menu.no,applyPrefs(p.menu,p)):"";$("prefs").hidden=!p.menu;[["pWarm",p.noWarm],["pCool",p.noCool]].forEach(([id,off])=>[...$(id).children].forEach(c=>c.setAttribute("aria-pressed",(c.dataset.v==="off")===!!off?"true":"false")));[...$("pBreak").children].forEach(c=>c.setAttribute("aria-pressed",Number(c.dataset.v)===(p.breaks||0)?"true":"false"));const d=ga.note||menuDiff(p.prevMenu,p.menu);$("diff").innerHTML=d?`<div class="diff"><span>${ga.note?"お知らせ":"前回から"}</span><b style="font-weight:700">${esc(d)}</b></div>`:""}
- else{$("prefs").hidden=true;buildStrRows();$("menuBody").innerHTML=strengthHTML(p)+`<p class="tiny">NTC（ナイキ トレーニング クラブ）は無料アプリです。痛みが出たら中止してください。</p>`;$("diff").innerHTML=""}
- $("machineField").hidden=kind!=="walk";$("doneField").hidden=kind!=="walk";$("changeField").hidden=kind!=="walk";$("strField").hidden=kind==="walk";$("kmField").hidden=kind!=="walk";$("rpeField").hidden=kind!=="walk";$("nextField").hidden=kind!=="walk";$("formTitle").textContent=kind==="walk"?"終わったら報告（歩く）":"NTCの報告";
+ else{$("prefs").hidden=true;$("menuBody").innerHTML=strengthHTML(p)+`<p class="tiny">種目は試案です。息を止めずに、フォームが崩れたらその種目は終える。</p>`;$("diff").innerHTML=""}
+ $("machineField").hidden=kind!=="walk";$("doneField").hidden=kind!=="walk";$("changeField").hidden=kind!=="walk";$("strField").hidden=kind==="walk";$("kmField").hidden=kind!=="walk";$("formTitle").textContent=kind==="walk"?"終わったら報告（歩く）":"終わったら報告（筋トレ）";
  const tg=p.target||{};$("goalDate").textContent=tg.date?tg.date.replace(/-/g,"/")+"まで":"";
  $("goalLines").innerHTML=goalBlock(p,"weight","体重","kg")+goalBlock(p,"waist","ウエスト","cm");
  const bl=badgeList(p);$("badgeCount").textContent=`${bl.filter(b=>b[1]).length}/${bl.length}`;
  $("badges").innerHTML=bl.map(([s,g,l])=>`<div class="badge ${g?"got":""}"><div class="disc">${esc(s)}</div><span>${esc(l)}</span></div>`).join("");
- const wk=weekStart(t),cur=((p.asken||[]).find(a=>a.week===wk)||{}).days;
- $("askenDays").innerHTML=Array.from({length:8},(_,i)=>`<button type="button" data-v="${i}" aria-pressed="${cur===i}">${i}日</button>`).join("");
- [...$("askenDays").children].forEach(b=>b.onclick=async()=>{const q=clone(members[$("who").value]);q.asken=[...(q.asken||[]).filter(a=>a.week!==wk),{week:wk,days:+b.dataset.v}].slice(-12);members[$("who").value]=q;await save($("who").value)});
- $("mealSum").textContent=cur==null?"今週はまだ入力がありません":`今週 ${cur}日記録${cur<3?"。まずは1日3食から始めてみてください。":""}`}
+ const td=(p.meals||[]).find(m=>m.date===t);$("kcal").value=td?td.kcal:"";$("kcalT").value=p.kcalTarget??"";
+ const ms=(p.meals||[]).slice(-7);$("mealSum").textContent=ms.length?`直近${ms.length}日の平均 ${Math.round(ms.reduce((a,m)=>a+m.kcal,0)/ms.length)}kcal${p.kcalTarget?`（目標 ${p.kcalTarget}kcal）`:""}`:"まだ入力がありません"}
 
 /* ---------- メニュー作成 ---------- */
 function validMenu(m){if(!m||!/^[A-G]$/.test(m.machine)||!Array.isArray(m.segments)||!m.segments.length)return false;const hasR=/^[ABC]$/.test(m.machine);let t=0;
@@ -632,17 +572,21 @@ async function aiMenu(p,input,cls){if(!sample)return null;
 
 async function save(id){renderAll();if(!db||!canWrite)return;try{await db.doc("members/"+id).set(members[id])}catch(e){if(e&&e.code==="invalid_argument"){canWrite=false;$("conn").textContent="閲覧のみのため、入力は保存されません（この画面の中だけで動きます）。"}}}
 
-$("send").onclick=async()=>{const names={machine:"マシン",done:"最後までできたか",change:"途中の変更",rpe:"きつさ",pain:"痛みや体調の変化"};const need=kind==="walk"?Object.keys(names):["pain"];if(kind!=="walk"&&(nres.c===null||(nres.c>0&&!nres.f))){$("err").textContent="未入力：NTCはできましたか";$("err").hidden=false;return}
+$("send").onclick=async()=>{const names={machine:"マシン",done:"最後までできたか",change:"途中の変更",rpe:"きつさ",pain:"痛みや体調の変化"};const need=kind==="walk"?Object.keys(names):["rpe","pain"];
  const miss=need.filter(k=>state[k]===null);if(miss.length){$("err").textContent="未入力："+miss.map(k=>names[k]).join("・");$("err").hidden=false;return}
  const kmv=$("km").value;const km=kmv===""?null:Number(kmv);if(km!==null&&!(km>0&&km<15)){$("err").textContent="距離は0〜15kmの数字で入れてください";$("err").hidden=false;return}
  const id=$("who").value;const ga=gapAdjust(clone(members[id]));const p=ga.p;const input={machine:state.machine,done:state.done,change:state.change,rpe:state.rpe,pain:state.pain,comment:$("comment").value.trim(),next:state.next||null,kind};
  const rec={date:today(),kind,...input,km:kind==="walk"?km:null};if(kind!=="walk")delete rec.machine;const out=$("result");
  let breakNote="";if(kind==="walk"&&!p.breaks&&/休憩|休み|休ん|止ま|座っ|座り/.test(input.comment)){p.breaks=1;breakNote=`<div class="okbox">ひとことを受けて、次回から途中に休憩を1回（2分）入れました。メニューの下で回数を変えられます。</div>`}
  const painNote=input.pain==="あり"?`<div class="stop">痛みや体調の変化が続くときは、無理をせずお休みしてください。次回のメニューは少し軽くしています。</div>`:"";
- if(kind==="strength"){const st=clone(ntcOf(p));const msg=ntcAdvance(st,nres.c,nres.f,input.pain==="あり");
-  p.ntc=st;if(nres.c>0)p.strengthCount+=1;p.history=[...(p.history||[]),{...rec,done:100,change:"なし",ntc:nres.c,feel:nres.f,result:msg?"調整":"維持"}].slice(-60);members[id]=p;
-  nres={c:null,f:null};buildStrRows();
-  out.innerHTML=painNote+`<div class="okbox">記録しました。${msg?"NTC："+esc(msg):`次回は ${esc(ntcProg(st).name)} ${st.week}週目です。`}</div>`;renderCustomer();await save(id);return}
+ if(kind==="strength"){const st=clone(strInit(p));const ch=[];const fast=(p.paceMode||"normal")==="fast"||input.next==="もう少しきつく";
+  STR_CATS.forEach(([k,l])=>{const c=st[k];let r=sres[k];if(input.next==="少し楽に"&&r!=="きつい")r="きつい";
+   if(r==="きつい"){c.streak=0;const d=strDown(c);if(d)ch.push(`${l}：${d}`)}
+   else if(r==="楽"&&input.pain!=="あり"){c.streak++;if(c.streak>=(fast?1:2)){c.streak=0;const u=strUp(c);if(u)ch.push(`${l}：${u}`)}}
+   else c.streak=0});
+  p.str=st;p.strengthCount+=1;p.history=[...(p.history||[]),{...rec,done:100,change:"なし",str:{...sres},result:ch.length?"調整":"維持"}].slice(-60);members[id]=p;
+  STR_CATS.forEach(([k])=>sres[k]="ちょうど");buildStrRows();
+  out.innerHTML=painNote+`<div class="okbox">記録しました。${ch.length?"次回の変更："+esc(ch.join("／")):"次回も同じ内容です（楽が2回続いたら上がります）。"}</div>`;renderCustomer();await save(id);return}
  const btn=$("send");btn.disabled=true;out.innerHTML=`<p class="tiny">次回メニューを作成しています…（数十秒かかることがあります）</p>`;
  const count=p.count+1;if(count>=p.goal){p.count=count;p.status="done";p.prevMenu=p.menu;p.menu=null;p.history=[...(p.history||[]),{...rec,result:"終了"}].slice(-60);members[id]=p;out.innerHTML=`<div class="okbox">予定の回数が終わりました。お疲れさまでした。</div>`;btn.disabled=false;await save(id);return}
  if(!input.next&&input.comment&&input.pain!=="あり"){const wsh=await aiWish(input.comment);if(wsh&&wsh!=="このまま")input.next=wsh}
@@ -653,7 +597,10 @@ $("send").onclick=async()=>{const names={machine:"マシン",done:"最後まで�
  const no=p.menu.no+1;p.count=count;p.prevMenu=p.menu;p.menu={no,...menu};p.history=[...(p.history||[]),{...rec,result:cls}].slice(-60);members[id]=p;
  out.innerHTML=painNote+breakNote+`<div class="okbox">報告しました。次回のメニューを上に出しています（${esc(cls)}${reason?"・"+esc(reason):""}／${esc(by)}）。</div>`;btn.disabled=false;await save(id);window.scrollTo({top:0,behavior:"smooth"})};
 
-
+$("mealSave").onclick=async()=>{const id=$("who").value;const p=clone(members[id]);const k=$("kcal").value,ktv=$("kcalT").value;$("mealErr").hidden=true;
+ if(k!==""){const n=Number(k);if(!Number.isInteger(n)||n<300||n>6000){$("mealErr").textContent="カロリーは300〜6000の数字で入力してください";$("mealErr").hidden=false;return}p.meals=[...(p.meals||[]).filter(m=>m.date!==today()),{date:today(),kcal:n}].slice(-30)}
+ if(ktv!==""){const n=Number(ktv);if(!Number.isInteger(n)||n<800||n>5000){$("mealErr").textContent="目標カロリーは800〜5000の数字で入力してください";$("mealErr").hidden=false;return}p.kcalTarget=n}
+ members[id]=p;await save(id);$("mealSave").textContent="保存しました";setTimeout(()=>$("mealSave").textContent="保存",1500)};
 
 /* ---------- スタッフの画面 ---------- */
 function flags(p){const t=today(),lv=lastVisit(p),gap=lv?daysBetween(lv,t):999,lm=lastMeas(p),out=[];
@@ -663,72 +610,28 @@ function flags(p){const t=today(),lv=lastVisit(p),gap=lv?daysBetween(lv,t):999,l
  if(brokeStreak(p))out.push(["連続が途切れた","p-w","先週の来店がありませんでした（今週1回で連続が再開）。"]);
  if(p.status!=="done"&&(!lm.date||daysBetween(lm.date,t)>=14))out.push(["測定なし","p-w","体重・ウエストの入力が2週間以上ありません。"]);
  const up=[];if(hitWeeks(p)>=4)up.push(`週${p.weekly}回を${hitWeeks(p)}週続けて達成`);if(streak(p)>=8)up.push(`${streak(p)}週連続`);if(reached(p))up.push("目標に到達");if(p.status==="done")up.push("予定回数が終了");
- const snooze=p.upsellAt&&daysBetween(p.upsellAt,t)<30;
- if(snooze||gap>=10)up.length=0;
- if(up.length&&p.plan!=="プレミアム")out.push(["案内のタイミング","p-a",`${up.join("・")}。効果レポートを見せて、プレミアム（1日2回）を案内する。`]);
- else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。効果レポートを見せて、スタジオのセルフトレーニングを案内する。`]);
- if(!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["NTC報告なし","p-b","NTCの報告がまだありません。来店時にアプリの入れ方と今のメニューを案内する。"]);
+ if(up.length&&p.plan!=="プレミアム")out.push(["案内のタイミング","p-a",`${up.join("・")}。ダブル枠（プレミアム）とスタジオを案内する時期。`]);
+ else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。スタジオの筋トレを案内する時期。`]);
+ if(!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["筋トレ未実施","p-b","スタジオの筋トレ（当初は無料）をまだ使っていません。"]);
  return out}
-/* 案内（単価アップ）：料金は正本 airnix_store_rules.md 用賀キャンペーン（2026-04〜）。上位変更のみ可 */
-const UPSELL={
- "ライト":{to:"プレミアム（9,800円・1日2回）",say:"このペースで続けていらっしゃるので、1日2回使えるプレミアムにすると、トレッドミルとスタジオを同じ日に組めます。"},
- "メイン":{to:"プレミアム（9,800円・1日2回）",say:"結果が数字に出てきているので、1日2回使えるプレミアムにすると、トレッドミルのあとにスタジオでNTCまで続けてできます。"},
- "プレミアム":{to:"スタジオのセルフトレーニング（料金は未定）",say:"NTCのメニューを、スタジオで集中してやってみませんか。仕切られたスペースで、画面を見ながらできます。"}};
-function monthReport(p){const from=addDays(today(),-30);const h=(p.history||[]).filter(x=>x.date>=from);
- const visits=new Set(h.map(x=>x.date)).size;const ntc=h.filter(x=>x.kind==="strength").reduce((a,x)=>a+(x.ntc||0),0);
- const km=Math.round(h.filter(x=>x.km).reduce((a,x)=>a+x.km,0)*10)/10;const m=(p.measurements||[]).filter(x=>x.date>=from),lm=lastMeas(p);
- const dw=m.length&&lm.weight!=null&&m[0].weight!=null?Math.round((lm.weight-m[0].weight)*10)/10:null;const dwa=m.length&&lm.waist!=null&&m[0].waist!=null?Math.round((lm.waist-m[0].waist)*10)/10:null;
- const sg=v=>v>0?"+"+v:String(v);
- return `来店${visits}回・NTC${ntc}回${km?`・歩いた距離${km}km`:""}${dw!=null?`・体重${sg(dw)}kg`:""}${dwa!=null?`・ウエスト${sg(dwa)}cm`:""}`}
-function upsellHTML(i){const p=members[i];if(!flags(p).some(f=>f[0]==="案内のタイミング"))return"";const u=UPSELL[p.plan];if(!u)return"";
- return `<div class="say"><p class="tiny" style="font-weight:700">直近30日の効果レポート</p><p>${esc(monthReport(p))}</p>
- <p class="tiny" style="color:#bdbdbd;margin-top:6px">案内：${esc(u.to)}</p><p>「${esc(u.say)}」</p></div>
- <div class="acts"><button class="ghost" data-up="${i}" data-r="yes">案内した → 変更する</button><button class="ghost" data-up="${i}" data-r="no">案内した → 今は見送り</button></div>`}
-function repData(p){const t=today(),from=addDays(t,-29);const h=(p.history||[]).filter(x=>x.date>=from);
- const visits=new Set(h.map(x=>x.date)).size;const ntc=h.filter(x=>x.kind==="strength").reduce((a,x)=>a+(x.ntc||0),0);
- const km=Math.round(h.filter(x=>x.km).reduce((a,x)=>a+x.km,0)*10)/10;
- const asken=(p.asken||[]).filter(a=>a.week>=weekStart(from)).reduce((a,x)=>a+x.days,0);
- const ms=(p.measurements||[]);const base=[...ms].reverse().find(m=>m.date<from)||ms[0]||{};const lm=lastMeas(p);
- const d=k=>base[k]!=null&&lm[k]!=null&&lm.date!==base.date?Math.round((lm[k]-base[k])*10)/10:null;
- return{t,from,visits,ntc,km,asken,dw:d("weight"),dwa:d("waist"),lm,streak:streak(p),ntcNow:ntcOf(p)}}
-function repHTML(p){const r=repData(p),sg=v=>v==null?"-":(v>0?"+":"")+v;const tg=p.target||{};
- const tile=(v,u,l)=>`<div style="background:#f5f5f5;border-radius:14px;padding:12px"><b style="font-size:26px;font-weight:900">${v}</b><span class="tiny"> ${u}</span><p class="tiny">${l}</p></div>`;
- const good=[];if(r.visits>=p.weekly*4)good.push(`週${p.weekly}回のペースで通えました`);if(r.dwa!=null&&r.dwa<0)good.push(`ウエストが${-r.dwa}cm細くなりました`);if(r.dw!=null&&r.dw<0)good.push(`体重が${-r.dw}kg減りました`);if(r.ntc>0)good.push(`来店以外の日にNTCを${r.ntc}回続けました`);
- const next=r.visits<p.weekly*4?`来月は週${p.weekly}回のペースを目指しましょう。`:r.asken<12?"来月は、あすけんで食事を記録する日を週3日以上に増やしてみましょう。":`この調子で、${ntcProg(r.ntcNow).name}を続けていきましょう。`;
- return `<div style="display:flex;justify-content:space-between;align-items:center"><span style="letter-spacing:.3em;font-weight:900;font-size:12px">AIRNIX</span><button class="ghost" type="button" id="repClose">閉じる</button></div>
- <div><p class="tiny">${md(r.from)}〜${md(r.t)}の記録</p><h2 style="font-size:24px">${esc(p.name)}の効果レポート</h2></div>
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${tile(r.visits,"回","来店")}${tile(r.km||"-","km","トレッドミルで歩いた距離")}${tile(r.ntc,"回","NTC（自宅・スタジオ）")}${tile(r.asken,"日","あすけんで食事を記録")}</div>
- <div style="background:#111;color:#fff;border-radius:16px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-  <div><p class="tiny" style="color:#bdbdbd">体重（30日の変化）</p><b style="font-size:24px;color:#d7ff3a">${sg(r.dw)}</b><span> kg</span><p class="tiny" style="color:#bdbdbd">今 ${r.lm.weight??"-"}kg${tg.weight!=null?`／目標 ${tg.weight}kg`:""}</p></div>
-  <div><p class="tiny" style="color:#bdbdbd">ウエスト（30日の変化）</p><b style="font-size:24px;color:#d7ff3a">${sg(r.dwa)}</b><span> cm</span><p class="tiny" style="color:#bdbdbd">今 ${r.lm.waist??"-"}cm${tg.waist!=null?`／目標 ${tg.waist}cm`:""}</p></div></div>
- <div><p class="tiny" style="font-weight:700">ウエストの推移（入会から）</p>${trend(p.measurements||[],"waist",tg.waist,"cm")}</div>
- ${good.length?`<div><p style="font-weight:900">今月できたこと</p><p style="font-size:14px">${good.map(esc).join("。")}。</p></div>`:""}
- <div><p style="font-weight:900">来月にむけて</p><p style="font-size:14px">${esc(next)}</p></div>
- <p class="tiny">${r.streak}週連続で来店中。NTCは「${esc(ntcProg(r.ntcNow).name)}」${r.ntcNow.week}週目です。</p>
- <p class="tiny">表示しているのはご本人の記録の数字で、効果をお約束するものではありません。</p>`}
-function openRep(id){$("repBody").innerHTML=repHTML(members[id]);$("rep").hidden=false;$("repClose").onclick=()=>$("rep").hidden=true}
 function score(p){const f=flags(p).map(x=>x[1]);return (f.includes("p-d")?0:f.includes("p-w")?1:f.includes("p-a")?2:3)*1000+rate(p)}
 function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastVisit(p),last=(p.history||[]).slice(-1)[0];
  const lm=lastMeas(p),tg=p.target||{};const prog=[];if(tg.weight!=null)prog.push(`体重 ${p.start.weight}→${lm.weight??"-"}（目標${tg.weight}）`);if(tg.waist!=null)prog.push(`ウエスト ${p.start.waist}→${lm.waist??"-"}（目標${tg.waist}）`);
  return `<article class="mcard ${fl.some(f=>f[1]==="p-d")?"alert":""}">
-  <div class="mhead"><div><b>${esc(p.name)}</b><p class="tiny">${esc(p.plan)}・週${p.weekly}回目標・${streak(p)}週連続・最終来店 ${md(lv)}</p><p class="tiny">NTC：${esc(ntcProg(ntcOf(p)).name)} ${ntcOf(p).week}週目／全${ntcProg(ntcOf(p)).weeks}週</p></div>
+  <div class="mhead"><div><b>${esc(p.name)}</b><p class="tiny">${esc(p.plan)}・週${p.weekly}回目標・${streak(p)}週連続・最終来店 ${md(lv)}</p></div>
   </div>
   <div class="pills">${fl.length?fl.map(f=>`<span class="pill ${f[1]}">${esc(f[0])}</span>`).join(""):`<span class="pill p-o">順調</span>`}</div>
   <div class="rate"><span>来店率</span><div class="bar"><i style="width:${r}%"></i></div><b class="num" style="color:var(--ink)">${r}%</b></div>
   ${fl.length?`<p class="say">${esc(fl[0][2])}</p>`:`<p class="say">順調です。</p>`}
-  ${upsellHTML(i)}
   <p class="tiny">${esc(prog.join("・"))}</p>
-  ${last?`<p class="tiny">直近の報告 ${md(last.date)}：${last.kind==="strength"?`NTC 今週${last.ntc??"-"}回${last.feel?`・${{easy:"楽",ok:"ちょうど",hard:"きつい"}[last.feel]}`:""}`:`歩く 達成度${last.done}%・きつさ${last.rpe}`}${last.km?`・${last.km}km`:""}${last.comment?`・「${esc(last.comment)}」`:""}</p>`:""}
-  <div class="acts"><button class="ghost" data-rep="${i}">効果レポート</button><button class="ghost" data-edit="${i}">目標を見直す</button></div>
+  ${last?`<p class="tiny">直近の報告 ${md(last.date)}：${last.kind==="strength"?"筋トレ":"歩く"} 達成度${last.done}%・きつさ${last.rpe}${last.km?`・${last.km}km`:""}${last.comment?`・「${esc(last.comment)}」`:""}</p>`:""}
+  <div class="acts"><button class="ghost" data-edit="${i}">目標を見直す</button></div>
  </article>`}
 function renderStaff(){const ids=Object.keys(members).sort((a,b)=>score(members[a])-score(members[b]));const t=today();
  const all=ids.map(i=>flags(members[i]));const cnt=c=>all.filter(f=>f.some(x=>x[1]===c)).length;
  $("sum").innerHTML=`<div class="d"><span class="tiny">長く来ていない</span><b class="num">${cnt("p-d")}</b></div><div class="w"><span class="tiny">気にかける人</span><b class="num">${cnt("p-w")}</b></div><div class="a"><span class="tiny">案内のタイミング</span><b class="num">${cnt("p-a")}</b></div><div class="o"><span class="tiny">全体</span><b class="num">${ids.length}</b></div>`;
  $("allList").innerHTML=ids.map(cardHTML).join("");
- document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
- document.querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>openRep(b.dataset.rep));
- document.querySelectorAll("[data-up]").forEach(b=>b.onclick=async()=>{const id=b.dataset.up;const p=clone(members[id]);p.upsellAt=today();
-  p.upsellLog=[...(p.upsellLog||[]),{date:today(),from:p.plan,result:b.dataset.r}];if(b.dataset.r==="yes"&&p.plan!=="プレミアム")p.plan="プレミアム";members[id]=p;await save(id)})}
+ document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit))}
 $("mCancel").onclick=()=>{$("measCard").hidden=true};
 $("mSave").onclick=async()=>{if(!measId)return;const w=$("mW").value,c=$("mC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);
  if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("measErr").textContent="体重かウエストを正しく入力してください";$("measErr").hidden=false;return}
@@ -785,8 +688,6 @@ function renderAll(){const sel=$("who");const cur=sel.value;const ids=Object.key
  sel.innerHTML=ids.map(i=>`<option value="${i}">${esc(members[i].name)}${i[0]==="u"?"":"（見本）"}</option>`).join("");
  if(cur&&members[cur])sel.value=cur;renderCustomer();renderStaff()}
 $("who").onchange=()=>{$("result").innerHTML="";preset();renderCustomer()};
-$("openRep").onclick=()=>openRep($("who").value);
-$("rep").onclick=e=>{if(e.target.id==="rep")$("rep").hidden=true};
 $("reset").onclick=async()=>{const b=$("reset");b.disabled=true;members=seeds();if(db&&canWrite){for(const [id,d] of Object.entries(members)){try{await db.doc("members/"+id).set(d)}catch(e){}}}$("result").innerHTML="";preset();renderAll();b.disabled=false};
 
 [...$("next").children].forEach(c=>c.onclick=()=>{const on=c.getAttribute("aria-pressed")!=="true";state.next=on?c.dataset.v:null;[...$("next").children].forEach(x=>x.setAttribute("aria-pressed",x===c&&on?"true":"false"))});
@@ -795,7 +696,7 @@ $("reset").onclick=async()=>{const b=$("reset");b.disabled=true;members=seeds();
 $("sSave").onclick=async()=>{const w=$("sW").value,c=$("sC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);$("sErr").hidden=true;
  if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("sErr").textContent="体重かウエストを数字で入力してください";$("sErr").hidden=false;return}
  const id=$("who").value;const p=clone(members[id]);p.measurements=[...(p.measurements||[]).filter(m=>m.date!==today()),{date:today(),weight:wn,waist:cn}].slice(-30);members[id]=p;$("sW").value="";$("sC").value="";await save(id);$("sSave").textContent="記録しました";setTimeout(()=>$("sSave").textContent="記録する",1500)};
-members=seeds();renderAll();showView(PV);$("viewTabs").hidden=true;document.title=PV==="staff"?"AIRNIX スタッフの画面":"AIRNIX お客様の画面";document.querySelectorAll("#topnav a[data-v]").forEach(a=>{if(a.dataset.v===PV)a.classList.add("on")});
+members=seeds();renderAll();showView(PV);$("viewTabs").hidden=true;document.title=PV==="staff"?"AIRNIX スタッフの画面":"AIRNIX お客様の画面";document.querySelectorAll("#topnav a[data-v]").forEach(a=>{if(a.dataset.v===PV){a.style.background="#24395c";a.style.borderColor="#24395c";a.style.color="#fff"}});
 (async()=>{try{sample=await window.claude?.use("sample")}catch(e){sample=null}
  try{db=await window.claude?.use("db")}catch(e){db=null}
  if(!db){$("conn").textContent="見本データで動いています（入力は保存されません）。";return}
