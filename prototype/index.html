@@ -93,13 +93,18 @@ details[open] summary::after{content:"－"}
 .chk input{width:20px;height:20px}
 .change{font-size:18px;font-weight:900;margin:0 0 10px;text-align:center;background:var(--bg);border-radius:10px;padding:10px}
 .change .arr{color:var(--green)}
+.ntcbox{margin-top:16px;border:2px solid #111;border-radius:12px;padding:12px 14px;background:#f4f4f4}
+.ntch{margin:0 0 6px;font-weight:900;font-size:15px;display:flex;align-items:center;gap:8px}
+.ntclogo{background:#111;color:#d7ff3a;font-weight:900;font-size:12px;border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+.ntcn{margin:0;font-size:17px;font-weight:900}
+.ntcp{margin:2px 0 0;font-size:12px;color:var(--sub)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brand">AIRNIX</div>
   <h1>個別メニュー（試作）</h1>
-  <p class="lead">報告すると、次回のメニューが自動で変わります。</p>
+  <p class="lead">店内のトレッドミルと、次の来店までのNTC（ナイキの無料アプリ）をセットで指定。報告すると、次回のメニューが自動で変わります。</p>
 
   <nav class="tabs">
     <a href="./" aria-current="page">仕組みを見る</a>
@@ -115,7 +120,7 @@ details[open] summary::after{content:"－"}
 
   <section class="card" id="s1">
     <div class="who"><span>サンプル様（見本）</span><span class="badge" id="visit"></span></div>
-    <h2>今日のメニュー（30分）</h2>
+    <h2>今日のメニュー（店内・トレッドミル30分）</h2>
     <div id="menu1"></div>
     <div id="ntc1"></div>
     <button class="btn" type="button" id="toReport">トレーニングした → 報告へ</button>
@@ -205,9 +210,9 @@ const NTC=[
 const ntcName=i=>{const x=NTC[i-1];return`${x.t}・${x.min}分・強度${x.lv}／週${x.n}回`};
 function ntcHTML(l,title){
   const x=NTC[l.nl-1];
-  return`<div class="rows" style="margin-top:14px"><p class="what">${title}</p>
-<div class="row"><div class="t">NTC</div><div><div class="n">${x.t} ${x.min}分</div><div class="p">強度：${x.lv}・週${x.n}回・自宅かスタジオで</div></div></div></div>
-<p class="hint" style="margin-top:6px">NTCアプリで「種類・時間・強度」を絞り込み、好きなものを1つ選んでください。</p>`;
+  return`<div class="ntcbox"><p class="ntch"><span class="ntclogo">NTC</span>${title}</p>
+<p class="ntcn">${x.t} ${x.min}分</p><p class="ntcp">強度：${x.lv}・週${x.n}回・自宅かスタジオで</p>
+<p class="ntcp">ナイキ トレーニング クラブ（無料アプリ）で「種類・時間・強度」を絞り込み、好きなものを1つ選んでください。</p></div>`;
 }
 
 function build(l){
