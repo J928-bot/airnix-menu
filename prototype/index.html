@@ -1,698 +1,312 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AIRNIX 個別メニュー</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
 <style>
-/* レイアウト：上にお客様／スタッフの切替。お客様＝携帯1画面（今週→今日のメニュー→目標→バッジ→報告）、スタッフ＝要約→今日来る人→全員のカード */
 :root{
-  --bg:#ffffff;--soft:#f5f7fa;--card:#ffffff;--ink:#16243a;--sub:#5d6b7e;--line:#e2e7ee;
-  --brand:#1d3a63;--brand-soft:#e9eef6;--amber:#d9921a;--amber-soft:#fdf3e2;
-  --ok:#2f7a3b;--ok-soft:#e9f5ec;--warn:#a25d07;--warn-soft:#fdf1df;--danger:#b4261e;--danger-soft:#fdeceb;
-  --goal:#9aa5b4;
-  --f-display:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",sans-serif;
-  --f-body:"Noto Sans JP","Hiragino Sans",sans-serif;
-  color-scheme:light;
+  --bg:#f6f7f9; --card:#ffffff; --ink:#1b2430; --sub:#5d6875; --line:#e3e7ec;
+  --navy:#24395c; --orange:#f08a24; --walk:#c9d0d9; --green:#1f9d6b; --greenbg:#e8f6ef;
+  --red:#d2493c; --redbg:#fdecea; --amberbg:#fff4e5;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;padding-inline:16px;padding-block:20px 56px}
-.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-h1,h2,h3{font-family:var(--f-display);font-weight:700;margin:0;text-wrap:balance;letter-spacing:.01em}
-h1{font-size:22px}h2{font-size:18px}h3{font-size:16px}
-p{margin:0}
-.sub{color:var(--sub);font-size:14px}
-.tiny{color:var(--sub);font-size:12.5px}
-.num{font-variant-numeric:tabular-nums}
-.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
-.brandmark{font-family:var(--f-display);font-weight:900;letter-spacing:.18em;color:var(--brand);font-size:13px}
-.seg{display:inline-flex;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
-.seg button{font:inherit;font-size:15px;font-weight:700;border:0;background:transparent;color:var(--sub);padding:8px 18px;border-radius:9px;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--card);color:var(--brand);box-shadow:0 1px 3px rgba(22,36,58,.12)}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-.status{font-size:12.5px;color:var(--sub)}
-
-/* お客様（携帯） */
-.custLayout{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:start}
-@media (max-width:860px){.custLayout{grid-template-columns:minmax(0,1fr)}}
-.phone{width:100%;max-width:400px;margin:0 auto;background:var(--soft);border:1px solid var(--line);border-radius:28px;padding:18px 14px 22px;display:flex;flex-direction:column;gap:12px}
-.hello{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 4px}
-.hello b{font-family:var(--f-display);font-size:19px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.card h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.card h3 small{font-family:var(--f-body);font-weight:500;font-size:12.5px;color:var(--sub)}
-.week{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center}
-.ringTxt{font-family:var(--f-display);font-weight:900;font-size:26px;fill:var(--ink)}
-.streak{display:flex;align-items:center;gap:8px;background:var(--amber-soft);color:var(--warn);border-radius:12px;padding:6px 10px;font-weight:700;font-size:14px}
-.streak .big{font-family:var(--f-display);font-size:22px;font-weight:900;color:var(--amber)}
-.days{display:flex;gap:5px}
-.days span{flex:1;text-align:center;font-size:11.5px;color:var(--sub);border-radius:8px;padding:3px 0;background:var(--soft)}
-.days span.on{background:var(--brand);color:#fff;font-weight:700}
-.days span.today{outline:1.5px solid var(--brand)}
-.stampMsg{background:var(--brand-soft);color:var(--brand);border-radius:12px;padding:8px 12px;font-size:14px}
-.menu{border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.menu header{display:flex;justify-content:space-between;align-items:baseline;padding:8px 12px;background:var(--brand);color:#fff;font-weight:700;font-size:14px}
-.menu table{width:100%;border-collapse:collapse;font-size:14px}
-.menu td{padding:7px 10px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
-.menu tr:first-child td{border-top:0}
-.menu td:first-child{width:3.6em;font-weight:700;color:var(--brand)}
-.menu tfoot td{text-align:right;font-weight:700;background:var(--soft)}
-.prof{display:block;width:100%;height:46px;padding:10px 12px 0;box-sizing:content-box;background:var(--card)}
-.menu .prof{width:calc(100% - 24px)}
-.menu td.tm{white-space:nowrap}
-.menu td.tm .tiny{display:block;font-weight:500}
-.menu td.pc{text-align:right;white-space:nowrap;color:var(--sub);font-size:13px}
-.menu tr.rep td{background:var(--brand-soft)}
-.menu tr.rep td div+div{margin-top:2px}
-.menu .mi{display:flex;flex-direction:column;line-height:1.35}
-.menu .mi+.mi{margin-top:4px}
-#weekCard .week{grid-template-columns:auto minmax(0,1fr);gap:10px}
-#weekCard #ring{width:64px;height:64px}
-#weekCard .streak{padding:3px 8px;font-size:13px}#weekCard .streak .big{font-size:17px}
-#weekCard #weekMsg{font-size:13.5px!important}
-details.prefs summary{cursor:pointer;font-size:14px;color:var(--brand);font-weight:700;list-style:none}
-details.prefs summary::before{content:"＋ "}details.prefs[open] summary::before{content:"− "}
-details.prefs{display:block}details.prefs[open]{display:flex}
-.prefs{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:10px}
-.pref{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px}
-.pref .chips button{min-height:34px;padding:4px 12px;font-size:14px}
-.diff{display:flex;gap:8px;align-items:flex-start;background:var(--ok-soft);color:var(--ok);border-radius:12px;padding:8px 12px;font-size:14px}
-.kindTabs{display:flex;gap:6px}
-.kindTabs button,.chips button{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer;min-height:40px;font-variant-numeric:tabular-nums}
-.kindTabs button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;line-height:1.65;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+.brand{font-size:12px;letter-spacing:.2em;color:var(--sub);font-weight:700}
+h1{font-size:22px;margin:4px 0 6px;font-weight:900}
+.lead{margin:0 0 16px;color:var(--sub);font-size:14px}
+.tabs{display:flex;gap:6px;margin-bottom:18px}
+.tabs a{flex:1;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;font-size:14px;font-weight:700}
+.tabs a[aria-current]{background:var(--navy);border-color:var(--navy);color:#fff}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;list-style:none;padding:0}
+.steps li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 6px;text-align:center;font-size:12px;color:var(--sub);font-weight:700}
+.steps li b{display:block;font-size:18px;line-height:1.2}
+.steps li.on{border-color:var(--navy);color:var(--navy);box-shadow:0 0 0 2px var(--navy) inset}
+.steps li.done{color:var(--green)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px;margin-bottom:14px}
+.card h2{font-size:17px;margin:0 0 4px}
+.hint{font-size:13px;color:var(--sub);margin:0 0 12px}
+.who{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--sub);margin-bottom:10px}
+.badge{display:inline-block;background:var(--navy);color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+.bar{display:flex;height:22px;border-radius:6px;overflow:hidden;margin:6px 0 4px}
+.bar span{display:block;height:100%;border-right:1px solid #fff}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--sub);margin-bottom:10px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.rows{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);align-items:center}
+.row .t{font-weight:900;font-size:15px}
+.row .n{font-weight:700}
+.row .p{font-size:12px;color:var(--sub)}
+.row.chg{background:var(--greenbg);margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:6px}
+.row.chg.dn{background:var(--amberbg)}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:900;font-family:inherit;cursor:pointer;background:var(--navy);color:#fff;margin-top:14px}
+.btn.sub{background:var(--card);color:var(--navy);border:1px solid var(--navy);font-weight:700;font-size:15px;padding:11px}
+.q{margin:14px 0 6px;font-weight:700;font-size:14px}
+.q small{font-weight:400;color:var(--sub)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.rpe button{min-width:40px;padding:6px 0}
-.field{display:flex;flex-direction:column;gap:6px}
-.field>span{font-size:13.5px;color:var(--sub);font-weight:500}
-input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%}
-textarea{min-height:52px;resize:vertical}
-.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
-.primary{font:inherit;font-weight:700;border:0;border-radius:14px;padding:13px;background:var(--brand);color:#fff;cursor:pointer;font-size:16px}
-.primary[disabled]{opacity:.6;cursor:wait}
-.ghost{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer}
-.err{color:var(--danger);font-size:14px}
-.stop{background:var(--danger-soft);color:var(--danger);border-radius:12px;padding:10px 12px;font-size:14px}
-.okbox{background:var(--ok-soft);color:var(--ok);border-radius:12px;padding:10px 12px;font-size:14px}
-.goalLine{font-size:14px}
-.goalLine b{font-family:var(--f-display);font-size:20px}
-.badges{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.badge{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;font-size:11.5px;color:var(--sub);line-height:1.3}
-.badge .disc{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:14px;background:var(--soft);color:var(--goal);border:2px dashed var(--line)}
-.badge.got{color:var(--ink)}
-.badge.got .disc{background:var(--amber);color:#fff;border:2px solid var(--amber)}
-.howto{display:flex;flex-direction:column;gap:12px}
-.howto ol{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
-.who{max-width:400px;margin:0 auto;width:100%}
-
-/* スタッフ */
-.sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-@media (max-width:640px){.sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.sum div{background:var(--soft);border-radius:14px;padding:10px 12px}
-.sum b{display:block;font-family:var(--f-display);font-size:26px;font-weight:900;line-height:1.2}
-.sum .d b{color:var(--danger)}.sum .w b{color:var(--warn)}.sum .a b{color:var(--amber)}.sum .o b{color:var(--brand)}
-.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-.mcard{border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--card);min-width:0}
-.mcard.alert{border-color:var(--danger)}
-.mhead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
-.mhead b{font-family:var(--f-display);font-size:17px}
-.pills{display:flex;flex-wrap:wrap;gap:5px}
-.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
-.p-d{background:var(--danger-soft);color:var(--danger)}.p-w{background:var(--warn-soft);color:var(--warn)}.p-a{background:var(--amber-soft);color:var(--warn)}.p-o{background:var(--ok-soft);color:var(--ok)}.p-b{background:var(--brand-soft);color:var(--brand)}
-.rate{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub)}
-.bar{flex:1;height:8px;background:var(--soft);border-radius:99px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--brand);border-radius:99px}
-.say{font-size:14px;background:var(--soft);border-radius:10px;padding:8px 10px}
-.acts{display:flex;flex-wrap:wrap;gap:6px}
-.stamps{display:flex;flex-wrap:wrap;gap:6px}
-.stamps button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 10px;cursor:pointer}
-.stamps button[aria-pressed="true"]{background:var(--brand-soft);border-color:var(--brand);color:var(--brand);font-weight:700}
-.sect{display:flex;flex-direction:column;gap:10px}
-.rules{font-size:13.5px;color:var(--sub);display:flex;flex-direction:column;gap:6px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.chips button{flex:1 0 auto;min-width:44px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 8px;font-size:14px;font-family:inherit;cursor:pointer;color:var(--ink)}
+.chips button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:700}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-top:4px}
+.gap{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--sub);margin-top:12px;flex-wrap:wrap}
+.gap .chips{flex:1}
+.gap .chips button{padding:6px;font-size:13px}
+.note{font-size:13px;background:var(--amberbg);border-radius:8px;padding:8px 10px;margin:10px 0 0}
+.verdict{border-radius:12px;padding:14px;margin-bottom:12px}
+.verdict.up{background:var(--greenbg)}
+.verdict.keep{background:#eef2f7}
+.verdict.down{background:var(--amberbg)}
+.verdict.stop{background:var(--redbg)}
+.verdict .big{font-size:20px;font-weight:900;margin:0}
+.verdict .why{font-size:13px;margin:4px 0 0;color:var(--ink)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cmp h3{font-size:13px;margin:0 0 4px;color:var(--sub)}
+.cmp .row{grid-template-columns:34px 1fr;gap:4px;padding:6px 0}
+.cmp .row .t{font-size:13px}
+.cmp .row .n{font-size:13px}
+.cmp .row .p{font-size:11px}
+.cmp .row.chg{margin:0 -4px;padding-left:4px;padding-right:4px}
+.what{font-size:14px;font-weight:700;margin:10px 0 0}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700;padding:12px 0;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";float:right;color:var(--sub)}
+details[open] summary::after{content:"－"}
+.ladder{list-style:none;padding:0;margin:0 0 12px}
+.ladder li{padding:8px 10px;border-radius:8px;font-size:14px;margin-bottom:4px;border:1px solid var(--line)}
+.ladder li.cur{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy) inset;font-weight:700}
+.ladder li span{display:inline-block;width:22px;font-weight:900;color:var(--navy)}
+.rule{font-size:14px;margin:0 0 12px;padding-left:1.2em}
+.rule li{margin-bottom:4px}
+.foot{font-size:12px;color:var(--sub);text-align:center;margin-top:18px}
+[hidden]{display:none!important}
 </style>
-
+</head>
+<body>
 <div class="wrap">
-  <div class="top">
-    <div>
-      <p class="brandmark">AIRNIX</p>
-      <h1>個別メニュー（試作 第8版）</h1>
-      <p class="sub">お客様は携帯で「今週の来店・今日のメニュー・報告」、スタッフの作業はなし。店長は週1回まとめを見るだけ。画面の方はすべて見本です。</p>
-    </div>
-    <div class="seg" role="tablist" id="viewTabs"><button type="button" data-view="cust">お客様の画面</button><button type="button" data-view="staff">店長の画面</button></div>
-  </div>
-  <p class="status" id="conn">データに接続しています…</p>
+  <div class="brand">AIRNIX</div>
+  <h1>個別メニュー（試作）</h1>
+  <p class="lead">お客様が終わったあとに報告すると、次回の30分メニューが自動で決まります。下の3ステップで試せます（見本データ・保存はされません）。</p>
 
-  <!-- お客様 -->
-  <section id="custView" class="custLayout" aria-label="お客様の画面">
-    <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
-      <label class="field who"><span>見本を切り替える</span><select id="who"></select></label>
-      <div class="phone">
-        <div class="hello"><div><p class="tiny">AIRNIX 用賀店</p><b id="hName"></b></div><span class="pill p-b" id="hPlan"></span></div>
-        <div id="custState"></div>
+  <nav class="tabs">
+    <a href="./" aria-current="page">仕組みを見る</a>
+    <a href="full.html">店長の画面・全機能</a>
+  </nav>
 
-        <div class="card" id="weekCard">
-          <h3>今週の来店<small id="weekRange"></small></h3>
-          <div class="week">
-            <svg id="ring" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="今週の来店"></svg>
-            <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
-              <p id="weekMsg" style="font-size:14.5px"></p>
-              <div class="streak"><span class="big num" id="streakN">0</span><span>週連続で来店中</span></div>
-            </div>
-          </div>
-          <div class="days" id="days"></div>
-          <div id="stampMsg"></div>
-        </div>
-        <div class="card" id="menuCard">
-          <h3>今日のメニュー<small>30分</small></h3>
-          <div class="kindTabs" id="kindTabs"></div>
-          <div id="diff"></div>
-          <div id="menuBody"></div>
-          <details class="prefs" id="prefs"><summary>メニューを調整する（アップ・クールダウン・休憩）</summary>
-            <div class="pref"><span>ウォーミングアップ</span><div class="chips" id="pWarm"><button type="button" data-v="on">あり</button><button type="button" data-v="off">なし</button></div></div>
-            <div class="pref"><span>クールダウン</span><div class="chips" id="pCool"><button type="button" data-v="on">あり</button><button type="button" data-v="off">なし</button></div></div>
-            <div class="pref"><span>途中の休憩</span><div class="chips" id="pBreak"><button type="button" data-v="0">なし</button><button type="button" data-v="1">1回</button><button type="button" data-v="2">2回</button></div></div>
-            <p class="tiny">アップ・クールダウンを「なし」にした分はトレーニングに回します。休憩は1回2分で、その分だけ歩く時間が減ります（合計は30分）。</p>
-          </details>
-        </div>
-        <div class="card" id="reportCard">
-          <h3 id="formTitle">終わったら報告</h3>
-          <button class="primary" id="openReport" type="button">終わったら報告する（1分）</button>
-          <div id="reportBody" hidden style="display:flex;flex-direction:column;gap:10px">
-          <p class="tiny">送ると、次回のメニューがすぐ出ます。</p>
-          <div class="field" id="machineField"><span>使ったマシン</span><div class="chips" id="machine"></div></div>
-          <div class="field" id="doneField"><span>最後までできた？</span><div class="chips" id="done"></div></div>
-          <div class="field" id="changeField"><span>途中で速さや抵抗を変えた？</span><div class="chips" id="change"></div></div>
-          <div class="field" id="strField"><span>種目ごとに（楽＝12回やって余裕がある／ちょうど／きつい＝8回できない・フォームが崩れる）</span><div id="strRows" style="display:flex;flex-direction:column;gap:6px"></div></div>
-          <div class="field"><span>きつさ（1 楽 〜 10 限界）</span><div class="chips rpe" id="rpe"></div></div>
-          <div class="field"><span>痛みや体調の変化</span><div class="chips" id="pain"></div></div>
-          <label class="field" id="kmField"><span>トレッドミルの距離（km・終了画面の数字・任意）</span><input id="km" type="number" step="0.01" inputmode="decimal" placeholder="2.80"></label>
-          <label class="field"><span>ひとこと（任意）</span><textarea id="comment" placeholder="程よく疲れた／途中で休みたい など"></textarea></label>
-          <div class="field"><span>次回は（任意）</span><div class="chips" id="next"><button type="button" data-v="もう少しきつく">もう少しきつく</button><button type="button" data-v="このまま">このまま</button><button type="button" data-v="少し楽に">少し楽に</button></div></div>
-          <p class="err" id="err" hidden></p>
-          <button class="primary" id="send" type="button">送信して次回メニューを受け取る</button>
-          </div>
-          <div id="result" style="display:flex;flex-direction:column;gap:8px"></div>
-        </div>
-        <div class="card">
-          <h3>目標まで<small id="goalDate"></small></h3>
-          <div id="goalLines" style="display:flex;flex-direction:column;gap:12px"></div>
-          <div class="two"><label class="field"><span>今日の体重（kg）</span><input id="sW" type="number" step="0.1" inputmode="decimal"></label><label class="field"><span>今日のウエスト（cm）</span><input id="sC" type="number" step="0.1" inputmode="decimal"></label></div>
-          <p class="err" id="sErr" hidden></p>
-          <button class="ghost" id="sSave" type="button">記録する</button>
-          <p class="tiny">運動の前に、同じ条件で測るのがおすすめです。</p>
-        </div>
-        <div class="card">
-          <h3>食事のカロリー<small>あすけんの合計を転記</small></h3>
-          <div class="two"><label class="field"><span>今日のkcal</span><input id="kcal" type="number" inputmode="numeric" placeholder="1600"></label>
-          <label class="field"><span>あすけんの目標kcal</span><input id="kcalT" type="number" inputmode="numeric" placeholder="1500"></label></div>
-          <p class="err" id="mealErr" hidden></p>
-          <button class="ghost" id="mealSave" type="button">保存</button>
-          <p class="tiny" id="mealSum"></p>
-        </div>
-        <div class="card">
-          <h3>バッジ<small id="badgeCount"></small></h3>
-          <div class="badges" id="badges"></div>
-        </div>
+  <ol class="steps" id="steps">
+    <li data-s="1"><b>①</b>今日のメニュー</li>
+    <li data-s="2"><b>②</b>終わったら報告</li>
+    <li data-s="3"><b>③</b>次回が変わる</li>
+  </ol>
+
+  <!-- ① -->
+  <section class="card" id="s1">
+    <div class="who"><span>サンプル様（見本）・マシンA</span><span class="badge" id="visit"></span></div>
+    <h2>今日のメニュー</h2>
+    <p class="hint">お客様は来店前に携帯でこの画面を見ます。</p>
+    <div id="menu1"></div>
+    <div class="gap"><span>前回からの間隔</span>
+      <div class="chips" id="gapChips">
+        <button type="button" data-g="0" aria-pressed="true">いつもどおり</button>
+        <button type="button" data-g="14">14日あいた</button>
+        <button type="button" data-g="28">28日あいた</button>
       </div>
     </div>
-
-    <aside class="panel howto" aria-label="お客様の使い方">
-      <h2>お客様の使い方</h2>
-      <ol>
-        <li>来店前に「今日のメニュー」を見る。前回から変わったところは緑の枠で表示。</li>
-        <li>30分トレーニング。</li>
-        <li>終わったら「報告」をタップで送る（1分以内）。次回のメニューがその場で出る。</li>
-        <li>今週の来店リングと「連続週」で、通うペースが分かる。週1回来れば連続はつながる。</li>
-        <li>体重・ウエストは自分で入力すると、目標までの残りが出る。</li>
-      </ol>
-      <h3>メニューの決め方</h3>
-      <div class="rules">
-        <p>交代走法は段階で上がります：①3分早歩き＋2分ゆっくり×4 → ②4分＋1分×4 → ③2分早歩き＋1分きつめ＋1分ゆっくり×5（4回目以降）→ ④3分早歩き＋1分きつめ×5 → きつめの抵抗+1 → 早歩き+0.2km/h。1回に変えるのは1か所だけ。</p>
-        <p>上げるのは楽にできたとき（きつさ4以下・最後まで・変更なし。人ごとに「じっくり／ふつう／積極的」）か、本人が「もう少しきつく」を選んだとき。きつさ8以上・達成80%未満・「少し楽に」のときは1つ戻します。</p>
-        <p>前回から14日あいたら1つ軽く、28日あいたら最初の段階から。速さは機種で違うため目安です。</p>
-        <p>痛み・体調の変化が「あり」のときは、次回を1つ軽くします。</p>
-        <p>筋トレ（スタジオ）は脚・お尻・押す・引く・体幹の5種目。種目ごとに「楽」が2回続いたらセットを増やし（1→2→3）、3セットでも楽なら次の段階へ。「きつい」なら1つ戻します。</p>
-        <p>表示するのは本人の記録の数字だけで、効果をお約束するものではありません。</p>
-      </div>
-    </aside>
+    <p class="note" id="gapNote" hidden></p>
+    <button class="btn" type="button" id="toReport">トレーニングした → 報告へ</button>
   </section>
 
-  <!-- スタッフ -->
-  <section id="staffView" class="sect" aria-label="店長の画面" hidden>
-    <div class="sum" id="sum"></div>
-    <div class="sect">
-      <div class="top"><h2>全員</h2><div class="acts"><button class="ghost" id="regOpen" type="button">＋ 新しい人を登録</button><button class="ghost" id="reset" type="button" hidden>見本を初期状態に戻す</button></div></div>
-      <div class="list" id="allList"></div>
-    </div>
-
-    <div class="panel" id="regCard" hidden>
-      <h3 id="regTitle">登録（目標と初回メニュー）</h3>
-      <div class="two">
-        <label class="field"><span>お名前</span><input id="rName" placeholder="山田 花子"></label>
-        <label class="field"><span>プラン</span><select id="rPlan"><option>メイン</option><option>プレミアム</option><option>ライト</option></select></label>
-        <label class="field"><span>上げるペース</span><select id="rPace"><option value="slow">じっくり（2回続けて楽なら上げる）</option><option value="normal" selected>ふつう（楽なら上げる）</option><option value="fast">積極的（きつさ6以下で上げる）</option></select></label>
-        <label class="field"><span>週の来店目標（回）</span><select id="rWeek"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label>
-        <label class="field"><span>性別（ウエストの目安に使う）</span><select id="rSex"><option value="">選ばない</option><option value="m">男性</option><option value="f">女性</option></select></label>
-        <label class="field"><span>身長（cm）</span><input id="rH" type="number" step="0.1"></label>
-        <label class="field"><span>今の体重（kg）</span><input id="rW" type="number" step="0.1"></label>
-        <label class="field"><span>今のウエスト（cm）</span><input id="rC" type="number" step="0.1"></label>
-        <label class="field"><span>目標の期日</span><input id="rTD" type="date"></label>
-      </div>
-      <div class="panel" id="hint" style="background:var(--soft);border:0"><p class="tiny">身長・体重・ウエストを入れると、目標の目安が出ます。</p></div>
-      <div class="two">
-        <label class="field"><span>目標の体重（kg）</span><input id="rTW" type="number" step="0.1"></label>
-        <label class="field"><span>目標のウエスト（cm）</span><input id="rTC" type="number" step="0.1"></label>
-      </div>
-      <label class="field"><span>終了測定までの回数</span><input id="rGoal" type="number" min="1" max="60" value="8"></label>
-      <div id="menuPart" class="sect">
-        <h3>初回の歩くメニュー</h3>
-        <p class="tiny">交代走法は段階①（3分早歩き＋2分ゆっくり×4）から始まります。最初の数分で本人と「会話はできるが歌えない」くらいの早歩きの速さと、きつめの抵抗を確かめてから入れる。以後は同じマシン。</p>
-        <div class="two">
-          <label class="field"><span>マシン（毎回同じ台）</span><select id="rM"><option>A</option><option>B</option><option>C</option><option class="noRes">D</option><option class="noRes">E</option><option class="noRes">F</option><option class="noRes">G</option></select></label>
-          <label class="field"><span>型</span><select id="rTpl"><option value="resist">交代走法</option><option value="walk">ウォーキング型</option><option value="runwalk">ラン＋ウォーク型</option><option value="run">ランニング型</option></select></label>
-          <label class="field f-walk"><span>ウォーキング（km/h）</span><input id="rPw" type="number" step="0.1" inputmode="decimal"></label>
-          <label class="field f-fast"><span>早歩き（km/h）</span><input id="rPf" type="number" step="0.1" inputmode="decimal"></label>
-          <label class="field f-hard"><span>きつめの抵抗（2〜6）</span><input id="rRh" type="number" min="2" max="6" step="1" inputmode="numeric" placeholder="3"></label>
-          <label class="field f-run"><span>ランニング（km/h）</span><input id="rPr" type="number" step="0.1" inputmode="decimal"></label>
-        </div>
-      </div>
-      <p class="err" id="regErr" hidden></p>
-      <div class="acts"><button class="primary" id="rSave" type="button">登録する</button><button class="ghost" id="rCancel" type="button">閉じる</button></div>
-    </div>
-
-    <div class="panel" id="measCard" hidden>
-      <h3>測定を記録</h3><p class="tiny" id="measWho"></p>
-      <p class="tiny">来店直後・運動前に測る（条件をそろえるため）。</p>
-      <div class="two"><label class="field"><span>体重（kg）</span><input id="mW" type="number" step="0.1"></label><label class="field"><span>ウエスト（cm）</span><input id="mC" type="number" step="0.1"></label></div>
-      <p class="err" id="measErr" hidden></p>
-      <div class="acts"><button class="primary" id="mSave" type="button">記録する</button><button class="ghost" id="mCancel" type="button">閉じる</button></div>
-    </div>
-
-    <div class="panel rules">
-      <h3 style="color:var(--ink)">店長の画面に出る印の条件</h3>
-      <p><span class="pill p-w">痛みの申告</span> 直近の報告で痛み・体調変化「あり」（メニューは自動で少し下げて続ける）</p>
-      <p><span class="pill p-w">きつさ注意</span> きつさ8以上が2回続いた</p>
-      <p><span class="pill p-d">21日来店なし</span><span class="pill p-w">10日来店なし</span> 最終来店からの日数</p>
-      <p><span class="pill p-w">連続が途切れた</span> 先週の来店がなく、連続週が0に戻った</p>
-      <p><span class="pill p-w">測定なし</span> 本人の体重・ウエストの入力が14日以上ない</p>
-      <p><span class="pill p-a">案内のタイミング</span> 週の来店目標を4週続けて達成／8週連続／目標に到達／終了 → ダブル枠（プレミアム）・スタジオを案内する時期</p>
-      <p>来店率＝直近4週の来店回数 ÷ 週の来店目標×4。低い人が上に並びます。</p>
-    </div>
+  <!-- ② -->
+  <section class="card" id="s2" hidden>
+    <h2>終わったら報告（1分）</h2>
+    <p class="hint">お客様がトレーニング後に選ぶだけです。</p>
+    <div class="q">最後までできた？</div>
+    <div class="chips" id="cDone"></div>
+    <div class="q">きつさ <small>（1＝とても楽、10＝限界）</small></div>
+    <div class="chips" id="cRpe"></div>
+    <div class="scale"><span>楽</span><span>ちょうどいい</span><span>きつい</span></div>
+    <div class="q">痛みや体調の変化</div>
+    <div class="chips" id="cPain"></div>
+    <div class="q">次回は？ <small>（任意）</small></div>
+    <div class="chips" id="cNext"></div>
+    <button class="btn" type="button" id="send">報告する</button>
+    <button class="btn sub" type="button" id="back1">メニューに戻る</button>
   </section>
+
+  <!-- ③ -->
+  <section class="card" id="s3" hidden>
+    <h2>次回のメニュー</h2>
+    <p class="hint">報告した瞬間に決まります。色の付いた行が変わったところです。</p>
+    <div id="verdict"></div>
+    <div class="cmp">
+      <div><h3>今回</h3><div id="prevMenu"></div></div>
+      <div><h3>次回</h3><div id="nextMenu"></div></div>
+    </div>
+    <p class="what" id="what"></p>
+    <button class="btn" type="button" id="nextVisit">次の来店へ進む（続けて試す）</button>
+    <button class="btn sub" type="button" id="reset">最初からやり直す</button>
+  </section>
+
+  <h2 style="font-size:16px;margin:22px 0 8px">決め方のルール</h2>
+  <details open>
+    <summary>メニューは4段階（本番20分）</summary>
+    <ol class="ladder" id="ladder"></ol>
+    <p class="hint">前後にアップ5分・クールダウン5分で合計30分。④の先は「きつめの抵抗＋1」→「早歩き＋0.2km/h」。最初の4回はきつめの区間を入れません（4回目の報告から追加）。</p>
+  </details>
+  <details>
+    <summary>上げる・戻すの条件</summary>
+    <ul class="rule">
+      <li><b>1つ上げる：</b>楽にできた（きつさ4以下・最後までできた）／本人が「もう少しきつく」を選んだ</li>
+      <li><b>1つ戻す：</b>きつさ8以上／8割未満で終了／痛みや体調の変化あり／本人が「少し楽に」を選んだ</li>
+      <li><b>そのまま：</b>上のどれにも当てはまらない</li>
+      <li>変えるのは1回に1か所だけ</li>
+      <li>14日あいたら1つ軽く、28日あいたら①から</li>
+    </ul>
+  </details>
+  <details>
+    <summary>初回の決め方</summary>
+    <ul class="rule">
+      <li>店長がお客様と一緒にトレッドミルで「会話はできるが歌えない」速さを探し、その人の「早歩き」にする</li>
+      <li>きつめの区間は、早歩きより約1km/h遅く、抵抗を上げる（1か月モニターで結果・満足度が最も高かった交代走法）</li>
+    </ul>
+  </details>
+  <details>
+    <summary>一人ひとりに合わせられること</summary>
+    <ul class="rule">
+      <li>上げるペースを人ごとに選べる（じっくり／ふつう／積極的）</li>
+      <li>ひとことだけ書いた場合は、AIが読んで「きつく／このまま／楽に」に振り分ける</li>
+      <li>アップ・クールダウンをなしにできる（30分は変わらない）</li>
+      <li>途中の休憩を1〜2回入れられる</li>
+    </ul>
+    <p class="hint">これらは「店長の画面・全機能」で試せます。</p>
+  </details>
+  <p class="foot">AIRNIX 個別メニュー 試作 第9版（見本データ・入力は保存されません）</p>
 </div>
 
 <script>
-/* ---------- 定数 ---------- */
-const ACTIONS=["ウォーキング","早歩き","きつめの早歩き","ランニング"];
-const PLANS={"ライト":"ライト（1日1回）","メイン":"メイン（1日1回）","プレミアム":"プレミアム（1日2回・ダブル枠可）"};
-const S=(name,sets,reps,sec,note)=>({name,sets,reps:reps||null,sec:sec||null,note:note||""});
-const STR_CATS=[["leg","脚"],["glute","お尻"],["push","押す"],["pull","引く・背中"],["core","体幹"]];
-const STR={leg:["椅子からの立ち座り","浅いスクワット","スクワット","バックランジ","スプリットスクワット"],
- glute:["ヒップリフト","ヒップリフト（足を閉じる）","ヒップリフト（上で3秒止める）","片脚ヒップリフト（補助あり）","片脚ヒップリフト"],
- push:["壁腕立て","台に手をつく腕立て","膝つき腕立て","膝つき腕立て（ゆっくり下ろす）","腕立て伏せ"],
- pull:["うつ伏せで腕を後ろへ引く","うつ伏せでY字に腕を上げる","Y字・T字を交互に","タオルを使って引く","Y字・T字・W字"],
- core:["デッドバグ","バードドッグ","膝つきプランク","プランク","プランク＋脚上げ"]};
-const strDose=(k,lv)=>k==="core"&&lv>=3?"20〜40秒":(k==="core"?"左右交互 8〜12回":"8〜12回");
-function strInit(p){if(p.str)return p.str;const lv=Math.min(5,Math.max(1,p.strengthLevel||1));const o={};STR_CATS.forEach(([k])=>o[k]={lv,sets:1,streak:0});return o}
-function strUp(c){if(c.sets<3){c.sets++;return`${c.sets}セットに`}if(c.lv<5){c.lv++;c.sets=1;return`段階${c.lv}へ（1セットから）`}return null}
-function strDown(c){if(c.sets>1){c.sets--;return`${c.sets}セットに`}if(c.lv>1){c.lv--;c.sets=2;return`段階${c.lv}へ戻す`}return null}
-const STAMPS=["ナイス継続！","いいペースです","無理せずいきましょう","目標まであと少し"];
-
-/* ---------- 日付 ---------- */
-const pad=n=>String(n).padStart(2,"0");
-const ymd=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
-const today=()=>ymd(new Date());
-const parse=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
-const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return ymd(d)};
-const daysBetween=(a,b)=>Math.round((parse(b)-parse(a))/86400000);
-const weekStart=s=>{const d=parse(s);const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)};
-const md=s=>s?Number(s.slice(5,7))+"/"+Number(s.slice(8,10)):"-";
-const f1=n=>Number(n).toFixed(1);
-
-/* ---------- 見本データ（今日から逆算して作る） ---------- */
-const W=(m,p,r)=>({min:m,action:"ウォーキング",pace:p,resistance:r});
-const SG=(m,a,p,r)=>({min:m,action:a,pace:p,resistance:r});
-function visitsBack(offsets,base,kind){return offsets.map((o,i)=>({date:addDays(base,-o),kind:kind||"walk",done:90,change:"なし",rpe:6,pain:"なし",km:base?Math.round((2.6+(i%4)*0.1)*10)/10:null,result:"維持"}))}
-function seeds(){const t=today();
- const A_off=[1,4,8,11,15,18,22,25,29,32,36,39,43,46];
- const D_off=[20,27,34,41];
- const E_off=[2,6,9,13,16,20,23];
- const a={ver:3,name:"サンプルA様",plan:"メイン",weekly:2,goal:24,count:14,status:"active",strengthLevel:2,strengthCount:2,kcalTarget:1500,
-  start:{weight:59.1,waist:80.3},target:{weight:57.0,waist:77.0,date:addDays(t,78)},
-  measurements:[{date:addDays(t,-46),weight:59.1,waist:80.3},{date:addDays(t,-25),weight:58.6,waist:79.4},{date:addDays(t,-8),weight:58.2,waist:78.8}],
-  meals:[{date:addDays(t,-3),kcal:1650},{date:addDays(t,-2),kcal:1520},{date:addDays(t,-1),kcal:1580}],
-  history:visitsBack(A_off,t),stamp:{text:STAMPS[0],date:addDays(t,-1)},todayFlag:t,
-  lad:{wl:4,wp:4.5,fp:5.5,fp0:5.1,hr:3,hr0:3},
-  prevMenu:{no:14,...buildResist({wl:4,wp:4.5,fp:5.3,hr:3},"A")},
-  menu:{no:15,...buildResist({wl:4,wp:4.5,fp:5.5,hr:3},"A")}};
- a.history.forEach(h=>h.km=+(2.7+((h.date.charCodeAt(9)%4)*0.08)).toFixed(2));
- const b={ver:3,name:"サンプルB様",plan:"プレミアム",weekly:3,goal:8,count:7,status:"active",strengthLevel:1,strengthCount:0,kcalTarget:null,
-  start:{weight:57.7,waist:71.0},target:{weight:null,waist:69.0,date:addDays(t,58)},
-  measurements:[{date:addDays(t,-30),weight:57.7,waist:71.0}],meals:[],
-  history:visitsBack([2,5,9,12,16,19,23],t),stamp:null,todayFlag:t,
-  prevMenu:null,menu:{no:8,machine:"E",segments:[W(5,[5.0,5.5],null),SG(20,"早歩き",[5.8,6.3],null),W(5,[5.0,5.5],null)]}};
- const c={ver:3,name:"サンプルC様",plan:"メイン",weekly:2,goal:8,count:8,status:"done",strengthLevel:3,strengthCount:4,kcalTarget:1600,
-  start:{weight:52.6,waist:72.0},target:{weight:51.5,waist:69.0,date:addDays(t,50)},
-  measurements:[{date:addDays(t,-42),weight:52.6,waist:72.0},{date:addDays(t,-26),weight:52.3,waist:70.5},{date:addDays(t,-11),weight:52.1,waist:69.0}],
-  meals:[],history:visitsBack([11,14,18,21,25,28,32,35],t),stamp:null,todayFlag:null,prevMenu:null,menu:null};
- const d={ver:3,name:"サンプルD様",plan:"ライト",weekly:1,goal:8,count:4,status:"active",strengthLevel:1,strengthCount:0,kcalTarget:null,
-  start:{weight:66.9,waist:79.5},target:{weight:65.0,waist:null,date:addDays(t,71)},
-  measurements:[{date:addDays(t,-41),weight:66.9,waist:79.5}],meals:[],
-  history:visitsBack(D_off,t),stamp:null,todayFlag:null,prevMenu:null,
-  menu:{no:5,machine:"C",segments:[W(5,[4.5,5.0],1),SG(20,"早歩き",[5.0,5.5],1),W(5,[4.5,5.0],1)]}};
- const e={ver:3,name:"サンプルE様",plan:"メイン",weekly:2,goal:12,count:7,status:"active",strengthLevel:2,strengthCount:1,kcalTarget:null,
-  start:{weight:71.4,waist:88.0},target:{weight:69.0,waist:85.0,date:addDays(t,64)},
-  measurements:[{date:addDays(t,-23),weight:71.4,waist:88.0},{date:addDays(t,-9),weight:71.0,waist:87.2}],meals:[],
-  history:visitsBack(E_off,t),stamp:null,todayFlag:t,prevMenu:null,
-  lad:{wl:3,wp:4.3,fp:5.0,fp0:5.0,hr:4,hr0:3},
-  menu:{no:8,...buildResist({wl:3,wp:4.3,fp:5.0,hr:4},"B")}};
- e.history[0].rpe=8;e.history[1].rpe=8;e.history[0].done=80;e.history[0].result="維持";
- return{a,b,c,d,e}}
-
-/* ---------- 状態 ---------- */
-let members={},db=null,sample=null,canWrite=true,kind="walk",measId=null,editId=null;
-const state={machine:null,done:null,change:null,rpe:null,pain:null};
 const $=id=>document.getElementById(id);
-const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
-const clone=o=>JSON.parse(JSON.stringify(o));
+const r1=n=>Math.round(n*10)/10;
+const f1=n=>n.toFixed(1);
+const START={wl:1,wp:4.5,fp:5.5,hr:3,fp0:5.5,hr0:3,count:1};
+let L,prevL,state;
 
-/* ---------- 計算 ---------- */
-const visitDates=p=>[...new Set((p.history||[]).map(h=>h.date))].sort();
-const lastVisit=p=>{const v=visitDates(p);return v.length?v[v.length-1]:null};
-function weekCount(p,ws){const we=addDays(ws,6);return visitDates(p).filter(d=>d>=ws&&d<=we).length}
-function streak(p){const t=today();let ws=weekStart(t);let n=0;if(weekCount(p,ws)>0)n=1;ws=addDays(ws,-7);
- if(n===0&&weekCount(p,ws)===0)return 0;
- while(weekCount(p,ws)>0){n++;ws=addDays(ws,-7)}return n}
-function brokeStreak(p){const ws=weekStart(today());const lw=addDays(ws,-7),lw2=addDays(ws,-14);return weekCount(p,ws)===0&&weekCount(p,lw)===0&&weekCount(p,lw2)>0}
-function hitWeeks(p){let ws=addDays(weekStart(today()),-7),n=0;while(weekCount(p,ws)>=p.weekly){n++;ws=addDays(ws,-7)}return n}
-function rate(p){const t=today();const from=addDays(t,-27);const v=visitDates(p).filter(d=>d>=from&&d<=t).length;return Math.min(100,Math.round(v/(p.weekly*4)*100))}
-function totalKm(p){return (p.history||[]).reduce((a,h)=>a+(+h.km||0),0)}
-function lastMeas(p){return (p.measurements||[]).slice(-1)[0]||{}}
-function reached(p){const m=lastMeas(p),t=p.target||{};return (t.weight!=null&&m.weight!=null&&m.weight<=t.weight)||(t.waist!=null&&m.waist!=null&&m.waist<=t.waist)}
-function badgeList(p){const n=visitDates(p).length,km=totalKm(p),s=streak(p);
- return[["初回",n>=1,"初来店"],["10",n>=10,"10回"],["30",n>=30,"30回"],["50km",km>=50,"累計50km"],["100km",km>=100,"累計100km"],["4週",s>=4,"4週連続"],["8週",s>=8,"8週連続"],["目標",reached(p),"目標到達"]]}
+/* 交代走法の段階（試作 第8版と同じ計算） */
+function build(l){
+  const W=m=>({min:m,a:"ウォーキング",pace:[l.wp,r1(l.wp+.5)],res:1,k:"w"});
+  const F=m=>({min:m,a:"早歩き",pace:[l.fp,r1(l.fp+.5)],res:1,k:"f"});
+  const H=m=>({min:m,a:"きつめの早歩き",pace:[Math.max(3,r1(l.fp-1.3)),Math.max(3.5,r1(l.fp-.7))],res:l.hr,k:"h"});
+  const body=l.wl===1?{reps:4,u:[F(3),W(2)]}:l.wl===2?{reps:4,u:[F(4),W(1)]}:l.wl===3?{reps:5,u:[F(2),H(1),W(1)]}:{reps:5,u:[F(3),H(1)]};
+  return{warm:W(5),body,cool:W(5)};
+}
+function stepUp(l){
+  if(l.wl<2){l.wl++;return"ゆっくりの区間を短くしました"}
+  if(l.wl===2){if(l.count<4)return null;l.wl++;return"きつめの区間を追加しました"}
+  if(l.wl===3){l.wl++;return"ゆっくりの区間をなくしました"}
+  if(l.hr<6){l.hr++;return"きつめの抵抗を＋1にしました"}
+  if(l.fp<8){l.fp=r1(l.fp+.2);return"早歩きを＋0.2km/hにしました"}
+  return null;
+}
+function stepDown(l){
+  if(l.fp>l.fp0){l.fp=r1(Math.max(l.fp0,l.fp-.2));return"早歩きを−0.2km/hにしました"}
+  if(l.hr>l.hr0){l.hr--;return"きつめの抵抗を−1にしました"}
+  if(l.wl>1){l.wl--;return"ひとつ前の段階に戻しました"}
+  return null;
+}
+function classify(s){
+  if(s.pain==="あり")return["down","痛みや体調の変化があったため"];
+  if(s.next==="少し楽に")return["down","本人が「少し楽に」を選んだため"];
+  const hard=s.done<80||s.rpe>=8;
+  if(hard&&s.next==="もう少しきつく")return["keep","きつかったが本人が「もう少しきつく」を選んだため、間を取ってそのまま"];
+  if(hard)return["down",s.rpe>=8?`きつさ${s.rpe}（8以上）だったため`:`${s.done}%で終了（8割未満）だったため`];
+  if(s.next==="もう少しきつく")return["up","本人が「もう少しきつく」を選んだため"];
+  if(s.done>=90&&s.rpe<=4)return["up",`きつさ${s.rpe}（4以下）で最後までできたため`];
+  return["keep",`きつさ${s.rpe}・${s.done}%で、ちょうどよかったため`];
+}
 
-/* ---------- 部品 ---------- */
-function chips(id,vals,key,fmt){const box=$(id);box.innerHTML="";vals.forEach(v=>{const b=document.createElement("button");b.type="button";b.textContent=fmt?fmt(v):String(v);b.setAttribute("aria-pressed","false");b.onclick=()=>{state[key]=v;[...box.children].forEach(c=>c.setAttribute("aria-pressed",c===b?"true":"false"));$("err").hidden=true};box.appendChild(b)})}
-chips("machine",["A","B","C","D","E","F","G"],"machine");chips("done",[100,90,80,70,60],"done",v=>v+"%");chips("change",["なし","あり"],"change");chips("rpe",[1,2,3,4,5,6,7,8,9,10],"rpe");chips("pain",["なし","あり"],"pain");
-function press(id,t){[...$(id).children].forEach(c=>c.setAttribute("aria-pressed",c.textContent===t?"true":"false"))}
-function preset(){Object.assign(state,{machine:"A",done:90,change:"なし",rpe:6,pain:"なし",next:null});[...$("next").children].forEach(c=>c.setAttribute("aria-pressed","false"));press("machine","A");press("done","90%");press("change","なし");press("rpe","6");press("pain","なし");$("comment").value="";$("km").value=""}
-const sres={};function buildStrRows(){$("strRows").innerHTML=STR_CATS.map(([k,l])=>`<div class="pref"><span>${l}</span><div class="chips" data-sk="${k}">${["楽","ちょうど","きつい"].map(v=>`<button type="button" data-v="${v}" aria-pressed="${sres[k]===v}">${v}</button>`).join("")}</div></div>`).join("");
- $("strRows").querySelectorAll("[data-sk]").forEach(box=>[...box.children].forEach(b=>b.onclick=()=>{sres[box.dataset.sk]=b.dataset.v;[...box.children].forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"))}))}
-STR_CATS.forEach(([k])=>sres[k]="ちょうど");buildStrRows();
-preset();
-$("openReport").onclick=()=>{const b=$("reportBody");b.hidden=!b.hidden;$("openReport").textContent=b.hidden?"終わったら報告する（1分）":"閉じる";$("openReport").className=b.hidden?"primary":"ghost"};
-const kt=$("kindTabs");[["walk","歩く"],["strength","筋トレ（スタジオ）"]].forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.onclick=()=>{kind=k;$("result").innerHTML="";renderCustomer()};kt.appendChild(b)});
+const color={w:"var(--walk)",f:"var(--navy)",h:"var(--orange)"};
+function segs(m){return[m.warm,...Array.from({length:m.body.reps}).flatMap(()=>m.body.u),m.cool]}
+function barHTML(m){return`<div class="bar">${segs(m).map(s=>`<span style="flex:${s.min};background:${color[s.k]}"></span>`).join("")}</div>`}
+function pace(s){return`${f1(s.pace[0])}〜${f1(s.pace[1])}km/h・抵抗${s.res}`}
+function rowsHTML(m,diff,compact){
+  const d=diff||{};
+  const row=(t,s,key,label)=>`<div class="row${d[key]?" chg"+(d.dir==="down"?" dn":""):""}"><div class="t">${t}</div><div><div class="n">${label||s.a}</div><div class="p">${pace(s)}</div></div></div>`;
+  const body=m.body.u.map((s,i)=>row(i===0?`×${m.body.reps}`:"",s,"b"+i,`${s.a} ${s.min}分`)).join("");
+  return`<div class="rows">${row("5分",m.warm,"warm",compact?"アップ":"ウォーミングアップ")}${body}${row("5分",m.cool,"cool",compact?"クール":"クールダウン")}</div>`;
+}
+function diffOf(a,b,dir){
+  const d={dir};const ua=a.body.u,ub=b.body.u;
+  const same=(x,y)=>x&&y&&x.a===y.a&&x.min===y.min&&x.pace[0]===y.pace[0]&&x.res===y.res;
+  if(a.body.reps!==b.body.reps||ua.length!==ub.length){ub.forEach((_,i)=>d["b"+i]=1);return d}
+  ub.forEach((s,i)=>{if(!same(ua[i],s))d["b"+i]=1});return d;
+}
 
-const LVL={"休憩":0,"ウォーキング":1,"早歩き":2,"きつめの早歩き":3,"ランニング":4};
-const sameSeg=(a,b)=>a.min===b.min&&a.action===b.action&&a.pace[0]===b.pace[0]&&a.pace[1]===b.pace[1]&&a.resistance===b.resistance;
-function groupSegs(segs){const L=segs.length,isW=s=>s.action==="ウォーキング";let a=0,z=L;const head=[],tail=[];
- if(L>1&&isW(segs[0])){head.push({reps:1,items:[segs[0]]});a=1}
- if(z-a>1&&isW(segs[z-1])){tail.push({reps:1,items:[segs[z-1]]});z--}
- const mid=segs.slice(a,z);
- if(mid.length>=3&&mid.length%2===1&&mid.every((s,j)=>sameSeg(s,mid[j%2]))&&!sameSeg(mid[0],mid[1]))return[...head,{reps:(mid.length+1)/2,items:[mid[0]],between:mid[1]},...tail];
- const out=[];let i=0;
- while(i<mid.length){let best={k:1,n:1};
-  for(let k=1;k<=3;k++){if(mid.slice(i,i+k).some(s=>s.action==="休憩"))continue;let n=1;while(i+(n+1)*k<=mid.length&&mid.slice(i+n*k,i+(n+1)*k).every((s,j)=>sameSeg(s,mid[i+j])))n++;if(n>1&&n*k>best.n*best.k)best={k,n}}
-  out.push({reps:best.n,items:mid.slice(i,i+best.k)});i+=best.n*best.k}
- return[...head,...out,...tail]}
-function segLabel(b,idx,len){const s=b.items[0];if(b.reps===1&&b.items.length===1&&s.action==="ウォーキング"){if(idx===0&&len>1)return"ウォーミングアップ";if(idx===len-1&&len>1)return"クールダウン"}return s.action}
-function profileSVG(segs){const total=segs.reduce((a,x)=>a+x.min,0);let x=0;const W=300,H=46;
- const col={0:"var(--line)",1:"var(--goal)",2:"var(--brand)",3:"var(--amber)",4:"var(--ink)"};
- return `<svg class="prof" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="強さの流れ">${segs.map(s=>{const w=W*s.min/total,l=LVL[s.action]??1,h=l===0?H*.08:H*(.25+.25*(l-1));const r=`<rect x="${(x+.6).toFixed(1)}" y="${(H-h).toFixed(1)}" width="${Math.max(w-1.2,1).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${col[l]}"/>`;x+=w;return r}).join("")}</svg>`}
-function paceTxt(x,r){if(x.action==="休憩")return"止まって休む・水分補給";return `${f1(x.pace[0])}〜${f1(x.pace[1])}${r&&x.resistance!=null?`・抵抗${x.resistance}`:""}`}
-function applyPrefs(m,p){if(!m||!p)return m;let r=(p.noWarm||p.noCool)?applyWC(m,p):m;if(p.breaks>0)r=addBreaks(r,p.breaks);return r}
-function addBreaks(m,n){const cp=s=>({...s,pace:[...s.pace]});const segs=m.segments.map(cp);const isW=s=>s&&s.action==="ウォーキング";
- const BR=()=>({min:2,action:"休憩",pace:[0,0],resistance:null});
- let warm=isW(segs[0])&&segs.length>1?segs.shift():null;let cool=isW(segs[segs.length-1])&&segs.length>1?segs.pop():null;
- const main=segs;const tot=main.reduce((a,s)=>a+s.min,0);if(tot<8)return m;const need=2*n;let out=null,spare=0;
- const alt=main.length>=3&&main.length%2===1&&main.every((s,j)=>sameSeg(s,main[j%2]))&&!sameSeg(main[0],main[1]);
- if(alt){const rests=[];for(let j=1;j<main.length;j+=2)rests.push(j);
-  if(rests.length>=n){const pick=new Set();for(let k=1;k<=n;k++)pick.add(rests[Math.min(rests.length-1,Math.round(k*(rests.length+1)/(n+1))-1)]);
-   out=[];main.forEach((s,j)=>{if(pick.has(j)){out.push(BR());spare+=s.min-2}else out.push(s)})}}
- if(!out){const g=groupSegs(main);if(g.length===1&&g[0].reps>=2){const unit=g[0].items,u=unit.reduce((a,s)=>a+s.min,0);let reps=g[0].reps;
-   let drop=Math.ceil(need/u);if(reps-drop>=n+1){reps-=drop;spare=drop*u-need;out=[];
-    const per=Array.from({length:n+1},(_,k)=>Math.floor(reps/(n+1))+(k<reps%(n+1)?1:0));
-    per.forEach((c,k)=>{for(let i=0;i<c;i++)unit.forEach(x=>out.push(cp(x)));if(k<n)out.push(BR())})}}}
- if(!out){out=[];let acc=0,mi=0;const marks=[];for(let k=1;k<=n;k++)marks.push(tot*k/(n+1));
-  for(const s0 of main){let s=cp(s0);
-   while(mi<marks.length&&acc+s.min>marks[mi]+1&&Math.round(marks[mi]-acc)>=2){const part=Math.round(marks[mi]-acc);out.push({...cp(s),min:part});out.push(BR());acc+=part;s.min-=part;mi++}
-   out.push(s);acc+=s.min;while(mi<marks.length&&acc>=marks[mi]-1){out.push(BR());mi++}}
-  let over=need;for(let i=out.length-1;i>=0&&over>0;i--){if(out[i].action==="休憩")continue;const t=Math.min(out[i].min,over);out[i].min-=t;over-=t;if(out[i].min===0)out.splice(i,1)}
-  while(out.length&&out[out.length-1].action==="休憩")out.pop()}
- if(spare>0){if(cool)cool={...cool,min:cool.min+spare};else{const w=[...out].reverse().find(s=>s.action!=="休憩");if(w)w.min+=spare}}
- return{...m,segments:[...(warm?[warm]:[]),...out,...(cool?[cool]:[])]}}
-function applyWC(m,p){const cp=s=>({...s,pace:[...s.pace]});let segs=m.segments.map(cp);const isW=s=>s&&s.action==="ウォーキング";
- let warm=null,cool=null;if(isW(segs[0])&&segs.length>1)warm=segs.shift();if(isW(segs[segs.length-1])&&segs.length>1)cool=segs.pop();
- if(!segs.length)return m;const main=segs;const keepW=warm&&!p.noWarm,keepC=cool&&!p.noCool;
- const sum=a=>a.reduce((t,s)=>t+s.min,0);let free=30-sum(main)-(keepW?warm.min:0)-(keepC?cool.min:0);
- let unit=null;
- if(main.length>=3&&main.length%2===1&&main.every((s,j)=>sameSeg(s,main[j%2]))&&!sameSeg(main[0],main[1]))unit=[main[1],main[0]];
- else{const g=groupSegs(main).find(b=>b.reps>1);if(g)unit=g.items}
- if(unit){const u=sum(unit);while(free>=u){unit.forEach(s=>main.push(cp(s)));free-=u}}
- if(free>0){const work=main.filter(s=>!isW(s));
-  if(!unit){const L=main.reduce((a,s)=>s.min>a.min?s:a,main[0]);L.min+=free}
-  else if(work.length&&free%work.length===0){work.forEach(s=>s.min+=free/work.length)}
-  else if(keepC){cool={...cool,min:cool.min+free}}
-  else{const w=unit.find(s=>!isW(s))||unit[0];main.push({...cp(w),min:free})}}
- return{...m,segments:[...(keepW?[warm]:[]),...main,...(keepC?[cool]:[])]}}
-function menuHTML(no,m){const r=/^[ABC]$/.test(m.machine);const total=m.segments.reduce((a,x)=>a+x.min,0);const g=groupSegs(m.segments);
- const it=(x,lab)=>`<div class="mi"><span>${esc(lab||x.action)}${lab?"":" "+x.min+"分"}</span><span class="tiny">${paceTxt(x,r)}</span></div>`;
- const rows=g.map((b,i)=>{if(b.reps===1&&b.items.length===1){const x=b.items[0];return `<tr><td class="tm">${x.min}分</td><td>${it(x,segLabel(b,i,g.length))}</td></tr>`}
-  const mins=b.items.reduce((a,x)=>a+x.min,0)*b.reps+(b.between?b.between.min*(b.reps-1):0);
-  if(b.between){const x=b.items[0],y=b.between;return `<tr class="rep"><td class="tm">×${b.reps}<span class="tiny">${mins}分</span></td><td>${it(x)}<div class="tiny">あいだに${esc(y.action)} ${y.min}分（${paceTxt(y,r)}）</div></td></tr>`}
-  return `<tr class="rep"><td class="tm">×${b.reps}<span class="tiny">${mins}分</span></td><td>${b.items.map(x=>it(x)).join("")}</td></tr>`}).join("");
- return `<div class="menu"><header><span>${no}回目</span><span>マシン${esc(m.machine)}</span></header>${profileSVG(m.segments)}<table><tbody>${rows}</tbody><tfoot><tr><td colspan="2">合計${total}分　<span class="tiny" style="font-weight:500">速さは目安（km/h）</span></td></tr></tfoot></table></div>`}
-function strengthHTML(p){const st=strInit(p);return `<div class="menu"><header><span>筋トレ（スタジオ）</span><span>30分</span></header><table><tbody><tr><td class="tm">5分</td><td><div class="mi"><span>ウォームアップ</span><span class="tiny">足踏み・肩回しなど軽く体を温める</span></div></td></tr>${STR_CATS.map(([k,l])=>{const c=st[k];return `<tr class="rep"><td class="tm">${c.sets}<span class="tiny">セット</span></td><td><div class="mi"><span>${esc(STR[k][c.lv-1])}</span><span class="tiny">${l}・段階${c.lv}・${strDose(k,c.lv)}</span></div></td></tr>`}).join("")}<tr><td class="tm">5分</td><td><div class="mi"><span>ストレッチ</span><span class="tiny">使った筋肉をゆっくり伸ばす</span></div></td></tr></tbody><tfoot><tr><td colspan="2">上から順に。セットの間は60〜90秒休む。あと2〜3回できる余力で止める</td></tr></tfoot></table></div>`}
-function menuDiff(prev,cur){if(!prev||!cur)return"";for(let i=0;i<Math.min(prev.segments.length,cur.segments.length);i++){const a=prev.segments[i],b=cur.segments[i];
- if(a.action!==b.action||a.min!==b.min)return"構成が変わりました";
- if(a.pace[0]!==b.pace[0]||a.pace[1]!==b.pace[1])return `${b.action}：${f1(a.pace[0])}〜${f1(a.pace[1])} → ${f1(b.pace[0])}〜${f1(b.pace[1])}km/h`;
- if(a.resistance!==b.resistance)return `${b.action}の抵抗：${a.resistance} → ${b.resistance}`}return"前回と同じメニュー（慣れてきたら次で調整）"}
-function ringSVG(done,goal){const R=38,C=2*Math.PI*R,f=Math.min(1,done/Math.max(goal,1));
- return `<circle cx="48" cy="48" r="${R}" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="48" cy="48" r="${R}" fill="none" stroke="${f>=1?"var(--amber)":"var(--brand)"}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${(C*f).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 48 48)"/><text x="48" y="50" text-anchor="middle" class="ringTxt">${done}<tspan font-size="14">回</tspan></text><text x="48" y="68" text-anchor="middle" font-size="11" fill="var(--sub)">目標${goal}回</text>`}
-function trend(pts0,key,target,unit){const pts=pts0.filter(p=>p[key]!=null);if(!pts.length)return"";const vals=pts.map(p=>+p[key]).concat(target!=null?[+target]:[]);let lo=Math.min(...vals),hi=Math.max(...vals);if(hi-lo<1){lo-=.5;hi+=.5}
- const Wd=340,H=96,P=30,n=Math.max(pts.length-1,1);const x=i=>P+(Wd-P*2)*(pts.length===1?.5:i/n);const y=v=>14+(H-34)*(1-(v-lo)/(hi-lo));const last=pts[pts.length-1];
- const tg=target!=null?`<line x1="${P}" x2="${Wd-P}" y1="${y(target)}" y2="${y(target)}" stroke="var(--goal)" stroke-dasharray="5 4" stroke-width="1.5"/><text x="${Wd-P}" y="${y(target)+14}" text-anchor="end" font-size="11" fill="var(--goal)">目標</text>`:"";
- return `<svg viewBox="0 0 ${Wd} ${H}" width="100%" role="img" aria-label="${key==="weight"?"体重":"ウエスト"}の推移">${tg}<path d="${pts.map((p,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(+p[key]).toFixed(1)).join(" ")}" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linejoin="round"/>${pts.map((p,i)=>`<circle cx="${x(i)}" cy="${y(+p[key])}" r="${i===pts.length-1?4.5:3}" fill="var(--brand)"/>`).join("")}<text x="${P}" y="${H-2}" font-size="11" fill="var(--sub)">${md(pts[0].date)}</text><text x="${Wd-P}" y="${H-2}" text-anchor="end" font-size="11" fill="var(--sub)">${md(last.date)}</text></svg>`}
-function goalBlock(p,key,label,unit){const t=p.target||{};if(t[key]==null)return"";const m=(p.measurements||[]).filter(x=>x[key]!=null);const cur=m.length?m[m.length-1][key]:p.start[key];
- const fromStart=+(cur-p.start[key]).toFixed(1),left=+(cur-t[key]).toFixed(1);
- const msg=left<=0?`目標に到達しました（開始から${fromStart>0?"+":""}${fromStart}${unit}）`:`開始から${fromStart>0?"+":""}${fromStart}${unit}。目標まであと${left}${unit}`;
- return `<div class="goalLine"><div style="display:flex;justify-content:space-between;align-items:baseline"><span>${label}</span><span><b class="num">${cur}</b>${unit} <span class="tiny">／目標 ${t[key]}${unit}</span></span></div>${trend(p.measurements||[],key,t[key],unit)}<p class="tiny">${msg}</p></div>`}
+function setStep(n){
+  ["s1","s2","s3"].forEach((id,i)=>$(id).hidden=i+1!==n);
+  [...$("steps").children].forEach(li=>{const s=+li.dataset.s;li.className=s===n?"on":s<n?"done":""});
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function legend(){return`<div class="legend"><span><i style="background:var(--walk)"></i>ウォーキング</span><span><i style="background:var(--navy)"></i>早歩き</span><span><i style="background:var(--orange)"></i>きつめ</span></div>`}
+function renderLadder(){
+  const names=["3分早歩き＋2分ゆっくり ×4","4分早歩き＋1分ゆっくり ×4","2分早歩き＋1分きつめ＋1分ゆっくり ×5","3分早歩き＋1分きつめ ×5"];
+  $("ladder").innerHTML=names.map((n,i)=>`<li class="${L.wl===i+1?"cur":""}"><span>${"①②③④"[i]}</span>${n}${L.wl===i+1?"　← いまここ":""}</li>`).join("");
+}
+let gapL=null;
+function renderMenu(){
+  const show=gapL||L;
+  $("visit").textContent=`${L.count}回目・段階${"①②③④"[show.wl-1]}`;
+  $("menu1").innerHTML=barHTML(build(show))+legend()+rowsHTML(build(show));
+  renderLadder();
+}
+function chips(id,vals,key,fmt){
+  $(id).innerHTML=vals.map(v=>`<button type="button" aria-pressed="${state[key]===v}">${fmt?fmt(v):v}</button>`).join("");
+  [...$(id).children].forEach((b,i)=>b.onclick=()=>{state[key]=state[key]===vals[i]&&key==="next"?null:vals[i];chips(id,vals,key,fmt)});
+}
+function renderReport(){
+  chips("cDone",[100,90,80,70,60],"done",v=>v+"%");
+  chips("cRpe",[1,2,3,4,5,6,7,8,9,10],"rpe");
+  chips("cPain",["なし","あり"],"pain");
+  chips("cNext",["もう少しきつく","このまま","少し楽に"],"next");
+}
+function freshState(){state={done:100,rpe:4,pain:"なし",next:null}}
 
-/* ---------- お客様の画面 ---------- */
-function renderCustomer(){const ga=gapAdjust(members[$("who").value]||{});const p=ga.p;if(!p||!p.name)return;const t=today();
- $("hName").textContent=p.name;$("hPlan").textContent=PLANS[p.plan]||p.plan;
- const ws=weekStart(t);$("weekRange").textContent=`${md(ws)}〜${md(addDays(ws,6))}`;
- const wc=weekCount(p,ws);$("ring").innerHTML=ringSVG(wc,p.weekly);
- $("weekMsg").innerHTML=wc>p.weekly?`今週の目標（${p.weekly}回）を達成。目標より<b class="num">${wc-p.weekly}</b>回多く来ています。`:wc===p.weekly?`今週の目標（${p.weekly}回）を達成しました。`:`今週はあと<b class="num">${p.weekly-wc}</b>回で目標です。`;
- $("streakN").textContent=streak(p);
- const vd=new Set(visitDates(p));$("days").innerHTML=["月","火","水","木","金","土","日"].map((l,i)=>{const d=addDays(ws,i);return `<span class="${vd.has(d)?"on":""} ${d===t?"today":""}">${l}</span>`}).join("");
- $("stampMsg").innerHTML="";
- const st=$("custState");$("menuCard").hidden=false;$("reportCard").hidden=false;
- if(p.status==="check"){st.innerHTML=`<div class="stop">体調のご報告ありがとうございます。スタッフが確認してから次のメニューをお届けします。</div>`;$("menuCard").hidden=true;$("reportCard").hidden=true}
- else if(p.status==="done"){st.innerHTML=`<div class="okbox">予定の回数が終わりました。お疲れさまでした。次のご来店時に体重とウエストを測ります。</div>`;$("menuCard").hidden=true;$("reportCard").hidden=true}
- else st.innerHTML="";
- [...kt.children].forEach((c,i)=>c.setAttribute("aria-pressed",(i===0)===(kind==="walk")?"true":"false"));
- if(kind==="walk"){$("menuBody").innerHTML=p.menu?menuHTML(p.menu.no,applyPrefs(p.menu,p)):"";$("prefs").hidden=!p.menu;[["pWarm",p.noWarm],["pCool",p.noCool]].forEach(([id,off])=>[...$(id).children].forEach(c=>c.setAttribute("aria-pressed",(c.dataset.v==="off")===!!off?"true":"false")));[...$("pBreak").children].forEach(c=>c.setAttribute("aria-pressed",Number(c.dataset.v)===(p.breaks||0)?"true":"false"));const d=ga.note||menuDiff(p.prevMenu,p.menu);$("diff").innerHTML=d?`<div class="diff"><span>${ga.note?"お知らせ":"前回から"}</span><b style="font-weight:700">${esc(d)}</b></div>`:""}
- else{$("prefs").hidden=true;$("menuBody").innerHTML=strengthHTML(p)+`<p class="tiny">種目は試案です。息を止めずに、フォームが崩れたらその種目は終える。</p>`;$("diff").innerHTML=""}
- $("machineField").hidden=kind!=="walk";$("doneField").hidden=kind!=="walk";$("changeField").hidden=kind!=="walk";$("strField").hidden=kind==="walk";$("kmField").hidden=kind!=="walk";$("formTitle").textContent=kind==="walk"?"終わったら報告（歩く）":"終わったら報告（筋トレ）";
- const tg=p.target||{};$("goalDate").textContent=tg.date?tg.date.replace(/-/g,"/")+"まで":"";
- $("goalLines").innerHTML=goalBlock(p,"weight","体重","kg")+goalBlock(p,"waist","ウエスト","cm");
- const bl=badgeList(p);$("badgeCount").textContent=`${bl.filter(b=>b[1]).length}/${bl.length}`;
- $("badges").innerHTML=bl.map(([s,g,l])=>`<div class="badge ${g?"got":""}"><div class="disc">${esc(s)}</div><span>${esc(l)}</span></div>`).join("");
- const td=(p.meals||[]).find(m=>m.date===t);$("kcal").value=td?td.kcal:"";$("kcalT").value=p.kcalTarget??"";
- const ms=(p.meals||[]).slice(-7);$("mealSum").textContent=ms.length?`直近${ms.length}日の平均 ${Math.round(ms.reduce((a,m)=>a+m.kcal,0)/ms.length)}kcal${p.kcalTarget?`（目標 ${p.kcalTarget}kcal）`:""}`:"まだ入力がありません"}
+$("gapChips").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  $("gapChips").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  const g=+b.dataset.g;gapL=null;$("gapNote").hidden=true;
+  if(g===14){gapL={...L};const msg=stepDown(gapL);$("gapNote").textContent=`前回から14日あいたので、ひとつ軽くしています（${msg||"これ以上は軽くできないため、そのまま"}）。`;$("gapNote").hidden=false}
+  if(g===28){gapL={...L,wl:1,fp:L.fp0,hr:L.hr0};$("gapNote").textContent="前回から28日あいたので、最初の段階①に戻しています。";$("gapNote").hidden=false}
+  renderMenu();
+});
+$("toReport").onclick=()=>{if(gapL){L={...gapL,count:L.count};gapL=null}freshState();renderReport();setStep(2)};
+$("back1").onclick=()=>setStep(1);
+$("send").onclick=()=>{
+  prevL={...L};
+  const [kind,why]=classify(state);
+  const next={...L};let what=null;
+  if(kind==="up"){what=stepUp(next);if(!what&&L.wl===2)what=null}
+  if(kind==="down")what=stepDown(next);
+  let cls=kind,big="";
+  if(kind==="up"&&!what){cls="keep";big="今回はそのまま";}
+  else if(kind==="up")big="次回は1つ上げます";
+  else if(kind==="down")big="次回は1つ軽くします";
+  else big="次回も同じメニュー";
+  let whyTxt=why;
+  if(kind==="up"&&!what&&L.wl===2&&L.count<4)whyTxt=why+"。ただし最初の4回はきつめの区間を入れないため、4回目の報告から上げます";
+  if(kind==="down"&&!what){big="次回も同じメニュー";whyTxt=why+"。ただしすでに一番軽い段階です"}
+  if(state.pain==="あり")whyTxt+="。無理せずお休みしてください、と表示します";
+  $("verdict").innerHTML=`<div class="verdict ${state.pain==="あり"?"stop":cls}"><p class="big">${big}</p><p class="why">理由：${whyTxt}</p></div>`;
+  next.count=L.count+1;
+  const a=build(prevL),b=build(next);
+  $("prevMenu").innerHTML=barHTML(a)+rowsHTML(a,null,true);
+  $("nextMenu").innerHTML=barHTML(b)+rowsHTML(b,what?diffOf(a,b,kind):null,true);
+  $("what").textContent=what?`変わったところ：${what}`:"変わったところ：なし";
+  L=next;renderLadder();setStep(3);
+};
+$("nextVisit").onclick=()=>{$("gapChips").querySelector('[data-g="0"]').click();setStep(1)};
+$("reset").onclick=()=>{L={...START};gapL=null;$("gapChips").querySelector('[data-g="0"]').click();setStep(1)};
 
-/* ---------- メニュー作成 ---------- */
-function validMenu(m){if(!m||!/^[A-G]$/.test(m.machine)||!Array.isArray(m.segments)||!m.segments.length)return false;const hasR=/^[ABC]$/.test(m.machine);let t=0;
- for(const s of m.segments){if(!Number.isInteger(s.min)||s.min<=0)return false;t+=s.min;if(!ACTIONS.includes(s.action))return false;if(!Array.isArray(s.pace)||s.pace.length!==2||!(s.pace[0]>0)||!(s.pace[1]>=s.pace[0])||s.pace[1]>20)return false;
-  if(hasR){if(!Number.isInteger(s.resistance)||s.resistance<1||s.resistance>6)return false}else if(s.resistance!=null)return false}return t===30}
-function classify(s,p){const hist=((p&&p.history)||[]).filter(h=>h.kind===(s.kind||"walk"));const hard=s.done<80||s.rpe>=8;
- if(s.next==="少し楽に")return"少し引き下げ";
- if(hard)return s.next==="もう少しきつく"?"維持":"少し引き下げ";
- if(s.next==="もう少しきつく")return"少し引き上げ";
- const easy=x=>x.done>=90&&x.rpe<=4&&x.change==="なし"&&x.pain!=="あり";const mode=(p&&p.paceMode)||"normal";
- if(mode==="fast")return s.done>=90&&s.rpe<=6&&s.change==="なし"?"少し引き上げ":"維持";
- if(!easy(s))return"維持";
- if(mode==="slow"){const prev=hist.slice(-1)[0];return prev&&easy(prev)?"少し引き上げ":"維持"}
- return"少し引き上げ"}
-/* ---------- 交代走法の段階（調査にもとづく） ---------- */
-const rd1=n=>Math.round(n*10)/10;
-function buildResist(L,machine){const R=/^[ABC]$/.test(machine);const w=L.wp,f=L.fp;
- const Wk=m=>({min:m,action:"ウォーキング",pace:[w,rd1(w+.5)],resistance:R?1:null}),Fa=m=>({min:m,action:"早歩き",pace:[f,rd1(f+.5)],resistance:R?1:null});
- const Hd=m=>R?{min:m,action:"きつめの早歩き",pace:[Math.max(3,rd1(f-1.3)),Math.max(3.5,rd1(f-.7))],resistance:L.hr}:{min:m,action:"きつめの早歩き",pace:[rd1(f+.6),rd1(f+1.1)],resistance:null};
- const rep=(n,u)=>Array.from({length:n}).flatMap(()=>u);
- const body=L.wl===1?rep(4,[Fa(3),Wk(2)]):L.wl===2?rep(4,[Fa(4),Wk(1)]):L.wl===3?rep(5,[Fa(2),Hd(1),Wk(1)]):rep(5,[Fa(3),Hd(1)]);
- return{machine,segments:[Wk(5),...body,Wk(5)]}}
-function stepUp(L,machine,count){const R=/^[ABC]$/.test(machine);
- if(L.wl<2){L.wl++;return"休む区間を短く"}
- if(L.wl===2){if(count<4)return null;L.wl++;return"きつめの区間を追加"}
- if(L.wl===3){L.wl++;return"休む区間をなくす"}
- if(R&&L.hr<6){L.hr++;return"きつめの抵抗を+1"}
- if(L.fp<8){L.fp=rd1(L.fp+.2);return"早歩きを+0.2km/h"}return null}
-function stepDown(L,machine){const R=/^[ABC]$/.test(machine);
- if(L.fp>L.fp0){L.fp=rd1(Math.max(L.fp0,L.fp-.2));return"早歩きを-0.2km/h"}
- if(R&&L.hr>L.hr0){L.hr--;return"きつめの抵抗を-1"}
- if(L.wl>1){L.wl--;return"ひとつ前の段階に戻す"}return null}
-function gapAdjust(p){if(!p.lad||!p.menu)return{p,note:""};const lv=lastVisit(p);const gap=lv?daysBetween(lv,today()):0;
- if(gap<14)return{p,note:""};const q=clone(p);const L=q.lad;
- if(gap>=28){L.wl=1;L.fp=L.fp0;L.hr=L.hr0;q.menu={...q.menu,...buildResist(L,q.menu.machine)};return{p:q,note:`前回から${gap}日あいたので、最初の段階に戻しています。`}}
- stepDown(L,q.menu.machine);q.menu={...q.menu,...buildResist(L,q.menu.machine)};return{p:q,note:`前回から${gap}日あいたので、ひとつ軽くしています。`}}
-async function aiWish(comment){if(!sample||!comment)return null;
- try{const r=await sample.json(`ジムの会員がトレーニング後に書いたひとことです。次回のメニューへの希望を1つだけ選んでJSONで返してください。選択肢:"もう少しきつく","このまま","少し楽に","不明"。体調やきつさの訴えは"少し楽に"、物足りなさは"もう少しきつく"。\nひとこと:${comment}\n形式:{"wish":"..."}`,{modelTier:"quick"});
-  return r&&["もう少しきつく","このまま","少し楽に"].includes(r.wish)?r.wish:null}catch(e){return null}}
-function localMenu(p,cls){const machine=state.machine;const r=/^[ABC]$/.test(machine);const d=cls==="少し引き上げ"?.2:cls==="少し引き下げ"?-.2:0;
- return{machine,segments:p.menu.segments.map(x=>{const y={...x,pace:[...x.pace]};if(d&&(y.action==="早歩き"||y.action==="ランニング"))y.pace=y.pace.map(v=>Math.max(3,Math.round((v+d)*10)/10));y.resistance=r?(Number.isInteger(x.resistance)?x.resistance:(y.action==="きつめの早歩き"?3:1)):null;return y})}}
-async function aiMenu(p,input,cls){if(!sample)return null;
- const prompt=`あなたは低酸素ジムAIRNIX用賀店の個別メニュー作成係です。次のルールだけで次回の30分メニューを作ってください。
-- 今回の分類は「${cls}」に決まっています。classificationには必ずこれを入れ、この方向でメニューを作る。ひとことに具体的な希望（もっと走りたい・脚が重い等）があれば、その方向の範囲で反映する。
-- 上げるときに変える要素は1つだけ、小幅に。前回うまくいった要素は変えない。迷ったら慎重な方。
-- 合計は必ず30分。各区間の分は正の整数。繰り返しの区間は、時間・速さ・抵抗をすべてそろえる（1回だけ変える、だんだん速くする、はしない）。
-- 動作名は「ウォーキング」「早歩き」「きつめの早歩き」「ランニング」だけ。
-- ペースはkm/hの[下限,上限]。マシンA〜Cは抵抗1〜6の整数、D〜Gはresistanceをnull。
-- 交代走法の場合：きつめ区間は1〜2分、きつめの速さは早歩きより約1km/h遅く、抵抗を上げるときは1段階ずつ（上げた回は速さを変えない）。
-本人の目標: ${JSON.stringify(p.target)}
-今回使ったマシン: ${input.machine}
-前回のメニュー: ${JSON.stringify({machine:p.menu.machine,segments:p.menu.segments})}
-直近の記録: ${JSON.stringify((p.history||[]).filter(h=>h.kind==="walk").slice(-3))}
-今回の報告: 達成度${input.done}% / 途中の変更:${input.change} / きつさ${input.rpe} / 次回の希望:${input.next||"指定なし"} / ひとこと:${input.comment||"なし"}
-次の形のJSONだけを返してください:
-{"classification":"維持|少し引き上げ|少し引き下げ|構成変更","reason":"20字以内","menu":{"machine":"${input.machine}","segments":[{"min":5,"action":"ウォーキング","pace":[4.5,5.0],"resistance":1}]}}`;
- try{const r=await sample.json(prompt,{modelTier:"default"});return r&&validMenu(r.menu)&&r.menu.machine===input.machine?r:null}catch(e){return{error:e&&e.code}}}
-
-async function save(id){renderAll();if(!db||!canWrite)return;try{await db.doc("members/"+id).set(members[id])}catch(e){if(e&&e.code==="invalid_argument"){canWrite=false;$("conn").textContent="閲覧のみのため、入力は保存されません（この画面の中だけで動きます）。"}}}
-
-$("send").onclick=async()=>{const names={machine:"マシン",done:"最後までできたか",change:"途中の変更",rpe:"きつさ",pain:"痛みや体調の変化"};const need=kind==="walk"?Object.keys(names):["rpe","pain"];
- const miss=need.filter(k=>state[k]===null);if(miss.length){$("err").textContent="未入力："+miss.map(k=>names[k]).join("・");$("err").hidden=false;return}
- const kmv=$("km").value;const km=kmv===""?null:Number(kmv);if(km!==null&&!(km>0&&km<15)){$("err").textContent="距離は0〜15kmの数字で入れてください";$("err").hidden=false;return}
- const id=$("who").value;const ga=gapAdjust(clone(members[id]));const p=ga.p;const input={machine:state.machine,done:state.done,change:state.change,rpe:state.rpe,pain:state.pain,comment:$("comment").value.trim(),next:state.next||null,kind};
- const rec={date:today(),kind,...input,km:kind==="walk"?km:null};if(kind!=="walk")delete rec.machine;const out=$("result");
- let breakNote="";if(kind==="walk"&&!p.breaks&&/休憩|休み|休ん|止ま|座っ|座り/.test(input.comment)){p.breaks=1;breakNote=`<div class="okbox">ひとことを受けて、次回から途中に休憩を1回（2分）入れました。メニューの下で回数を変えられます。</div>`}
- const painNote=input.pain==="あり"?`<div class="stop">痛みや体調の変化が続くときは、無理をせずお休みしてください。次回のメニューは少し軽くしています。</div>`:"";
- if(kind==="strength"){const st=clone(strInit(p));const ch=[];const fast=(p.paceMode||"normal")==="fast"||input.next==="もう少しきつく";
-  STR_CATS.forEach(([k,l])=>{const c=st[k];let r=sres[k];if(input.next==="少し楽に"&&r!=="きつい")r="きつい";
-   if(r==="きつい"){c.streak=0;const d=strDown(c);if(d)ch.push(`${l}：${d}`)}
-   else if(r==="楽"&&input.pain!=="あり"){c.streak++;if(c.streak>=(fast?1:2)){c.streak=0;const u=strUp(c);if(u)ch.push(`${l}：${u}`)}}
-   else c.streak=0});
-  p.str=st;p.strengthCount+=1;p.history=[...(p.history||[]),{...rec,done:100,change:"なし",str:{...sres},result:ch.length?"調整":"維持"}].slice(-60);members[id]=p;
-  STR_CATS.forEach(([k])=>sres[k]="ちょうど");buildStrRows();
-  out.innerHTML=painNote+`<div class="okbox">記録しました。${ch.length?"次回の変更："+esc(ch.join("／")):"次回も同じ内容です（楽が2回続いたら上がります）。"}</div>`;renderCustomer();await save(id);return}
- const btn=$("send");btn.disabled=true;out.innerHTML=`<p class="tiny">次回メニューを作成しています…（数十秒かかることがあります）</p>`;
- const count=p.count+1;if(count>=p.goal){p.count=count;p.status="done";p.prevMenu=p.menu;p.menu=null;p.history=[...(p.history||[]),{...rec,result:"終了"}].slice(-60);members[id]=p;out.innerHTML=`<div class="okbox">予定の回数が終わりました。お疲れさまでした。</div>`;btn.disabled=false;await save(id);return}
- if(!input.next&&input.comment&&input.pain!=="あり"){const wsh=await aiWish(input.comment);if(wsh&&wsh!=="このまま")input.next=wsh}
- const cls=input.pain==="あり"?"少し引き下げ":classify(input,p);let menu,by,reason="";
- if(p.lad){const mc=/^[A-G]$/.test(state.machine)&&(/^[ABC]$/.test(state.machine)===/^[ABC]$/.test(p.menu.machine))?state.machine:p.menu.machine;
-  const ch=cls==="少し引き上げ"?stepUp(p.lad,mc,count):cls==="少し引き下げ"?stepDown(p.lad,mc):null;menu=buildResist(p.lad,mc);by="段階表";reason=ch||(cls==="少し引き上げ"?"次の段階は回数がたまってから":"")}
- else{const ai=input.pain==="あり"?null:await aiMenu(p,input,cls);if(ai&&ai.menu){menu=ai.menu;by="AI";reason=ai.reason||""}else{menu=localMenu(p,cls);by="簡易ルール"}}
- const no=p.menu.no+1;p.count=count;p.prevMenu=p.menu;p.menu={no,...menu};p.history=[...(p.history||[]),{...rec,result:cls}].slice(-60);members[id]=p;
- out.innerHTML=painNote+breakNote+`<div class="okbox">報告しました。次回のメニューを上に出しています（${esc(cls)}${reason?"・"+esc(reason):""}／${esc(by)}）。</div>`;btn.disabled=false;await save(id);window.scrollTo({top:0,behavior:"smooth"})};
-
-$("mealSave").onclick=async()=>{const id=$("who").value;const p=clone(members[id]);const k=$("kcal").value,ktv=$("kcalT").value;$("mealErr").hidden=true;
- if(k!==""){const n=Number(k);if(!Number.isInteger(n)||n<300||n>6000){$("mealErr").textContent="カロリーは300〜6000の数字で入力してください";$("mealErr").hidden=false;return}p.meals=[...(p.meals||[]).filter(m=>m.date!==today()),{date:today(),kcal:n}].slice(-30)}
- if(ktv!==""){const n=Number(ktv);if(!Number.isInteger(n)||n<800||n>5000){$("mealErr").textContent="目標カロリーは800〜5000の数字で入力してください";$("mealErr").hidden=false;return}p.kcalTarget=n}
- members[id]=p;await save(id);$("mealSave").textContent="保存しました";setTimeout(()=>$("mealSave").textContent="保存",1500)};
-
-/* ---------- スタッフの画面 ---------- */
-function flags(p){const t=today(),lv=lastVisit(p),gap=lv?daysBetween(lv,t):999,lm=lastMeas(p),out=[];
- const lastW=(p.history||[]).slice(-1)[0];if(lastW&&lastW.pain==="あり")out.push(["痛みの申告","p-w","直近の報告で痛み・体調変化あり。メニューは自動で少し下げています。続くようならLINEで様子を聞く。"]);
- const w=(p.history||[]).filter(h=>h.kind==="walk").slice(-2);if(w.length===2&&w.every(h=>h.rpe>=8))out.push(["きつさ注意","p-w","きつさ8以上が2回続いています。次のメニューは自動で調整されます。"]);
- if(gap>=21)out.push([`${gap}日来店なし`,"p-d","LINEで様子を聞き、次の予約を案内する。"]);else if(gap>=10)out.push([`${gap}日来店なし`,"p-w","LINEで次の来店を案内する。"]);
- if(brokeStreak(p))out.push(["連続が途切れた","p-w","先週の来店がありませんでした（今週1回で連続が再開）。"]);
- if(p.status!=="done"&&(!lm.date||daysBetween(lm.date,t)>=14))out.push(["測定なし","p-w","体重・ウエストの入力が2週間以上ありません。"]);
- const up=[];if(hitWeeks(p)>=4)up.push(`週${p.weekly}回を${hitWeeks(p)}週続けて達成`);if(streak(p)>=8)up.push(`${streak(p)}週連続`);if(reached(p))up.push("目標に到達");if(p.status==="done")up.push("予定回数が終了");
- if(up.length&&p.plan!=="プレミアム")out.push(["案内のタイミング","p-a",`${up.join("・")}。ダブル枠（プレミアム）とスタジオを案内する時期。`]);
- else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。スタジオの筋トレを案内する時期。`]);
- if(!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["筋トレ未実施","p-b","スタジオの筋トレ（当初は無料）をまだ使っていません。"]);
- return out}
-function score(p){const f=flags(p).map(x=>x[1]);return (f.includes("p-d")?0:f.includes("p-w")?1:f.includes("p-a")?2:3)*1000+rate(p)}
-function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastVisit(p),last=(p.history||[]).slice(-1)[0];
- const lm=lastMeas(p),tg=p.target||{};const prog=[];if(tg.weight!=null)prog.push(`体重 ${p.start.weight}→${lm.weight??"-"}（目標${tg.weight}）`);if(tg.waist!=null)prog.push(`ウエスト ${p.start.waist}→${lm.waist??"-"}（目標${tg.waist}）`);
- return `<article class="mcard ${fl.some(f=>f[1]==="p-d")?"alert":""}">
-  <div class="mhead"><div><b>${esc(p.name)}</b><p class="tiny">${esc(p.plan)}・週${p.weekly}回目標・${streak(p)}週連続・最終来店 ${md(lv)}</p></div>
-  </div>
-  <div class="pills">${fl.length?fl.map(f=>`<span class="pill ${f[1]}">${esc(f[0])}</span>`).join(""):`<span class="pill p-o">順調</span>`}</div>
-  <div class="rate"><span>来店率</span><div class="bar"><i style="width:${r}%"></i></div><b class="num" style="color:var(--ink)">${r}%</b></div>
-  ${fl.length?`<p class="say">${esc(fl[0][2])}</p>`:`<p class="say">順調です。</p>`}
-  <p class="tiny">${esc(prog.join("・"))}</p>
-  ${last?`<p class="tiny">直近の報告 ${md(last.date)}：${last.kind==="strength"?"筋トレ":"歩く"} 達成度${last.done}%・きつさ${last.rpe}${last.km?`・${last.km}km`:""}${last.comment?`・「${esc(last.comment)}」`:""}</p>`:""}
-  <div class="acts"><button class="ghost" data-edit="${i}">目標を見直す</button></div>
- </article>`}
-function renderStaff(){const ids=Object.keys(members).sort((a,b)=>score(members[a])-score(members[b]));const t=today();
- const all=ids.map(i=>flags(members[i]));const cnt=c=>all.filter(f=>f.some(x=>x[1]===c)).length;
- $("sum").innerHTML=`<div class="d"><span class="tiny">長く来ていない</span><b class="num">${cnt("p-d")}</b></div><div class="w"><span class="tiny">気にかける人</span><b class="num">${cnt("p-w")}</b></div><div class="a"><span class="tiny">案内のタイミング</span><b class="num">${cnt("p-a")}</b></div><div class="o"><span class="tiny">全体</span><b class="num">${ids.length}</b></div>`;
- $("allList").innerHTML=ids.map(cardHTML).join("");
- document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit))}
-$("mCancel").onclick=()=>{$("measCard").hidden=true};
-$("mSave").onclick=async()=>{if(!measId)return;const w=$("mW").value,c=$("mC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);
- if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("measErr").textContent="体重かウエストを正しく入力してください";$("measErr").hidden=false;return}
- const p=clone(members[measId]);p.measurements=[...(p.measurements||[]),{date:today(),weight:wn,waist:cn}].slice(-30);members[measId]=p;$("measCard").hidden=true;await save(measId)};
-
-/* ---------- 登録 ---------- */
-function initialMenu(machine,tpl,w,f,r,hr){const R=/^[ABC]$/.test(machine);const rd=n=>Math.round(n*10)/10;
- const Wk=m=>({min:m,action:"ウォーキング",pace:[w,rd(w+.5)],resistance:R?1:null}),Fa=m=>({min:m,action:"早歩き",pace:[f,rd(f+.5)],resistance:R?1:null}),
- Hd=m=>({min:m,action:"きつめの早歩き",pace:[Math.max(3,rd(f-1.3)),Math.max(3.5,rd(f-.7))],resistance:R?(hr||3):null}),Rn=m=>({min:m,action:"ランニング",pace:[r,rd(r+1)],resistance:R?1:null});
- const seg=tpl==="resist"&&R?[Wk(5),...[1,2,3,4,5].flatMap(()=>[Fa(3),Hd(1)]),Wk(5)]:tpl==="runwalk"?[Wk(3),Rn(6),Wk(3),Rn(6),Wk(3),Rn(6),Wk(3)]:tpl==="run"?[Wk(5),Rn(20),Wk(5)]:[Wk(3),Fa(6),Wk(3),Fa(6),Wk(3),Fa(6),Wk(3)];
- return{no:1,machine,segments:seg}}
-function tplFields(){const t=$("rTpl").value,show={"f-walk":true,"f-fast":t==="resist"||t==="walk","f-hard":t==="resist","f-run":t==="runwalk"||t==="run"};
- Object.entries(show).forEach(([c,v])=>document.querySelectorAll("."+c).forEach(e=>e.hidden=!v));document.querySelectorAll(".noRes").forEach(o=>o.disabled=t==="resist");
- if(t==="resist"&&!/^[ABC]$/.test($("rM").value))$("rM").value="A"}
-function goalHint(){const h=Number($("rH").value)/100,w=Number($("rW").value),c=Number($("rC").value),sex=$("rSex").value,box=$("hint");
- if(!(h>1&&h<2.3)||!(w>20)){box.innerHTML=`<p class="tiny">身長・体重・ウエストを入れると、目標の目安が出ます。</p>`;return}
- const bmi=w/(h*h),std=22*h*h,lo=18.5*h*h,hi=25*h*h,band=bmi<18.5?"低体重":bmi<25?"普通体重":"肥満（BMI25以上）";
- const tw=Math.round(w*0.97*10)/10,tc=c>40?Math.round((c-2)*10)/10:null,lim=sex==="m"?85:sex==="f"?90:null;
- const tWin=Number($("rTW").value),tCin=Number($("rTC").value);
- const warn=[];if(tWin>0&&tWin<w*0.9)warn.push(`目標体重が今より10%以上少ない`);if(tWin>0&&tWin<lo)warn.push("目標体重が「低体重」（BMI18.5未満）の範囲");if(tCin>0&&c>40&&c-tCin>8)warn.push(`目標ウエストが今より${Math.round((c-tCin)*10)/10}cm少ない`);
- box.innerHTML=`<p style="font-size:14px"><b>今</b>：BMI ${bmi.toFixed(1)}（${band}）／標準体重（BMI22）${std.toFixed(1)}kg／普通体重の範囲 ${lo.toFixed(1)}〜${hi.toFixed(1)}kg${lim&&c>40?`／ウエストの目安 ${lim}cm未満（メタボ健診）`:""}</p>
- <p style="font-size:14px"><b>3か月の目安</b>：体重3%減 → ${tw}kg${tc?`、ウエスト2cm減 → ${tc}cm`:""}（国の特定保健指導が3か月で目指す水準）</p>
- ${warn.length?`<p class="err">${warn.join("／")}。本人と無理のない目標か話してください。</p>`:""}
- <div><button class="ghost" id="useHint" type="button">この目安を目標に入れる</button></div>`;
- $("useHint").onclick=()=>{$("rTW").value=tw;if(tc)$("rTC").value=tc;goalHint()}}
-["rH","rW","rC","rSex","rTW","rTC"].forEach(i=>$(i).addEventListener("input",goalHint));
-$("rTpl").addEventListener("change",tplFields);tplFields();
-function openEdit(id){const p=members[id];editId=id;$("regTitle").textContent="目標を見直す";$("regCard").hidden=false;$("menuPart").hidden=true;$("rName").value=p.name.replace(/様$/,"");$("rPlan").value=p.plan;$("rPace").value=p.paceMode||"normal";$("rWeek").value=String(p.weekly);$("rH").value=p.height??"";$("rSex").value=p.sex||"";$("rW").value=p.start.weight??"";$("rC").value=p.start.waist??"";
- $("rTW").value=p.target.weight??"";$("rTC").value=p.target.waist??"";$("rTD").value=p.target.date||"";$("rGoal").value=p.goal;$("rSave").textContent="更新する";$("regErr").hidden=true;goalHint();$("regCard").scrollIntoView({behavior:"smooth",block:"nearest"})}
-$("regOpen").onclick=()=>{editId=null;$("regTitle").textContent="登録（目標と初回メニュー）";$("rSave").textContent="登録する";$("menuPart").hidden=false;["rName","rH","rW","rC","rTW","rTC","rPw","rPf","rRh","rPr"].forEach(i=>$(i).value="");$("rTpl").value="resist";tplFields();goalHint();$("rTD").value=addDays(today(),90);$("regErr").hidden=true;$("regCard").hidden=false;$("regCard").scrollIntoView({behavior:"smooth",block:"nearest"})};
-$("rCancel").onclick=()=>{$("regCard").hidden=true};
-$("rSave").onclick=async()=>{const num=id=>$(id).value===""?null:Number($(id).value);const e=$("regErr");const name=$("rName").value.trim();
- const w=num("rW"),c=num("rC"),tw=num("rTW"),tc=num("rTC"),td=$("rTD").value,goal=Number($("rGoal").value),pw=num("rPw"),pf=num("rPf"),pr=num("rPr"),rh=num("rRh"),tpl=$("rTpl").value,mc=$("rM").value,editing=!!(editId&&members[editId]);
- const bad=m=>{e.textContent=m;e.hidden=false};
- if(!name)return bad("お名前を入力してください");if(!(w>20&&w<250)||!(c>40&&c<200))return bad("今の体重とウエストを入力してください");
- if(tw===null&&tc===null)return bad("目標（体重かウエスト）を入力してください");if(!td||td<=today())return bad("期日は今日より後の日付にしてください");
- if(!Number.isInteger(goal)||goal<1||goal>60)return bad("回数は1〜60で入力してください");let menu=null,lad=null;
- if(!editing){if(!(pw>0))return bad("初回に確かめたウォーキングの速さを入力してください");
-  if(tpl==="resist"){if(!/^[ABC]$/.test(mc))return bad("交代走法は抵抗のあるマシン（A〜C）を選んでください");if(!(pf>0)||!Number.isInteger(rh)||rh<2||rh>6)return bad("早歩きの速さと、きつめの抵抗（2〜6）を入力してください")}
-  else if(tpl==="walk"&&!(pf>0))return bad("早歩きの速さを入力してください");
-  else if((tpl==="runwalk"||tpl==="run")&&!(pr>0))return bad("ランニングの速さを入力してください");
-  if(tpl==="resist"){lad={wl:1,wp:pw,fp:pf,fp0:pf,hr:rh,hr0:rh};menu={no:1,...buildResist(lad,mc)}}else menu=initialMenu(mc,tpl,pw,pf||pw,pr||pw,rh);if(!validMenu(menu))return bad("初回メニューを作れませんでした。条件を見直してください")}
- let id;const base={paceMode:$("rPace").value,plan:$("rPlan").value,weekly:Number($("rWeek").value),height:num("rH"),sex:$("rSex").value||null,goal,target:{weight:tw,waist:tc,date:td}};
- if(editing){id=editId;const p=clone(members[id]);Object.assign(p,base);p.name=name.endsWith("様")?name:name+"様";
-  if(p.start.weight!==w||p.start.waist!==c){p.start={weight:w,waist:c};p.measurements=[...(p.measurements||[]),{date:today(),weight:w,waist:c}].slice(-30)}members[id]=p}
- else{id="u"+Date.now().toString(36);members[id]={ver:3,lad,name:name+"様",...base,count:0,status:"active",strengthLevel:1,strengthCount:0,kcalTarget:null,
-  start:{weight:w,waist:c},measurements:[{date:today(),weight:w,waist:c}],meals:[],menu,prevMenu:null,history:[],stamp:null,todayFlag:today()}}
- editId=null;$("regCard").hidden=true;renderAll();$("who").value=id;renderCustomer();showView("cust");await save(id)};
-
-/* ---------- 画面切替・起動 ---------- */
-function showView(v){$("custView").hidden=v!=="cust";$("staffView").hidden=v!=="staff";[...$("viewTabs").children].forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===v?"true":"false"))}
-[...$("viewTabs").children].forEach(b=>b.onclick=()=>showView(b.dataset.view));
-function renderAll(){const sel=$("who");const cur=sel.value;const ids=Object.keys(members).sort((a,b)=>(a[0]==="u"?0:1)-(b[0]==="u"?0:1)||a.localeCompare(b));
- sel.innerHTML=ids.map(i=>`<option value="${i}">${esc(members[i].name)}${i[0]==="u"?"":"（見本）"}</option>`).join("");
- if(cur&&members[cur])sel.value=cur;renderCustomer();renderStaff()}
-$("who").onchange=()=>{$("result").innerHTML="";preset();renderCustomer()};
-$("reset").onclick=async()=>{const b=$("reset");b.disabled=true;members=seeds();if(db&&canWrite){for(const [id,d] of Object.entries(members)){try{await db.doc("members/"+id).set(d)}catch(e){}}}$("result").innerHTML="";preset();renderAll();b.disabled=false};
-
-[...$("next").children].forEach(c=>c.onclick=()=>{const on=c.getAttribute("aria-pressed")!=="true";state.next=on?c.dataset.v:null;[...$("next").children].forEach(x=>x.setAttribute("aria-pressed",x===c&&on?"true":"false"))});
-[...$("pBreak").children].forEach(c=>c.onclick=async()=>{const pid=$("who").value;const p=clone(members[pid]);p.breaks=Number(c.dataset.v);members[pid]=p;renderCustomer();await save(pid)});
-[["pWarm","noWarm"],["pCool","noCool"]].forEach(([id,key])=>[...$(id).children].forEach(c=>c.onclick=async()=>{const pid=$("who").value;const p=clone(members[pid]);p[key]=c.dataset.v==="off";members[pid]=p;renderCustomer();await save(pid)}));
-$("sSave").onclick=async()=>{const w=$("sW").value,c=$("sC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);$("sErr").hidden=true;
- if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("sErr").textContent="体重かウエストを数字で入力してください";$("sErr").hidden=false;return}
- const id=$("who").value;const p=clone(members[id]);p.measurements=[...(p.measurements||[]).filter(m=>m.date!==today()),{date:today(),weight:wn,waist:cn}].slice(-30);members[id]=p;$("sW").value="";$("sC").value="";await save(id);$("sSave").textContent="記録しました";setTimeout(()=>$("sSave").textContent="記録する",1500)};
-members=seeds();renderAll();showView("cust");
-(async()=>{try{sample=await window.claude?.use("sample")}catch(e){sample=null}
- try{db=await window.claude?.use("db")}catch(e){db=null}
- if(!db){$("conn").textContent="見本データで動いています（入力は保存されません）。";return}
- try{const u=await window.claude.use("user");const w=u?await u.can("data.write"):null;if(w===false)canWrite=false}catch(e){}
- $("reset").hidden=!canWrite;
- db.collection("members").onSnapshot(snap=>{if(snap.empty){$("conn").textContent="共有データはまだ空です。見本で表示しています。";return}
-  const m={};snap.docs.forEach(d=>{const v=d.data();if(v&&v.ver===3)m[d.id]=clone(v)});
-  if(!Object.keys(m).length){$("conn").textContent="見本で表示しています。入力すると共有データに保存されます。";return}
-  members={...seeds(),...m};$("conn").textContent=canWrite?"共有データに接続中。入力した内容は、開いている全員の画面に反映されます。":"共有データを表示中（閲覧のみ）。";renderAll()},
- e=>{$("conn").textContent="共有データの読み込みが止まりました。ページを開き直してください。"})})();
+L={...START};freshState();renderMenu();setStep(1);
 </script>
+</body>
+</html>
