@@ -117,6 +117,7 @@ details[open] summary::after{content:"－"}
     <div class="who"><span>サンプル様（見本）</span><span class="badge" id="visit"></span></div>
     <h2>今日のメニュー（30分）</h2>
     <div id="menu1"></div>
+    <div id="ntc1"></div>
     <button class="btn" type="button" id="toReport">トレーニングした → 報告へ</button>
   </section>
 
@@ -127,6 +128,16 @@ details[open] summary::after{content:"－"}
       <button type="button" data-k="ok">ちょうどよかった<small>最後までできた</small></button>
       <button type="button" data-k="hard">きつかった<small>途中で止まった・限界</small></button>
     </div>
+    <div id="ntcAsk">
+      <p class="q">前回からのNTCはできましたか？</p>
+      <div class="chips" id="ntcPick">
+        <button type="button" data-k="no">できなかった</button>
+        <button type="button" data-k="easy">やった・楽</button>
+        <button type="button" data-k="ok">やった・ちょうど</button>
+        <button type="button" data-k="hard">やった・きつい</button>
+      </div>
+    </div>
+    <p class="hint" id="ntcFirst">NTCの報告は2回目の来店から</p>
     <label class="chk"><input type="checkbox" id="pain">痛みや体調の変化があった</label>
     <button class="btn" type="button" id="send" disabled>報告する</button>
   </section>
@@ -136,6 +147,7 @@ details[open] summary::after{content:"－"}
     <p class="change" id="change"></p>
     <h2>次回のメニュー</h2>
     <div id="nextMenu"></div>
+    <div id="ntc3"></div>
     <button class="btn" type="button" id="nextVisit">次の来店へ（もう一度試す）</button>
     <button class="btn sub" type="button" id="reset">最初に戻す</button>
   </section>
@@ -144,6 +156,11 @@ details[open] summary::after{content:"－"}
     <summary>メニューの段階（①〜④）</summary>
     <ol class="ladder" id="ladder"></ol>
     <p class="hint">④の先は、きつめの抵抗を＋1 → 早歩きを＋0.2km/h。</p>
+  </details>
+  <details>
+    <summary>NTCの段階（1〜5）</summary>
+    <ol class="ladder" id="ntcLadder"></ol>
+    <p class="hint">NTC（ナイキ トレーニング クラブ・無料）のアプリで、種類・時間・強度を絞り込んで1つ選びます。</p>
   </details>
   <details>
     <summary>初回の決め方</summary>
@@ -161,16 +178,37 @@ details[open] summary::after{content:"－"}
       <li>14日あいたら1つ軽く、28日あいたら①から</li>
       <li>最初の4回は、きつめの区間を入れない</li>
     </ul>
+    <p class="q">NTC</p>
+    <ul class="rule">
+      <li><b>やった・楽</b> → 1つ上げる</li>
+      <li><b>やった・ちょうど</b> → そのまま</li>
+      <li><b>やった・きつい／痛みあり</b> → 1つ戻す</li>
+      <li><b>できなかった</b> → そのまま。2回続いたら1つ戻す</li>
+    </ul>
   </details>
-  <p class="foot">試作 第9版（見本データ・保存されません）</p>
+  <p class="foot">試作 第10版（見本データ・保存されません）</p>
 </div>
 
 <script>
 const $=id=>document.getElementById(id);
 const r1=n=>Math.round(n*10)/10;
 const f1=n=>n.toFixed(1);
-const START={wl:1,wp:4.5,fp:5.5,hr:3,fp0:5.5,hr0:3,count:1};
-let L,pick=null;
+const START={wl:1,wp:4.5,fp:5.5,hr:3,fp0:5.5,hr0:3,count:1,nl:1,miss:0};
+let L,pick=null,npick=null;
+const NTC=[
+  {t:"ストレッチ・モビリティ",min:10,lv:"低",n:1},
+  {t:"筋トレ（全身・器具なし）",min:15,lv:"低",n:1},
+  {t:"筋トレ（全身・器具なし）",min:20,lv:"中",n:1},
+  {t:"筋トレ（全身・器具なし）",min:20,lv:"中",n:2},
+  {t:"筋トレ（全身・器具なし）",min:30,lv:"中",n:2}
+];
+const ntcName=i=>{const x=NTC[i-1];return`${x.t}・${x.min}分・強度${x.lv}／週${x.n}回`};
+function ntcHTML(l,title){
+  const x=NTC[l.nl-1];
+  return`<div class="rows" style="margin-top:14px"><p class="what">${title}</p>
+<div class="row"><div class="t">NTC</div><div><div class="n">${x.t} ${x.min}分</div><div class="p">強度：${x.lv}・週${x.n}回・自宅かスタジオで</div></div></div></div>
+<p class="hint" style="margin-top:6px">NTCアプリで「種類・時間・強度」を絞り込み、好きなものを1つ選んでください。</p>`;
+}
 
 function build(l){
   const W=m=>({min:m,a:"ゆっくり",pace:[l.wp,r1(l.wp+.5)],res:1,k:"w"});
@@ -201,27 +239,46 @@ function menuHTML(l){
   const rows=m.body.u.map((s,i)=>`<div class="row"><div class="t">${i===0?"×"+m.body.reps:""}</div><div><div class="n">${s.a} ${s.min}分</div><div class="p">${f1(s.pace[0])}〜${f1(s.pace[1])}km/h・抵抗${s.res}</div></div></div>`).join("");
   return bar+leg+`<div class="rows"><div class="row"><div class="t">5分</div><div class="n">ウォーミングアップ</div></div>${rows}<div class="row"><div class="t">5分</div><div class="n">クールダウン</div></div></div>`;
 }
-function renderLadder(){$("ladder").innerHTML=STAGE.map((n,i)=>`<li class="${L.wl===i+1?"cur":""}"><span>${"①②③④"[i]}</span>${n}</li>`).join("")}
+function renderLadder(){
+  $("ladder").innerHTML=STAGE.map((n,i)=>`<li class="${L.wl===i+1?"cur":""}"><span>${"①②③④"[i]}</span>${n}</li>`).join("");
+  $("ntcLadder").innerHTML=NTC.map((x,i)=>`<li class="${L.nl===i+1?"cur":""}"><span>${i+1}</span>${ntcName(i+1)}</li>`).join("");
+}
+function ntcStep(l,k,pain){
+  if(l.count<2)return null;
+  if(pain||k==="hard"){l.miss=0;if(l.nl>1){l.nl--;return"down"}return null}
+  if(k==="no"){l.miss++;if(l.miss>=2&&l.nl>1){l.nl--;l.miss=0;return"down"}return null}
+  l.miss=0;
+  if(k==="easy"&&l.nl<NTC.length){l.nl++;return"up"}
+  return null;
+}
 function setStep(n){
   ["s1","s2","s3"].forEach((id,i)=>$(id).hidden=i+1!==n);
   [...$("steps").children].forEach(li=>{const s=+li.dataset.s;li.className=s===n?"on":s<n?"done":""});
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function render1(){$("visit").textContent=`${L.count}回目・段階${"①②③④"[L.wl-1]}`;$("menu1").innerHTML=menuHTML(L);renderLadder()}
+function render1(){$("visit").textContent=`${L.count}回目・段階${"①②③④"[L.wl-1]}`;$("menu1").innerHTML=menuHTML(L);$("ntc1").innerHTML=ntcHTML(L,"次の来店までに（NTC）");renderLadder()}
+const canSend=()=>{$("send").disabled=!pick||(L.count>=2&&!npick)};
 
-$("toReport").onclick=()=>{pick=null;$("pain").checked=false;$("send").disabled=true;[...$("pick").children].forEach(b=>b.setAttribute("aria-pressed","false"));setStep(2)};
-[...$("pick").children].forEach(b=>b.onclick=()=>{pick=b.dataset.k;[...$("pick").children].forEach(x=>x.setAttribute("aria-pressed",x===b));$("send").disabled=false});
+$("toReport").onclick=()=>{
+  pick=null;npick=null;$("pain").checked=false;
+  [...$("pick").children,...$("ntcPick").children].forEach(b=>b.setAttribute("aria-pressed","false"));
+  $("ntcAsk").hidden=L.count<2;$("ntcFirst").hidden=L.count>=2;canSend();setStep(2);
+};
+[...$("pick").children].forEach(b=>b.onclick=()=>{pick=b.dataset.k;[...$("pick").children].forEach(x=>x.setAttribute("aria-pressed",x===b));canSend()});
+[...$("ntcPick").children].forEach(b=>b.onclick=()=>{npick=b.dataset.k;[...$("ntcPick").children].forEach(x=>x.setAttribute("aria-pressed",x===b));canSend()});
 $("send").onclick=()=>{
   const pain=$("pain").checked;const kind=pain||pick==="hard"?"down":pick==="easy"?"up":"keep";
   const next={...L};let chg=null,big,cls=kind,why="";
   if(kind==="up"){chg=stepUp(next);big=chg?"次回は1つ上げます":"今回はそのまま";if(!chg){cls="keep";why="最初の4回は、きつめの区間を入れないため"}}
   if(kind==="down"){chg=stepDown(next);big=chg?"次回は1つ軽くします":"今回はそのまま";if(!chg)why="いちばん軽い段階のため"}
-  if(kind==="keep")big="次回も同じメニュー";
+  const a=next.nl,nd=ntcStep(next,npick,pain);
+  if(kind==="keep")big=nd==="up"?"次回はNTCを1つ上げます":nd==="down"?"次回はNTCを1つ軽くします":"次回も同じメニュー";
   if(pain)why=(why?why+"。":"")+"「無理せずお休みしてください」と表示します";
   $("verdict").innerHTML=`<div class="verdict ${pain?"stop":cls}"><p class="big">${big}</p>${why?`<p class="why">${why}</p>`:""}</div>`;
-  $("change").innerHTML=chg||"変更なし";
+  const nchg=nd?`<br><span style="font-size:15px">NTC ${ntcName(a)}<br><span class="arr">↓</span><br>${ntcName(next.nl)}</span>`:"";
+  $("change").innerHTML=(chg||"トレッドミル 変更なし")+nchg;
   next.count=L.count+1;L=next;
-  $("nextMenu").innerHTML=menuHTML(L);renderLadder();setStep(3);
+  $("nextMenu").innerHTML=menuHTML(L);$("ntc3").innerHTML=ntcHTML(L,"次の来店までに（NTC）");renderLadder();setStep(3);
 };
 $("nextVisit").onclick=()=>{render1();setStep(1)};
 $("reset").onclick=()=>{L={...START};render1();setStep(1)};
