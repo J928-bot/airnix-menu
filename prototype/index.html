@@ -187,6 +187,8 @@ details{border:0;border-top:1px solid var(--line);border-radius:0;padding:4px 0;
     <div id="ntcAsk">
       <p class="q" id="ntcQ"></p>
       <div class="chips" id="ntcCount"></div>
+      <p class="q">今週、あすけんで食事を記録した日は？ <small>目標 3食×毎日</small></p>
+      <div class="chips" id="askenDays"><button type="button" data-k="0">0日</button><button type="button" data-k="1">1日</button><button type="button" data-k="2">2日</button><button type="button" data-k="3">3日</button><button type="button" data-k="4">4日</button><button type="button" data-k="5">5日</button><button type="button" data-k="6">6日</button><button type="button" data-k="7">7日</button></div>
       <div id="ntcFeelBox" hidden>
         <p class="q">NTCのきつさは？</p>
         <div class="chips" id="ntcFeel">
@@ -255,7 +257,7 @@ const $=id=>document.getElementById(id);
 const r1=n=>Math.round(n*10)/10;
 const f1=n=>n.toFixed(1);
 const START={wl:1,wp:4.5,fp:5.5,hr:3,fp0:5.5,hr0:3,count:1};
-let L,N,pick=null,ncount=null,nfeel=null,track="base";
+let L,N,pick=null,ncount=null,nfeel=null,adays=null,track="base";
 
 function build(l){
   const W=m=>({min:m,a:"ゆっくり",pace:[l.wp,r1(l.wp+.5)],res:1,k:"w"});
@@ -299,10 +301,10 @@ function setStep(n){
 }
 function render1(){$("visit").textContent=`${L.count}回目`;$("stLv").textContent="①②③④"[L.wl-1];$("menu1").innerHTML=menuHTML(L);$("ntc1").innerHTML=ntcCardHTML(N,"次の来店までに");renderTrack();renderLadder()}
 const press=(box,v)=>[...box.children].forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===String(v)));
-const canSend=()=>{$("send").disabled=!pick||(L.count>=2&&(ncount===null||(ncount>0&&!nfeel)))};
+const canSend=()=>{$("send").disabled=!pick||(L.count>=2&&(ncount===null||adays===null||(ncount>0&&!nfeel)))};
 
 $("toReport").onclick=()=>{
-  pick=null;ncount=null;nfeel=null;$("pain").checked=false;
+  pick=null;ncount=null;nfeel=null;adays=null;press($("askenDays"),"");$("pain").checked=false;
   const p=ntcProg(N);
   $("ntcQ").innerHTML=`今週のNTC（${p.name}）は何回できましたか？ <small>目標 週${p.per}回</small>`;
   $("ntcCount").innerHTML=Array.from({length:p.per+1},(_,i)=>`<button type="button" data-k="${i}">${i}回</button>`).join("");
@@ -311,6 +313,7 @@ $("toReport").onclick=()=>{
   $("ntcAsk").hidden=L.count<2;$("ntcFirst").hidden=L.count>=2;canSend();setStep(2);
 };
 [...$("pick").children].forEach(b=>b.onclick=()=>{pick=b.dataset.k;press($("pick"),pick);canSend()});
+[...$("askenDays").children].forEach(b=>b.onclick=()=>{adays=+b.dataset.k;press($("askenDays"),adays);canSend()});
 [...$("ntcFeel").children].forEach(b=>b.onclick=()=>{nfeel=b.dataset.k;press($("ntcFeel"),nfeel);canSend()});
 $("send").onclick=()=>{
   const pain=$("pain").checked;const kind=pain||pick==="hard"?"down":pick==="easy"?"up":"keep";
@@ -321,7 +324,8 @@ $("send").onclick=()=>{
   if(kind==="keep")big="トレッドミルは同じメニュー";
   if(pain)why=(why?why+"。":"")+"「無理せずお休みしてください」と表示します";
   $("verdict").innerHTML=`<div class="verdict ${pain?"stop":cls}"><p class="big">${big}</p>${why?`<p class="why">${why}</p>`:""}</div>`;
-  const nchg=`<br><span style="font-size:15px">NTC：${nd||(L.count<2?`${ntcProg(N).name}を開始`:`${ntcProg(N).name} ${N.week}週目へ`)}</span>`;
+  const anote=L.count>=2?`<br><span style="font-size:15px">あすけん：今週${adays}日記録${adays<3?"（次回、スタッフが記録のコツを案内）":""}</span>`:"";
+  const nchg=anote+`<br><span style="font-size:15px">NTC：${nd||(L.count<2?`${ntcProg(N).name}を開始`:`${ntcProg(N).name} ${N.week}週目へ`)}</span>`;
   $("change").innerHTML=(chg||"トレッドミル 変更なし")+nchg;
   next.count=L.count+1;L=next;
   $("nextMenu").innerHTML=menuHTML(L);$("ntc3").innerHTML=ntcCardHTML(N,"次の来店までに");renderLadder();setStep(3);
