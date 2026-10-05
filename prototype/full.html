@@ -134,6 +134,50 @@ textarea{min-height:52px;resize:vertical}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 [hidden]{display:none!important}
 </style>
+<style>
+/* NTC風の見た目（仕組みの画面と揃える） */
+:root{--soft:#f5f5f5;--ink:#111;--sub:#707072;--line:#e5e5e5;--brand:#111;--brand-soft:#f0f0f0;--amber:#111;--amber-soft:#f5f5f5;--goal:#9e9e9e;
+  --f-display:"Helvetica Neue",Helvetica,"Noto Sans JP",sans-serif;--f-body:"Helvetica Neue",Helvetica,"Noto Sans JP",sans-serif}
+h1,h2,h3{font-weight:900;letter-spacing:-.01em}
+h1{font-size:28px}h2{font-size:22px}h3{font-size:18px}
+.brandmark{color:#111;letter-spacing:.3em}
+#topnav a{border-radius:999px!important;border-color:#f5f5f5!important;background:#f5f5f5!important;color:#111!important}
+#topnav a.on{background:#111!important;border-color:#111!important;color:#fff!important}
+.phone{background:#fff;border:0;border-radius:0;padding:0;gap:16px}
+.hello b{font-size:24px;font-weight:900}
+.card{border:0;background:#f5f5f5;border-radius:16px;padding:16px}
+.card h3 small{color:var(--sub)}
+.streak{background:#111;color:#fff}.streak .big{color:#d7ff3a}
+.days span{background:#fff}
+.days span.on{background:#111}
+.days span.today{outline-color:#111}
+.stampMsg{background:#111;color:#fff}
+.menu{border:0;border-radius:14px;background:#fff}
+.menu header{background:#111;font-size:15px;padding:12px 14px}
+.menu tr.rep td{background:#f5f5f5}
+.menu td:first-child{color:#111}
+.diff{background:#111;color:#fff}
+.kindTabs button,.chips button{border-radius:999px;background:#fff;border-color:#e5e5e5}
+.kindTabs button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:#111;border-color:#111}
+.primary{border-radius:999px;background:#111;padding:16px}
+.ghost,.stamps button{border-radius:999px;border-color:#cacacb}
+.stamps button[aria-pressed="true"]{background:#111;border-color:#111;color:#fff}
+.okbox{background:#f5f5f5;color:#111}
+.badge .disc{background:#fff;border-color:#e5e5e5}
+.badge.got .disc{background:#111;color:#d7ff3a;border-color:#111}
+.panel{border:0;background:#f5f5f5;border-radius:16px}
+.sum div{background:#f5f5f5;border-radius:16px}
+.sum .o b,.sum .a b{color:#111}
+.mcard{border:0;background:#f5f5f5;border-radius:16px}
+.mcard.alert{box-shadow:0 0 0 2px var(--danger) inset}
+.mhead b{font-size:19px;font-weight:900}
+.p-b{background:#111;color:#fff}.p-o{background:#e9f5ec}
+.bar{background:#fff}.bar i{background:#111}
+.say{background:#fff}
+input,select,textarea{border-radius:12px;background:#fff}
+.seg{border-radius:999px}.seg button{border-radius:999px}
+.seg button[aria-pressed="true"]{background:#111;color:#fff}
+</style>
 
 <nav id="topnav" style="max-width:1080px;margin:0 auto;padding:12px 16px 0;display:flex;gap:6px">
 <a href="./" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">仕組みを見る</a>
@@ -696,7 +740,7 @@ $("reset").onclick=async()=>{const b=$("reset");b.disabled=true;members=seeds();
 $("sSave").onclick=async()=>{const w=$("sW").value,c=$("sC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);$("sErr").hidden=true;
  if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("sErr").textContent="体重かウエストを数字で入力してください";$("sErr").hidden=false;return}
  const id=$("who").value;const p=clone(members[id]);p.measurements=[...(p.measurements||[]).filter(m=>m.date!==today()),{date:today(),weight:wn,waist:cn}].slice(-30);members[id]=p;$("sW").value="";$("sC").value="";await save(id);$("sSave").textContent="記録しました";setTimeout(()=>$("sSave").textContent="記録する",1500)};
-members=seeds();renderAll();showView(PV);$("viewTabs").hidden=true;document.title=PV==="staff"?"AIRNIX スタッフの画面":"AIRNIX お客様の画面";document.querySelectorAll("#topnav a[data-v]").forEach(a=>{if(a.dataset.v===PV){a.style.background="#24395c";a.style.borderColor="#24395c";a.style.color="#fff"}});
+members=seeds();renderAll();showView(PV);$("viewTabs").hidden=true;document.title=PV==="staff"?"AIRNIX スタッフの画面":"AIRNIX お客様の画面";document.querySelectorAll("#topnav a[data-v]").forEach(a=>{if(a.dataset.v===PV)a.classList.add("on")});
 (async()=>{try{sample=await window.claude?.use("sample")}catch(e){sample=null}
  try{db=await window.claude?.use("db")}catch(e){db=null}
  if(!db){$("conn").textContent="見本データで動いています（入力は保存されません）。";return}
