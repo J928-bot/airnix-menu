@@ -132,9 +132,14 @@ textarea{min-height:52px;resize:vertical}
 .sect{display:flex;flex-direction:column;gap:10px}
 .rules{font-size:13.5px;color:var(--sub);display:flex;flex-direction:column;gap:6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+[hidden]{display:none!important}
 </style>
 
-<div style="max-width:1080px;margin:0 auto;padding:10px 16px 0;font-size:14px"><a href="./" style="color:#24395c;font-weight:700">← 仕組みを見る（説明つき）</a></div>
+<nav id="topnav" style="max-width:1080px;margin:0 auto;padding:12px 16px 0;display:flex;gap:6px">
+<a href="./" style="flex:1;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:14px;font-weight:700">仕組みを見る</a>
+<a href="full.html?view=cust" data-v="cust" style="flex:1;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:14px;font-weight:700">お客様の画面</a>
+<a href="full.html?view=staff" data-v="staff" style="flex:1;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:14px;font-weight:700">店長の画面</a>
+</nav>
 <div class="wrap">
   <div class="top">
     <div>
@@ -306,6 +311,7 @@ textarea{min-height:52px;resize:vertical}
 </div>
 
 <script>
+const PV=new URLSearchParams(location.search).get("view")==="staff"?"staff":"cust";
 /* ---------- 定数 ---------- */
 const ACTIONS=["ウォーキング","早歩き","きつめの早歩き","ランニング"];
 const PLANS={"ライト":"ライト（1日1回）","メイン":"メイン（1日1回）","プレミアム":"プレミアム（1日2回・ダブル枠可）"};
@@ -673,7 +679,7 @@ $("rSave").onclick=async()=>{const num=id=>$(id).value===""?null:Number($(id).va
   if(p.start.weight!==w||p.start.waist!==c){p.start={weight:w,waist:c};p.measurements=[...(p.measurements||[]),{date:today(),weight:w,waist:c}].slice(-30)}members[id]=p}
  else{id="u"+Date.now().toString(36);members[id]={ver:3,lad,name:name+"様",...base,count:0,status:"active",strengthLevel:1,strengthCount:0,kcalTarget:null,
   start:{weight:w,waist:c},measurements:[{date:today(),weight:w,waist:c}],meals:[],menu,prevMenu:null,history:[],stamp:null,todayFlag:today()}}
- editId=null;$("regCard").hidden=true;renderAll();$("who").value=id;renderCustomer();showView("cust");await save(id)};
+ editId=null;$("regCard").hidden=true;renderAll();$("who").value=id;renderCustomer();showView(PV);await save(id)};
 
 /* ---------- 画面切替・起動 ---------- */
 function showView(v){$("custView").hidden=v!=="cust";$("staffView").hidden=v!=="staff";[...$("viewTabs").children].forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===v?"true":"false"))}
@@ -690,7 +696,7 @@ $("reset").onclick=async()=>{const b=$("reset");b.disabled=true;members=seeds();
 $("sSave").onclick=async()=>{const w=$("sW").value,c=$("sC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);$("sErr").hidden=true;
  if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("sErr").textContent="体重かウエストを数字で入力してください";$("sErr").hidden=false;return}
  const id=$("who").value;const p=clone(members[id]);p.measurements=[...(p.measurements||[]).filter(m=>m.date!==today()),{date:today(),weight:wn,waist:cn}].slice(-30);members[id]=p;$("sW").value="";$("sC").value="";await save(id);$("sSave").textContent="記録しました";setTimeout(()=>$("sSave").textContent="記録する",1500)};
-members=seeds();renderAll();showView(new URLSearchParams(location.search).get("view")==="staff"?"staff":"cust");
+members=seeds();renderAll();showView(PV);$("viewTabs").hidden=true;document.title=PV==="staff"?"AIRNIX 店長の画面":"AIRNIX お客様の画面";document.querySelectorAll("#topnav a[data-v]").forEach(a=>{if(a.dataset.v===PV){a.style.background="#24395c";a.style.borderColor="#24395c";a.style.color="#fff"}});
 (async()=>{try{sample=await window.claude?.use("sample")}catch(e){sample=null}
  try{db=await window.claude?.use("db")}catch(e){db=null}
  if(!db){$("conn").textContent="見本データで動いています（入力は保存されません）。";return}
