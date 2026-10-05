@@ -354,7 +354,7 @@ input,select,textarea{border-radius:12px;background:#fff}
       <p><span class="pill p-d">21日来店なし</span><span class="pill p-w">10日来店なし</span> 最終来店からの日数</p>
       <p><span class="pill p-w">連続が途切れた</span> 先週の来店がなく、連続週が0に戻った</p>
       <p><span class="pill p-w">測定なし</span> 本人の体重・ウエストの入力が14日以上ない</p>
-      <p><span class="pill p-a">案内のタイミング</span> 週の来店目標を4週続けて達成／8週連続／目標に到達／終了 → ダブル枠（プレミアム）・スタジオを案内する時期</p>
+      <p><span class="pill p-a">案内のタイミング</span> 週の来店目標を4週続けて達成／8週連続／目標に到達／終了 → 効果レポート（直近30日）を見せて案内。ライト・メイン→プレミアム（9,800円・1日2回）、プレミアム→スタジオ。案内したら30日は出さない</p>
       <p>来店率＝直近4週の来店回数 ÷ 週の来店目標×4。低い人が上に並びます。</p>
     </div>
   </section>
@@ -651,10 +651,27 @@ function flags(p){const t=today(),lv=lastVisit(p),gap=lv?daysBetween(lv,t):999,l
  if(brokeStreak(p))out.push(["連続が途切れた","p-w","先週の来店がありませんでした（今週1回で連続が再開）。"]);
  if(p.status!=="done"&&(!lm.date||daysBetween(lm.date,t)>=14))out.push(["測定なし","p-w","体重・ウエストの入力が2週間以上ありません。"]);
  const up=[];if(hitWeeks(p)>=4)up.push(`週${p.weekly}回を${hitWeeks(p)}週続けて達成`);if(streak(p)>=8)up.push(`${streak(p)}週連続`);if(reached(p))up.push("目標に到達");if(p.status==="done")up.push("予定回数が終了");
- if(up.length&&p.plan!=="プレミアム")out.push(["案内のタイミング","p-a",`${up.join("・")}。ダブル枠（プレミアム）とスタジオを案内する時期。`]);
- else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。スタジオのセルフトレーニング（NTC）を案内する時期。`]);
+ const snooze=p.upsellAt&&daysBetween(p.upsellAt,t)<30;
+ if(snooze||gap>=10)up.length=0;
+ if(up.length&&p.plan!=="プレミアム")out.push(["案内のタイミング","p-a",`${up.join("・")}。効果レポートを見せて、プレミアム（1日2回）を案内する。`]);
+ else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。効果レポートを見せて、スタジオのセルフトレーニングを案内する。`]);
  if(!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["NTC報告なし","p-b","NTCの報告がまだありません。来店時にアプリの入れ方と今のメニューを案内する。"]);
  return out}
+/* 案内（単価アップ）：料金は正本 airnix_store_rules.md 用賀キャンペーン（2026-04〜）。上位変更のみ可 */
+const UPSELL={
+ "ライト":{to:"プレミアム（9,800円・1日2回）",say:"このペースで続けていらっしゃるので、1日2回使えるプレミアムにすると、トレッドミルとスタジオを同じ日に組めます。"},
+ "メイン":{to:"プレミアム（9,800円・1日2回）",say:"結果が数字に出てきているので、1日2回使えるプレミアムにすると、トレッドミルのあとにスタジオでNTCまで続けてできます。"},
+ "プレミアム":{to:"スタジオのセルフトレーニング（料金は未定）",say:"NTCのメニューを、スタジオで集中してやってみませんか。仕切られたスペースで、画面を見ながらできます。"}};
+function monthReport(p){const from=addDays(today(),-30);const h=(p.history||[]).filter(x=>x.date>=from);
+ const visits=new Set(h.map(x=>x.date)).size;const ntc=h.filter(x=>x.kind==="strength").reduce((a,x)=>a+(x.ntc||0),0);
+ const km=Math.round(h.filter(x=>x.km).reduce((a,x)=>a+x.km,0)*10)/10;const m=(p.measurements||[]).filter(x=>x.date>=from),lm=lastMeas(p);
+ const dw=m.length&&lm.weight!=null&&m[0].weight!=null?Math.round((lm.weight-m[0].weight)*10)/10:null;const dwa=m.length&&lm.waist!=null&&m[0].waist!=null?Math.round((lm.waist-m[0].waist)*10)/10:null;
+ const sg=v=>v>0?"+"+v:String(v);
+ return `来店${visits}回・NTC${ntc}回${km?`・歩いた距離${km}km`:""}${dw!=null?`・体重${sg(dw)}kg`:""}${dwa!=null?`・ウエスト${sg(dwa)}cm`:""}`}
+function upsellHTML(i){const p=members[i];if(!flags(p).some(f=>f[0]==="案内のタイミング"))return"";const u=UPSELL[p.plan];if(!u)return"";
+ return `<div class="say" style="background:#111;color:#fff"><p class="tiny" style="color:#d7ff3a;font-weight:700">直近30日の効果レポート</p><p>${esc(monthReport(p))}</p>
+ <p class="tiny" style="color:#bdbdbd;margin-top:6px">案内：${esc(u.to)}</p><p>「${esc(u.say)}」</p></div>
+ <div class="acts"><button class="ghost" data-up="${i}" data-r="yes">案内した → 変更する</button><button class="ghost" data-up="${i}" data-r="no">案内した → 今は見送り</button></div>`}
 function score(p){const f=flags(p).map(x=>x[1]);return (f.includes("p-d")?0:f.includes("p-w")?1:f.includes("p-a")?2:3)*1000+rate(p)}
 function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastVisit(p),last=(p.history||[]).slice(-1)[0];
  const lm=lastMeas(p),tg=p.target||{};const prog=[];if(tg.weight!=null)prog.push(`体重 ${p.start.weight}→${lm.weight??"-"}（目標${tg.weight}）`);if(tg.waist!=null)prog.push(`ウエスト ${p.start.waist}→${lm.waist??"-"}（目標${tg.waist}）`);
@@ -664,6 +681,7 @@ function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastV
   <div class="pills">${fl.length?fl.map(f=>`<span class="pill ${f[1]}">${esc(f[0])}</span>`).join(""):`<span class="pill p-o">順調</span>`}</div>
   <div class="rate"><span>来店率</span><div class="bar"><i style="width:${r}%"></i></div><b class="num" style="color:var(--ink)">${r}%</b></div>
   ${fl.length?`<p class="say">${esc(fl[0][2])}</p>`:`<p class="say">順調です。</p>`}
+  ${upsellHTML(i)}
   <p class="tiny">${esc(prog.join("・"))}</p>
   ${last?`<p class="tiny">直近の報告 ${md(last.date)}：${last.kind==="strength"?`NTC 今週${last.ntc??"-"}回${last.feel?`・${{easy:"楽",ok:"ちょうど",hard:"きつい"}[last.feel]}`:""}`:`歩く 達成度${last.done}%・きつさ${last.rpe}`}${last.km?`・${last.km}km`:""}${last.comment?`・「${esc(last.comment)}」`:""}</p>`:""}
   <div class="acts"><button class="ghost" data-edit="${i}">目標を見直す</button></div>
@@ -672,7 +690,9 @@ function renderStaff(){const ids=Object.keys(members).sort((a,b)=>score(members[
  const all=ids.map(i=>flags(members[i]));const cnt=c=>all.filter(f=>f.some(x=>x[1]===c)).length;
  $("sum").innerHTML=`<div class="d"><span class="tiny">長く来ていない</span><b class="num">${cnt("p-d")}</b></div><div class="w"><span class="tiny">気にかける人</span><b class="num">${cnt("p-w")}</b></div><div class="a"><span class="tiny">案内のタイミング</span><b class="num">${cnt("p-a")}</b></div><div class="o"><span class="tiny">全体</span><b class="num">${ids.length}</b></div>`;
  $("allList").innerHTML=ids.map(cardHTML).join("");
- document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit))}
+ document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
+ document.querySelectorAll("[data-up]").forEach(b=>b.onclick=async()=>{const id=b.dataset.up;const p=clone(members[id]);p.upsellAt=today();
+  p.upsellLog=[...(p.upsellLog||[]),{date:today(),from:p.plan,result:b.dataset.r}];if(b.dataset.r==="yes"&&p.plan!=="プレミアム")p.plan="プレミアム";members[id]=p;await save(id)})}
 $("mCancel").onclick=()=>{$("measCard").hidden=true};
 $("mSave").onclick=async()=>{if(!measId)return;const w=$("mW").value,c=$("mC").value;const wn=w===""?null:Number(w),cn=c===""?null:Number(c);
  if((wn===null&&cn===null)||(wn!==null&&!(wn>20&&wn<250))||(cn!==null&&!(cn>40&&cn<200))){$("measErr").textContent="体重かウエストを正しく入力してください";$("measErr").hidden=false;return}
