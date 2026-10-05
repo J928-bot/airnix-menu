@@ -208,6 +208,7 @@ input,select,textarea{border-radius:12px;background:#fff}
       <div class="phone">
         <div class="hello"><div><p class="tiny">AIRNIX 用賀店</p><b id="hName"></b></div><span class="pill p-b" id="hPlan"></span></div>
         <div id="custState"></div>
+        <button class="primary" type="button" id="openRep" style="background:#d7ff3a;color:#111">今月の効果レポートを見る</button>
 
         <div class="card" id="weekCard">
           <h3>今週の来店<small id="weekRange"></small></h3>
@@ -261,11 +262,10 @@ input,select,textarea{border-radius:12px;background:#fff}
           <p class="tiny">運動の前に、同じ条件で測るのがおすすめです。</p>
         </div>
         <div class="card">
-          <h3>食事のカロリー<small>あすけんの合計を転記</small></h3>
-          <div class="two"><label class="field"><span>今日のkcal</span><input id="kcal" type="number" inputmode="numeric" placeholder="1600"></label>
-          <label class="field"><span>あすけんの目標kcal</span><input id="kcalT" type="number" inputmode="numeric" placeholder="1500"></label></div>
-          <p class="err" id="mealErr" hidden></p>
-          <button class="ghost" id="mealSave" type="button">保存</button>
+          <h3>食事<small>あすけんで記録</small></h3>
+          <p style="font-size:14px">食事はあすけん（無料アプリ）で、朝・昼・夕の3食を写真かバーコードで記録してください。AIRNIXでは「今週何日記録したか」だけを伺います。</p>
+          <a class="ntcopen" style="background:#7cc242;color:#fff" href="https://apps.apple.com/jp/app/id687287242" target="_blank" rel="noopener">あすけんを開く</a>
+          <div class="field"><span>今週、あすけんで記録した日</span><div class="chips" id="askenDays"></div></div>
           <p class="tiny" id="mealSum"></p>
         </div>
         <div class="card">
@@ -360,6 +360,9 @@ input,select,textarea{border-radius:12px;background:#fff}
   </section>
 </div>
 
+<div id="rep" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;overflow:auto;padding:16px">
+ <div id="repBody" style="max-width:420px;margin:0 auto;background:#fff;border-radius:20px;padding:20px 18px;display:flex;flex-direction:column;gap:14px"></div>
+</div>
 <script src="ntc.js"></script>
 <script>
 const PV=new URLSearchParams(location.search).get("view")==="staff"?"staff":"cust";
@@ -391,7 +394,7 @@ function seeds(){const t=today();
  const a={ver:3,name:"サンプルA様",plan:"メイン",weekly:2,goal:24,count:14,status:"active",strengthLevel:2,strengthCount:2,kcalTarget:1500,
   start:{weight:59.1,waist:80.3},target:{weight:57.0,waist:77.0,date:addDays(t,78)},
   measurements:[{date:addDays(t,-46),weight:59.1,waist:80.3},{date:addDays(t,-25),weight:58.6,waist:79.4},{date:addDays(t,-8),weight:58.2,waist:78.8}],
-  meals:[{date:addDays(t,-3),kcal:1650},{date:addDays(t,-2),kcal:1520},{date:addDays(t,-1),kcal:1580}],
+  meals:[],asken:[{week:addDays(weekStart(t),-21),days:3},{week:addDays(weekStart(t),-14),days:4},{week:addDays(weekStart(t),-7),days:5},{week:weekStart(t),days:2}],
   history:visitsBack(A_off,t),stamp:{text:STAMPS[0],date:addDays(t,-1)},todayFlag:t,
   lad:{wl:4,wp:4.5,fp:5.5,fp0:5.1,hr:3,hr0:3},
   prevMenu:{no:14,...buildResist({wl:4,wp:4.5,fp:5.3,hr:3},"A")},
@@ -555,8 +558,10 @@ function renderCustomer(){const ga=gapAdjust(members[$("who").value]||{});const 
  $("goalLines").innerHTML=goalBlock(p,"weight","体重","kg")+goalBlock(p,"waist","ウエスト","cm");
  const bl=badgeList(p);$("badgeCount").textContent=`${bl.filter(b=>b[1]).length}/${bl.length}`;
  $("badges").innerHTML=bl.map(([s,g,l])=>`<div class="badge ${g?"got":""}"><div class="disc">${esc(s)}</div><span>${esc(l)}</span></div>`).join("");
- const td=(p.meals||[]).find(m=>m.date===t);$("kcal").value=td?td.kcal:"";$("kcalT").value=p.kcalTarget??"";
- const ms=(p.meals||[]).slice(-7);$("mealSum").textContent=ms.length?`直近${ms.length}日の平均 ${Math.round(ms.reduce((a,m)=>a+m.kcal,0)/ms.length)}kcal${p.kcalTarget?`（目標 ${p.kcalTarget}kcal）`:""}`:"まだ入力がありません"}
+ const wk=weekStart(t),cur=((p.asken||[]).find(a=>a.week===wk)||{}).days;
+ $("askenDays").innerHTML=Array.from({length:8},(_,i)=>`<button type="button" data-v="${i}" aria-pressed="${cur===i}">${i}日</button>`).join("");
+ [...$("askenDays").children].forEach(b=>b.onclick=async()=>{const q=clone(members[$("who").value]);q.asken=[...(q.asken||[]).filter(a=>a.week!==wk),{week:wk,days:+b.dataset.v}].slice(-12);members[$("who").value]=q;await save($("who").value)});
+ $("mealSum").textContent=cur==null?"今週はまだ入力がありません":`今週 ${cur}日記録${cur<3?"。まずは1日3食から始めてみてください。":""}`}
 
 /* ---------- メニュー作成 ---------- */
 function validMenu(m){if(!m||!/^[A-G]$/.test(m.machine)||!Array.isArray(m.segments)||!m.segments.length)return false;const hasR=/^[ABC]$/.test(m.machine);let t=0;
@@ -638,10 +643,7 @@ $("send").onclick=async()=>{const names={machine:"マシン",done:"最後まで�
  const no=p.menu.no+1;p.count=count;p.prevMenu=p.menu;p.menu={no,...menu};p.history=[...(p.history||[]),{...rec,result:cls}].slice(-60);members[id]=p;
  out.innerHTML=painNote+breakNote+`<div class="okbox">報告しました。次回のメニューを上に出しています（${esc(cls)}${reason?"・"+esc(reason):""}／${esc(by)}）。</div>`;btn.disabled=false;await save(id);window.scrollTo({top:0,behavior:"smooth"})};
 
-$("mealSave").onclick=async()=>{const id=$("who").value;const p=clone(members[id]);const k=$("kcal").value,ktv=$("kcalT").value;$("mealErr").hidden=true;
- if(k!==""){const n=Number(k);if(!Number.isInteger(n)||n<300||n>6000){$("mealErr").textContent="カロリーは300〜6000の数字で入力してください";$("mealErr").hidden=false;return}p.meals=[...(p.meals||[]).filter(m=>m.date!==today()),{date:today(),kcal:n}].slice(-30)}
- if(ktv!==""){const n=Number(ktv);if(!Number.isInteger(n)||n<800||n>5000){$("mealErr").textContent="目標カロリーは800〜5000の数字で入力してください";$("mealErr").hidden=false;return}p.kcalTarget=n}
- members[id]=p;await save(id);$("mealSave").textContent="保存しました";setTimeout(()=>$("mealSave").textContent="保存",1500)};
+
 
 /* ---------- スタッフの画面 ---------- */
 function flags(p){const t=today(),lv=lastVisit(p),gap=lv?daysBetween(lv,t):999,lm=lastMeas(p),out=[];
@@ -672,6 +674,29 @@ function upsellHTML(i){const p=members[i];if(!flags(p).some(f=>f[0]==="案内の
  return `<div class="say" style="background:#111;color:#fff"><p class="tiny" style="color:#d7ff3a;font-weight:700">直近30日の効果レポート</p><p>${esc(monthReport(p))}</p>
  <p class="tiny" style="color:#bdbdbd;margin-top:6px">案内：${esc(u.to)}</p><p>「${esc(u.say)}」</p></div>
  <div class="acts"><button class="ghost" data-up="${i}" data-r="yes">案内した → 変更する</button><button class="ghost" data-up="${i}" data-r="no">案内した → 今は見送り</button></div>`}
+function repData(p){const t=today(),from=addDays(t,-29);const h=(p.history||[]).filter(x=>x.date>=from);
+ const visits=new Set(h.map(x=>x.date)).size;const ntc=h.filter(x=>x.kind==="strength").reduce((a,x)=>a+(x.ntc||0),0);
+ const km=Math.round(h.filter(x=>x.km).reduce((a,x)=>a+x.km,0)*10)/10;
+ const asken=(p.asken||[]).filter(a=>a.week>=weekStart(from)).reduce((a,x)=>a+x.days,0);
+ const ms=(p.measurements||[]);const base=[...ms].reverse().find(m=>m.date<from)||ms[0]||{};const lm=lastMeas(p);
+ const d=k=>base[k]!=null&&lm[k]!=null&&lm.date!==base.date?Math.round((lm[k]-base[k])*10)/10:null;
+ return{t,from,visits,ntc,km,asken,dw:d("weight"),dwa:d("waist"),lm,streak:streak(p),ntcNow:ntcOf(p)}}
+function repHTML(p){const r=repData(p),sg=v=>v==null?"-":(v>0?"+":"")+v;const tg=p.target||{};
+ const tile=(v,u,l)=>`<div style="background:#f5f5f5;border-radius:14px;padding:12px"><b style="font-size:26px;font-weight:900">${v}</b><span class="tiny"> ${u}</span><p class="tiny">${l}</p></div>`;
+ const good=[];if(r.visits>=p.weekly*4)good.push(`週${p.weekly}回のペースで通えました`);if(r.dwa!=null&&r.dwa<0)good.push(`ウエストが${-r.dwa}cm細くなりました`);if(r.dw!=null&&r.dw<0)good.push(`体重が${-r.dw}kg減りました`);if(r.ntc>0)good.push(`来店以外の日にNTCを${r.ntc}回続けました`);
+ const next=r.visits<p.weekly*4?`来月は週${p.weekly}回のペースを目指しましょう。`:r.asken<12?"来月は、あすけんで食事を記録する日を週3日以上に増やしてみましょう。":`この調子で、${ntcProg(r.ntcNow).name}を続けていきましょう。`;
+ return `<div style="display:flex;justify-content:space-between;align-items:center"><span style="letter-spacing:.3em;font-weight:900;font-size:12px">AIRNIX</span><button class="ghost" type="button" id="repClose">閉じる</button></div>
+ <div><p class="tiny">${md(r.from)}〜${md(r.t)}の記録</p><h2 style="font-size:24px">${esc(p.name)}の効果レポート</h2></div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${tile(r.visits,"回","来店")}${tile(r.km||"-","km","トレッドミルで歩いた距離")}${tile(r.ntc,"回","NTC（自宅・スタジオ）")}${tile(r.asken,"日","あすけんで食事を記録")}</div>
+ <div style="background:#111;color:#fff;border-radius:16px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+  <div><p class="tiny" style="color:#bdbdbd">体重（30日の変化）</p><b style="font-size:24px;color:#d7ff3a">${sg(r.dw)}</b><span> kg</span><p class="tiny" style="color:#bdbdbd">今 ${r.lm.weight??"-"}kg${tg.weight!=null?`／目標 ${tg.weight}kg`:""}</p></div>
+  <div><p class="tiny" style="color:#bdbdbd">ウエスト（30日の変化）</p><b style="font-size:24px;color:#d7ff3a">${sg(r.dwa)}</b><span> cm</span><p class="tiny" style="color:#bdbdbd">今 ${r.lm.waist??"-"}cm${tg.waist!=null?`／目標 ${tg.waist}cm`:""}</p></div></div>
+ <div><p class="tiny" style="font-weight:700">ウエストの推移（入会から）</p>${trend(p.measurements||[],"waist",tg.waist,"cm")}</div>
+ ${good.length?`<div><p style="font-weight:900">今月できたこと</p><p style="font-size:14px">${good.map(esc).join("。")}。</p></div>`:""}
+ <div><p style="font-weight:900">来月にむけて</p><p style="font-size:14px">${esc(next)}</p></div>
+ <p class="tiny">${r.streak}週連続で来店中。NTCは「${esc(ntcProg(r.ntcNow).name)}」${r.ntcNow.week}週目です。</p>
+ <p class="tiny">表示しているのはご本人の記録の数字で、効果をお約束するものではありません。</p>`}
+function openRep(id){$("repBody").innerHTML=repHTML(members[id]);$("rep").hidden=false;$("repClose").onclick=()=>$("rep").hidden=true}
 function score(p){const f=flags(p).map(x=>x[1]);return (f.includes("p-d")?0:f.includes("p-w")?1:f.includes("p-a")?2:3)*1000+rate(p)}
 function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastVisit(p),last=(p.history||[]).slice(-1)[0];
  const lm=lastMeas(p),tg=p.target||{};const prog=[];if(tg.weight!=null)prog.push(`体重 ${p.start.weight}→${lm.weight??"-"}（目標${tg.weight}）`);if(tg.waist!=null)prog.push(`ウエスト ${p.start.waist}→${lm.waist??"-"}（目標${tg.waist}）`);
@@ -684,13 +709,14 @@ function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastV
   ${upsellHTML(i)}
   <p class="tiny">${esc(prog.join("・"))}</p>
   ${last?`<p class="tiny">直近の報告 ${md(last.date)}：${last.kind==="strength"?`NTC 今週${last.ntc??"-"}回${last.feel?`・${{easy:"楽",ok:"ちょうど",hard:"きつい"}[last.feel]}`:""}`:`歩く 達成度${last.done}%・きつさ${last.rpe}`}${last.km?`・${last.km}km`:""}${last.comment?`・「${esc(last.comment)}」`:""}</p>`:""}
-  <div class="acts"><button class="ghost" data-edit="${i}">目標を見直す</button></div>
+  <div class="acts"><button class="ghost" data-rep="${i}">効果レポート</button><button class="ghost" data-edit="${i}">目標を見直す</button></div>
  </article>`}
 function renderStaff(){const ids=Object.keys(members).sort((a,b)=>score(members[a])-score(members[b]));const t=today();
  const all=ids.map(i=>flags(members[i]));const cnt=c=>all.filter(f=>f.some(x=>x[1]===c)).length;
  $("sum").innerHTML=`<div class="d"><span class="tiny">長く来ていない</span><b class="num">${cnt("p-d")}</b></div><div class="w"><span class="tiny">気にかける人</span><b class="num">${cnt("p-w")}</b></div><div class="a"><span class="tiny">案内のタイミング</span><b class="num">${cnt("p-a")}</b></div><div class="o"><span class="tiny">全体</span><b class="num">${ids.length}</b></div>`;
  $("allList").innerHTML=ids.map(cardHTML).join("");
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
+ document.querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>openRep(b.dataset.rep));
  document.querySelectorAll("[data-up]").forEach(b=>b.onclick=async()=>{const id=b.dataset.up;const p=clone(members[id]);p.upsellAt=today();
   p.upsellLog=[...(p.upsellLog||[]),{date:today(),from:p.plan,result:b.dataset.r}];if(b.dataset.r==="yes"&&p.plan!=="プレミアム")p.plan="プレミアム";members[id]=p;await save(id)})}
 $("mCancel").onclick=()=>{$("measCard").hidden=true};
@@ -749,6 +775,8 @@ function renderAll(){const sel=$("who");const cur=sel.value;const ids=Object.key
  sel.innerHTML=ids.map(i=>`<option value="${i}">${esc(members[i].name)}${i[0]==="u"?"":"（見本）"}</option>`).join("");
  if(cur&&members[cur])sel.value=cur;renderCustomer();renderStaff()}
 $("who").onchange=()=>{$("result").innerHTML="";preset();renderCustomer()};
+$("openRep").onclick=()=>openRep($("who").value);
+$("rep").onclick=e=>{if(e.target.id==="rep")$("rep").hidden=true};
 $("reset").onclick=async()=>{const b=$("reset");b.disabled=true;members=seeds();if(db&&canWrite){for(const [id,d] of Object.entries(members)){try{await db.doc("members/"+id).set(d)}catch(e){}}}$("result").innerHTML="";preset();renderAll();b.disabled=false};
 
 [...$("next").children].forEach(c=>c.onclick=()=>{const on=c.getAttribute("aria-pressed")!=="true";state.next=on?c.dataset.v:null;[...$("next").children].forEach(x=>x.setAttribute("aria-pressed",x===c&&on?"true":"false"))});
