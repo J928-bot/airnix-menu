@@ -187,11 +187,6 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
 .ntcn{margin:0;font-size:20px;font-weight:500}
 .ntcp{margin:4px 0 0;font-size:13px;color:var(--sub)}
 .ntcopen{display:block;text-align:center;margin:14px 0 8px;padding:13px;border-radius:999px;background:transparent;border:1px solid #fff;color:#fff;font-weight:600;text-decoration:none}
-.chero{position:relative;height:360px;margin:0 0 18px;border-radius:0;background:#000 url(hero_cust.jpg) center/cover;display:flex;align-items:flex-end;padding:0 16px 18px}
-.chero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.7))}
-.chero .hello{position:relative;z-index:1;width:100%;padding:0;flex-direction:column;align-items:flex-start;gap:8px}.chero .hello b{font-size:30px;white-space:nowrap}.chero .tiny{color:#e5e5ea}
-.rhero{height:220px;margin:-20px -18px 0;border-radius:20px 20px 0 0;background:#000 url(hero_run.jpg) center 30%/cover;position:relative}
-.rhero::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,#1f1f1f)}
 #openRep{background:transparent!important;color:#fff!important;border:1px solid #fff;margin:0 0 18px}
 #repBody{background:#1f1f1f!important;color:#fff}
 #repBody [style*="background:#f5f5f5"]{background:#2c2c2e!important}
@@ -203,13 +198,12 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
 <a href="./" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">仕組みを見る</a>
 <a href="full.html?view=cust" data-v="cust" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">お客様の画面</a>
 <a href="full.html?view=staff" data-v="staff" style="flex:1;text-align:center;padding:9px 4px;white-space:nowrap;border-radius:10px;border:1px solid #e3e7ec;background:#fff;color:#1b2430;text-decoration:none;font-size:13px;font-weight:700">スタッフの画面</a>
-<a href="../versions/" style="flex:0 0 auto;text-align:center;padding:9px 12px;white-space:nowrap;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700">過去の版</a>
 </nav>
 <div class="wrap">
   <div class="top">
     <div>
       <p class="brandmark">AIRNIX</p>
-      <h1>個別メニュー（試作 第14版）</h1>
+      <h1>個別メニュー（試作 第12版）</h1>
       <p class="sub">お客様は携帯で「今週の来店・今日のメニュー・報告」、スタッフは週1回まとめを見るだけ。画面の方はすべて見本です。</p>
     </div>
     <div class="seg" role="tablist" id="viewTabs"><button type="button" data-view="cust">お客様の画面</button><button type="button" data-view="staff">スタッフの画面</button></div>
@@ -221,7 +215,7 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
     <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
       <label class="field who"><span>見本を切り替える</span><select id="who"></select></label>
       <div class="phone">
-        <div class="chero"><div class="hello"><div><p class="tiny">AIRNIX 用賀店</p><b id="hName"></b></div><span class="pill p-b" id="hPlan"></span></div></div>
+        <div class="hello"><div><p class="tiny">AIRNIX 用賀店</p><b id="hName"></b></div><span class="pill p-b" id="hPlan"></span></div>
         <div id="custState"></div>
         <button class="primary" type="button" id="openRep" >今月の効果レポートを見る</button>
 
@@ -700,7 +694,7 @@ function repHTML(p){const r=repData(p),sg=v=>v==null?"-":(v>0?"+":"")+v;const tg
  const tile=(v,u,l)=>`<div style="background:#f5f5f5;border-radius:14px;padding:12px"><b style="font-size:26px;font-weight:900">${v}</b><span class="tiny"> ${u}</span><p class="tiny">${l}</p></div>`;
  const good=[];if(r.visits>=p.weekly*4)good.push(`週${p.weekly}回のペースで通えました`);if(r.dwa!=null&&r.dwa<0)good.push(`ウエストが${-r.dwa}cm細くなりました`);if(r.dw!=null&&r.dw<0)good.push(`体重が${-r.dw}kg減りました`);if(r.ntc>0)good.push(`来店以外の日にNTCを${r.ntc}回続けました`);
  const next=r.visits<p.weekly*4?`来月は週${p.weekly}回のペースを目指しましょう。`:r.asken<12?"来月は、あすけんで食事を記録する日を週3日以上に増やしてみましょう。":`この調子で、${ntcProg(r.ntcNow).name}を続けていきましょう。`;
- return `<div class="rhero"></div><div style="display:flex;justify-content:space-between;align-items:center"><span style="letter-spacing:.3em;font-weight:900;font-size:12px">AIRNIX</span><button class="ghost" type="button" id="repClose">閉じる</button></div>
+ return `<div style="display:flex;justify-content:space-between;align-items:center"><span style="letter-spacing:.3em;font-weight:900;font-size:12px">AIRNIX</span><button class="ghost" type="button" id="repClose">閉じる</button></div>
  <div><p class="tiny">${md(r.from)}〜${md(r.t)}の記録</p><h2 style="font-size:24px">${esc(p.name)}の効果レポート</h2></div>
  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${tile(r.visits,"回","来店")}${tile(r.km||"-","km","トレッドミルで歩いた距離")}${tile(r.ntc,"回","NTC（自宅・スタジオ）")}${tile(r.asken,"日","あすけんで食事を記録")}</div>
  <div style="background:#111;color:#fff;border-radius:16px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
