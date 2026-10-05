@@ -1,87 +1,56 @@
-import {
-  type Env, type Menu, json, verifyLine, todayJst, nowIso, parseReport, parseStrengthReport,
-  aiMenu, ruleClass, ruleMenu, nextStrengthLevel, strengthMenu,
-} from "../../src/lib";
+import { type Env, json, verifyLine, todayJst, nowIso, getMember, ladderOf, ntcOf, numOrNull } from "../../src/lib";
+import { applyWalk, gapAdjust, ntcAdvance, ntcProg } from "../../src/logic";
 
-// お客様の報告（歩く／筋トレ）を受け取り、次回メニューを作って保存する。
-// 痛み・体調変化「あり」はメニューを作らず、スタッフ確認（status=check）に回す。
+// 来店時の報告：トレッドミル（楽／ちょうど／きつい）＋前回からのNTC（今週の回数・きつさ）＋痛み・体調の変化。
+// 痛み・体調の変化「あり」は、メニューを1つ軽くしたうえで「体調の確認」としてスタッフ画面に出す。
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const me = await verifyLine(request, env);
   if (!me) return json({ error: "LINEのログインを確認できませんでした" }, 401);
-  const body = (await request.json().catch(() => null)) as Record<string, unknown> | null;
-  const kind = body?.kind === "strength" ? "strength" : "walk";
-
-  const m = await env.DB.prepare("SELECT * FROM members WHERE line_user_id = ?").bind(me.userId).first<Record<string, unknown>>();
+  const b = (await request.json().catch(() => null)) as Record<string, unknown> | null;
+  const m = await getMember(env, me.userId);
   if (!m || m.status === "pending") return json({ error: "まだ登録されていません。スタッフにお声がけください" }, 403);
-  if (m.status === "done") return json({ error: "モニター期間は終了しています" }, 409);
-  if (m.status === "check") return json({ error: "スタッフが体調を確認中です。確認後に次回メニューをお届けします" }, 409);
+  if (m.status === "check") return json({ error: "スタッフが体調を確認中です。確認後に次回のメニューをお届けします" }, 409);
+  const l = ladderOf(m);
+  if (!l) return json({ error: "メニューがまだ登録されていません。スタッフにお声がけください" }, 409);
+
+  const feel = ["easy", "ok", "hard"].includes(String(b?.feel)) ? String(b!.feel) : null;
+  const pain = b?.pain === true;
+  const machine = /^[A-G]$/.test(String(b?.machine)) ? String(b!.machine) : l.machine;
+  const km = numOrNull(b?.km, 0.1, 15);
+  if (!feel) return json({ error: "今日のトレーニングはどうだったか選んでください" }, 400);
 
   const today = todayJst();
   const t = nowIso();
-  const ins = (sessionNo: number, machine: string, r: { done: number; change: string; rpe: number; pain: string; comment: string }, result: string, madeBy: string, next: unknown) =>
-    env.DB.prepare(`INSERT INTO reports (line_user_id, kind, date, session_no, machine, done, change, rpe, pain, comment, result, made_by, next_menu_json, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-      .bind(me.userId, kind, today, sessionNo, machine, r.done, r.change, r.rpe, r.pain, r.comment, result, madeBy, next ? JSON.stringify(next) : null, t);
+  const notes: string[] = [];
+  // 前回から間があいたら先に軽くする
+  const g = gapAdjust(l, (m.last_date as string) || null, today);
+  if (g) notes.push(g);
+  if (machine !== l.machine) { l.machine = machine; }
+  notes.push("トレッドミル：" + applyWalk(l, feel, pain));
 
-  // ---- 筋トレ ----
-  if (kind === "strength") {
-    const r = parseStrengthReport(body);
-    if (!r) return json({ error: "入力内容を確認してください" }, 400);
-    const sessionNo = Number(m.strength_count) + 1;
-    if (r.pain === "あり") {
-      await env.DB.batch([
-        ins(sessionNo, "", r, "要確認", "stop", null),
-        env.DB.prepare("UPDATE members SET status='check', strength_count=?, last_date=?, updated_at=? WHERE line_user_id=?").bind(sessionNo, today, t, me.userId),
-      ]);
-      return json({ stopped: true });
-    }
-    const { cls, level } = nextStrengthLevel(Number(m.strength_level), r);
-    const next = strengthMenu(level);
-    await env.DB.batch([
-      ins(sessionNo, "", r, cls, "rule", next),
-      env.DB.prepare("UPDATE members SET strength_level=?, strength_count=?, last_date=?, updated_at=? WHERE line_user_id=?").bind(level, sessionNo, today, t, me.userId),
-    ]);
-    return json({ kind, classification: cls, strength: next });
+  // NTC（2回目の来店から）
+  const n = ntcOf(m);
+  let ntcNote: string | null = null;
+  const stmts: D1PreparedStatement[] = [];
+  const hasNtc = b?.ntcCount !== undefined && b?.ntcCount !== null;
+  if (hasNtc) {
+    const cnt = Number(b!.ntcCount);
+    const p = ntcProg(n);
+    if (!Number.isInteger(cnt) || cnt < 0 || cnt > p.per) return json({ error: "NTCの回数を選んでください" }, 400);
+    const nf = ["easy", "ok", "hard"].includes(String(b!.ntcFeel)) ? String(b!.ntcFeel) : null;
+    if (cnt > 0 && !nf) return json({ error: "NTCのきつさを選んでください" }, 400);
+    ntcNote = ntcAdvance(n, cnt, nf, pain);
+    notes.push("NTC：" + (ntcNote || `${ntcProg(n).name} ${n.week}週目へ`));
+    stmts.push(env.DB.prepare("INSERT INTO reports (line_user_id, kind, date, feel, pain, ntc_count, note, created_at) VALUES (?, 'ntc', ?, ?, ?, ?, ?, ?)")
+      .bind(me.userId, today, nf, pain ? 1 : 0, cnt, ntcNote || "", t));
   }
-
-  // ---- 歩く ----
-  const input = parseReport(body);
-  if (!input) return json({ error: "入力内容を確認してください" }, 400);
-  if (!m.menu_json) return json({ error: "メニューがまだ登録されていません。スタッフにお声がけください" }, 409);
-  const sessionNo = Number(m.count) + 1;
-
-  if (input.pain === "あり") {
-    await env.DB.batch([
-      ins(sessionNo, input.machine, input, "要確認", "stop", null),
-      env.DB.prepare("UPDATE members SET status='check', count=?, last_date=?, updated_at=? WHERE line_user_id=?").bind(sessionNo, today, t, me.userId),
-    ]);
-    return json({ stopped: true });
-  }
-
-  const goal = Number(m.goal);
-  if (sessionNo >= goal) {
-    await env.DB.batch([
-      ins(sessionNo, input.machine, input, "終了", "rule", null),
-      env.DB.prepare("UPDATE members SET status='done', count=?, last_date=?, menu_json=NULL, updated_at=? WHERE line_user_id=?").bind(sessionNo, today, t, me.userId),
-    ]);
-    return json({ finished: true });
-  }
-
-  const prev = JSON.parse(String(m.menu_json)) as Menu;
-  const hist = await env.DB.prepare("SELECT date, machine, done, change, rpe, pain, result FROM reports WHERE line_user_id=? AND kind='walk' ORDER BY id DESC LIMIT 3")
-    .bind(me.userId).all();
-  const history = (hist.results || []).reverse();
-
-  const ai = await aiMenu(env, prev, history, input);
-  const next = ai ? ai.menu : ruleMenu(prev, input);
-  const classification = ai ? ai.classification : ruleClass(input);
-  const menuNo = Number(m.menu_no) + 1;
-
-  await env.DB.batch([
-    ins(sessionNo, input.machine, input, classification, ai ? "ai" : "rule", next),
-    env.DB.prepare("UPDATE members SET count=?, last_date=?, menu_json=?, menu_no=?, updated_at=? WHERE line_user_id=?")
-      .bind(sessionNo, today, JSON.stringify(next), menuNo, t, me.userId),
-  ]);
-
-  return json({ kind, classification, reason: ai?.reason || "", madeBy: ai ? "ai" : "rule", menuNo, menu: next, isFinal: sessionNo + 1 >= goal });
+  const note = notes.join("／");
+  stmts.push(
+    env.DB.prepare("INSERT INTO reports (line_user_id, kind, date, feel, pain, machine, km, note, created_at) VALUES (?, 'walk', ?, ?, ?, ?, ?, ?, ?)")
+      .bind(me.userId, today, feel, pain ? 1 : 0, machine, km, note, t),
+    env.DB.prepare("UPDATE members SET lad_json=?, ntc_json=?, status=?, last_date=?, updated_at=? WHERE line_user_id=?")
+      .bind(JSON.stringify(l), JSON.stringify(n), pain ? "check" : "active", today, t, me.userId),
+  );
+  await env.DB.batch(stmts);
+  return json({ ok: true, note, stopped: pain });
 };

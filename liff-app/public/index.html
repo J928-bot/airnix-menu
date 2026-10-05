@@ -10,146 +10,136 @@
 </head>
 <body>
 <div class="wrap">
-  <div>
-    <h1>AIRNIX 個別メニュー</h1>
-    <p class="sub" id="hello">読み込み中…</p>
+  <div class="hero" style="background-image:url(/hero_cust.jpg)">
+    <p class="k">AIRNIX 用賀店</p>
+    <h1 class="t" id="hName">読み込み中…</h1>
+    <span class="pill" id="hPlan" hidden></span>
   </div>
-  <div id="state"></div>
+  <div id="state" class="pad" style="padding-top:16px"></div>
 
-  <!-- 1. 目標と進捗 -->
-  <section class="card" id="goalCard" hidden>
-    <h2>目標と進捗</h2>
-    <p class="sub" id="goalText"></p>
-    <div id="wChart"></div>
-    <div id="cChart"></div>
-    <p class="sub">体重・ウエストは、来店直後・運動前にスタッフが測ります。</p>
-  </section>
+  <div id="main" hidden>
+    <div class="pad" style="padding-top:18px;padding-bottom:22px"><button class="btn line" type="button" id="openRep">今月の効果レポートを見る</button></div>
 
-  <!-- 2. 今日のメニュー（歩く／筋トレ） -->
-  <section class="card" id="menuCard" hidden>
-    <div class="chips" id="kindTabs"></div>
-    <div id="menuBody"></div>
-  </section>
+    <section class="sec">
+      <h3>今週の来店</h3>
+      <p id="weekMsg"></p>
+      <p class="sub" id="streakMsg"></p>
+    </section>
 
-  <section class="card" id="form" hidden>
-    <h2 id="formTitle">トレーニングの報告</h2>
-    <div class="field" id="machineField"><span>使ったマシン</span><div class="chips" id="machine"></div></div>
-    <div class="field"><span>達成度（メニュー通りできた割合）</span><div class="chips" id="done"></div></div>
-    <div class="field"><span>途中の変更</span><div class="chips" id="change"></div></div>
-    <div class="field"><span>きつさ（1＝楽 〜 10＝限界）</span><div class="chips" id="rpe"></div></div>
-    <div class="field"><span>痛みや体調の変化</span><div class="chips" id="pain"></div></div>
-    <label class="field"><span>感想（任意）</span><textarea id="comment" maxlength="300" placeholder="程よく疲れた"></textarea></label>
-    <p class="err" id="err" hidden></p>
-    <button class="primary" id="send" type="button">送信して次回メニューを受け取る</button>
-  </section>
-  <section class="card" id="result" hidden></section>
+    <section class="sec">
+      <h2>今日のメニュー</h2>
+      <div class="stats">
+        <div><svg viewBox="0 0 24 24"><path d="M12 4a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm1 9V8h-2v6h5v-2h-3zM9 1h6v2H9z"/></svg>30分</div>
+        <div><svg viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5V3zm3 9 2.5 2.5L16 9l-1.4-1.4-4.1 4.1-1.1-1.1L8 12z"/></svg><span id="stage"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M3 20h4v-6H3v6zm7 0h4V9h-4v11zm7 0h4V4h-4v16z"/></svg><span id="machineName"></span></div>
+        <div><svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm-1 8v10h12V10H6z"/></svg><span id="ntcPer"></span></div>
+      </div>
+      <p class="box" id="lastNote" hidden></p>
+      <div id="menu"></div>
+    </section>
 
-  <!-- 3. 食事（カロリー） -->
-  <section class="card" id="mealCard" hidden>
-    <h2>食事（カロリー）</h2>
-    <p class="sub">食事の内容は「あすけん」で記録し、1日の摂取カロリーだけここに入れてください。</p>
-    <div class="grid2">
-      <label class="field"><span>今日の摂取カロリー</span><input id="kcal" type="number" inputmode="numeric" placeholder="1600"></label>
-      <label class="field"><span>あすけんの目標カロリー</span><input id="kcalTarget" type="number" inputmode="numeric" placeholder="1500"></label>
-    </div>
-    <p class="err" id="mealErr" hidden></p>
-    <button class="ghost" id="mealSave" type="button">保存</button>
-    <p class="sub" id="mealSummary"></p>
-  </section>
+    <section class="sec" id="ntcCard"></section>
+
+    <section class="sec">
+      <h2>終わったら報告</h2>
+      <div class="field"><span>今日のトレーニングはどうでしたか？</span><div class="chips" id="feel"></div></div>
+      <div class="field"><span>使ったマシン</span><div class="chips" id="machine"></div></div>
+      <div id="ntcAsk" hidden>
+        <div class="field"><span id="ntcQ"></span><div class="chips" id="ntcCount"></div></div>
+        <div class="field" id="ntcFeelBox" hidden style="margin-top:12px"><span>NTCのきつさ</span><div class="chips" id="ntcFeel"></div></div>
+      </div>
+      <div class="field"><span>痛みや体調の変化</span><div class="chips" id="pain"></div></div>
+      <label class="field"><span>トレッドミルの距離（km・任意）</span><input id="km" type="number" step="0.01" inputmode="decimal" placeholder="2.80"></label>
+      <p class="err" id="err" hidden></p>
+      <button class="btn" type="button" id="send">報告する</button>
+    </section>
+
+    <section class="sec">
+      <h3>食事<span class="tiny">　あすけんで記録</span></h3>
+      <p style="font-size:14px">食事はあすけん（無料アプリ）で、朝・昼・夕の3食を写真かバーコードで記録してください。AIRNIXでは「今週何日記録したか」だけを伺います。</p>
+      <a class="btn line" href="https://apps.apple.com/jp/app/id687287242" target="_blank" rel="noopener">あすけんを開く</a>
+      <div class="field"><span>今週、あすけんで記録した日</span><div class="chips" id="asken"></div></div>
+    </section>
+
+    <section class="sec">
+      <h3>目標まで<span class="tiny" id="goalDate"></span></h3>
+      <div id="goal"></div>
+      <p class="tiny">体重・ウエストは、来店直後・運動前にスタッフが測ります。</p>
+    </section>
+  </div>
+  <p class="pad tiny" style="padding-top:20px">表示しているのはご本人の記録の数字で、効果をお約束するものではありません。</p>
 </div>
+<div class="overlay" id="overlay" hidden><div></div></div>
 
 <script>
-const state = { machine: null, done: null, change: null, rpe: null, pain: null };
-let me = null, kind = "walk";
-const $ = (id) => document.getElementById(id);
-function chips(id, vals, key, fmt) {
-  const box = $(id); box.innerHTML = "";
-  vals.forEach((v) => {
-    const b = document.createElement("button");
-    b.type = "button"; b.textContent = fmt ? fmt(v) : String(v); b.setAttribute("aria-pressed", "false");
-    b.onclick = () => { state[key] = v; [...box.children].forEach((c) => c.setAttribute("aria-pressed", c === b ? "true" : "false")); $("err").hidden = true; };
-    box.appendChild(b);
-  });
+let D = null, f = {};
+const FEEL = [["easy", "楽だった"], ["ok", "ちょうど"], ["hard", "きつかった"]];
+
+async function load() {
+  D = await api("/api/me");
+  $("hName").textContent = (D.name || "") + (D.status === "pending" ? "" : "様");
+  if (D.status === "pending") {
+    $("state").innerHTML = `<div class="box">はじめまして。スタッフが初回の測定とメニューの登録をします。受付でこの画面をお見せください。</div>`;
+    return;
+  }
+  $("hPlan").hidden = !D.plan; $("hPlan").textContent = D.plan;
+  $("state").innerHTML = D.status === "check" ? `<div class="box d">体調のご報告ありがとうございます。スタッフが確認してから、次のメニューでご案内します。無理をせずお休みしてください。</div>` : "";
+  $("main").hidden = false;
+
+  const ws = weekStartOf(D.today), wc = D.visits.filter((d) => d >= ws).length;
+  $("weekMsg").innerHTML = wc >= D.weekly ? `今週の目標（週${D.weekly}回）を達成しました。` : `今週はあと<b>${D.weekly - wc}</b>回で目標（週${D.weekly}回）です。`;
+  $("streakMsg").textContent = `${D.report.streak}週連続で来店中`;
+
+  $("stage").textContent = "段階 " + "①②③④"[D.ladder.wl - 1];
+  $("machineName").textContent = "マシン" + D.ladder.machine;
+  $("ntcPer").textContent = "NTC 週" + D.ntc.program.per + "回";
+  $("lastNote").hidden = !D.lastNote; $("lastNote").textContent = "前回から：" + D.lastNote;
+  $("menu").innerHTML = menuHTML(D.menu);
+  $("ntcCard").innerHTML = ntcHTML(D.ntc, "次の来店までに");
+
+  f = { feel: null, machine: D.ladder.machine, pain: false, ntcCount: null, ntcFeel: null };
+  chips($("feel"), FEEL, null, (v) => (f.feel = v));
+  chips($("machine"), "ABCDEFG".split("").map((x) => [x, x]), D.ladder.machine, (v) => (f.machine = v));
+  chips($("pain"), [["0", "なし"], ["1", "あり"]], "0", (v) => (f.pain = v === "1"));
+  const askNtc = D.visits.length >= 1;
+  $("ntcAsk").hidden = !askNtc;
+  if (askNtc) {
+    $("ntcQ").textContent = `前回からのNTC（${D.ntc.program.name}）は何回できましたか？（目標 週${D.ntc.program.per}回）`;
+    chips($("ntcCount"), Array.from({ length: D.ntc.program.per + 1 }, (_, i) => [i, i + "回"]), null, (v) => { f.ntcCount = +v; $("ntcFeelBox").hidden = +v === 0; });
+    chips($("ntcFeel"), FEEL.map(([k, l]) => [k, l.replace("だった", "").replace("かった", "い")]), null, (v) => (f.ntcFeel = v));
+  }
+  chips($("asken"), Array.from({ length: 8 }, (_, i) => [i, i + "日"]), D.askenThisWeek, async (v) => { await api("/api/asken", { days: +v }); });
+
+  const t = D.target;
+  $("goalDate").textContent = t.date ? "　" + t.date.replace(/-/g, "/") + "まで" : "";
+  $("goal").innerHTML = (t.weight != null ? `<p class="tiny" style="font-weight:700">体重</p>${trendSVG(D.measurements, "weight", t.weight, "kg")}` : "")
+    + (t.waist != null ? `<p class="tiny" style="font-weight:700">ウエスト</p>${trendSVG(D.measurements, "waist", t.waist, "cm")}` : "")
+    || `<p class="tiny">目標は来店時にスタッフと決めます。</p>`;
+  $("openRep").onclick = () => openReport(reportHTML(D.name, D.report, D.target, D.measurements));
 }
-chips("machine", ["A","B","C","D","E","F","G"], "machine");
-chips("done", [100, 90, 80, 70, 60, 50], "done", (v) => v + "%");
-chips("change", ["なし", "あり"], "change");
-chips("rpe", [1,2,3,4,5,6,7,8,9,10], "rpe");
-chips("pain", ["なし", "あり"], "pain");
-
-const tabs = $("kindTabs");
-[["walk", "歩くメニュー"], ["strength", "筋トレメニュー"]].forEach(([k, label]) => {
-  const b = document.createElement("button"); b.type = "button"; b.textContent = label;
-  b.onclick = () => { kind = k; renderMenu(); }; tabs.appendChild(b);
-});
-
-function renderMenu() {
-  [...tabs.children].forEach((c, i) => c.setAttribute("aria-pressed", (i === 0) === (kind === "walk") ? "true" : "false"));
-  $("menuBody").innerHTML = kind === "walk"
-    ? (me.menu ? menuHTML(me.menuNo, me.menu, me.isFinal) : `<p class="sub">歩くメニューはスタッフが準備中です。</p>`)
-    : strengthHTML(me.strength) + `<p class="sub">スタジオで行う自重の筋トレです。フォームが崩れたら回数を減らしてください。</p>`;
-  $("machineField").hidden = kind !== "walk";
-  $("formTitle").textContent = kind === "walk" ? "歩くメニューの報告" : "筋トレの報告";
-  $("result").hidden = true;
-}
-
-function show(d) {
-  me = d;
-  $("hello").textContent = d.status === "pending" ? "" : `${d.name || ""}様　歩く ${Math.min(d.count, d.goal)}/${d.goal}回・筋トレ ${d.strengthCount}回`;
-  const st = $("state");
-  ["goalCard", "menuCard", "form", "mealCard"].forEach((id) => ($(id).hidden = true));
-  if (d.status === "pending") { st.innerHTML = `<div class="notice n-warn">ご登録ありがとうございます。来店時にスタッフと目標を決めると、ここに目標と初回メニューが表示されます。</div>`; return; }
-  if (d.status === "check") st.innerHTML = `<div class="notice n-danger">体調のご報告ありがとうございます。スタッフが確認してから、次回メニューをお届けします。</div>`;
-  else if (d.status === "done") st.innerHTML = `<div class="notice n-ok">モニター期間は終了しました。お疲れさまでした。次回ご来店時に、体重とウエストを測定します。</div>`;
-  else st.innerHTML = "";
-
-  const tg = d.target || {};
-  const parts = [];
-  if (tg.weight != null) parts.push(`体重 ${tg.startWeight}kg → ${tg.weight}kg`);
-  if (tg.waist != null) parts.push(`ウエスト ${tg.startWaist}cm → ${tg.waist}cm`);
-  $("goalText").textContent = (tg.date ? `${tg.date.replace(/-/g, "/")}までに ` : "") + parts.join("、");
-  $("wChart").innerHTML = tg.weight != null || d.measurements.some((m) => m.weight != null) ? `<p class="meta">体重</p>` + trendSVG(d.measurements, "weight", tg.weight, "kg") : "";
-  $("cChart").innerHTML = tg.waist != null || d.measurements.some((m) => m.waist != null) ? `<p class="meta">ウエスト</p>` + trendSVG(d.measurements, "waist", tg.waist, "cm") : "";
-  $("goalCard").hidden = false;
-
-  if (d.status === "active") { $("menuCard").hidden = false; $("form").hidden = false; renderMenu(); }
-  if (d.status !== "done") $("mealCard").hidden = false;
-  $("kcal").value = d.todayKcal ?? ""; $("kcalTarget").value = d.kcalTarget ?? "";
-  const days = d.meals.length;
-  const avg = days ? Math.round(d.meals.reduce((a, m) => a + Number(m.kcal), 0) / days) : null;
-  $("mealSummary").textContent = days ? `直近${days}日の平均 ${avg}kcal` + (d.kcalTarget ? `（目標 ${d.kcalTarget}kcal）` : "") : "";
-}
+function weekStartOf(s) { const d = new Date(s + "T00:00:00Z"), w = d.getUTCDay(); d.setUTCDate(d.getUTCDate() + (w === 0 ? -6 : 1 - w)); return d.toISOString().slice(0, 10); }
 
 $("send").onclick = async () => {
-  const names = { machine: "マシン", done: "達成度", change: "途中の変更", rpe: "きつさ", pain: "痛みや体調の変化" };
-  const need = kind === "walk" ? Object.keys(names) : ["done", "change", "rpe", "pain"];
-  const miss = need.filter((k) => state[k] === null);
-  if (miss.length) { $("err").textContent = "未入力：" + miss.map((k) => names[k]).join("・"); $("err").hidden = false; return; }
-  const btn = $("send"); btn.disabled = true; btn.textContent = "次回メニューを作成しています…";
-  const out = $("result");
+  const e = $("err"); e.hidden = true;
+  const miss = [];
+  if (!f.feel) miss.push("今日のトレーニング");
+  if (!$("ntcAsk").hidden && (f.ntcCount === null || (f.ntcCount > 0 && !f.ntcFeel))) miss.push("NTC");
+  if (miss.length) { e.textContent = "未入力：" + miss.join("・"); e.hidden = false; return; }
+  const b = $("send"); b.disabled = true;
   try {
-    const r = await api("/api/report", { method: "POST", body: JSON.stringify({ kind, ...state, comment: $("comment").value.trim() }) });
-    if (r.stopped) out.innerHTML = `<div class="notice n-danger">ご報告ありがとうございます。体調を優先するため、次回メニューはスタッフが確認してからお届けします。</div>`;
-    else if (r.finished) out.innerHTML = `<div class="notice n-ok">モニター最終回、お疲れさまでした。次回ご来店時に、体重とウエストを測定します。</div>`;
-    else if (r.kind === "strength") out.innerHTML = `<h2>次回の筋トレメニュー</h2>` + strengthHTML(r.strength);
-    else out.innerHTML = `<h2>次回の歩くメニュー</h2>` + menuHTML(r.menuNo, r.menu, r.isFinal) +
-      (r.isFinal ? `<p class="sub">次回が最終回です。来店時に体重とウエストを測定します。</p>` : `<p class="sub">めまい・息苦しさ・吐き気などがあれば、すぐに歩く速さを落としてスタッフに声をかけてください。</p>`);
-    out.hidden = false; $("form").hidden = true;
-    show(await api("/api/me")); $("form").hidden = true; out.hidden = false;
-  } catch (e) { $("err").textContent = e.message; $("err").hidden = false; }
-  finally { btn.disabled = false; btn.textContent = "送信して次回メニューを受け取る"; }
-};
-
-$("mealSave").onclick = async () => {
-  const b = $("mealSave"); b.disabled = true; $("mealErr").hidden = true;
-  try { await api("/api/meal", { method: "POST", body: JSON.stringify({ kcal: $("kcal").value, kcalTarget: $("kcalTarget").value }) }); show(await api("/api/me")); b.textContent = "保存しました"; setTimeout(() => (b.textContent = "保存"), 1500); }
-  catch (e) { $("mealErr").textContent = e.message; $("mealErr").hidden = false; }
-  finally { b.disabled = false; }
+    const body = { feel: f.feel, machine: f.machine, pain: f.pain, km: $("km").value };
+    if (!$("ntcAsk").hidden) { body.ntcCount = f.ntcCount; body.ntcFeel = f.ntcFeel; }
+    await api("/api/report", body);
+    $("km").value = "";
+    await load();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } catch (err) { e.textContent = err.message; e.hidden = false; }
+  b.disabled = false;
 };
 
 (async () => {
-  try { if (!(await boot())) return; show(await api("/api/me")); }
-  catch (e) { $("hello").textContent = e.message; }
+  try { if (await boot()) await load(); }
+  catch (err) { $("state").innerHTML = `<p class="err">${esc(err.message)}</p>`; }
 })();
 </script>
 </body>

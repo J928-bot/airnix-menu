@@ -3,219 +3,108 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>AIRNIX 声掛けリスト</title>
+<title>AIRNIX スタッフの画面</title>
 <link rel="stylesheet" href="/app.css">
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script src="/common.js"></script>
 </head>
 <body>
-<div class="wrap wide">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-    <div><h1>声掛けリスト</h1><p class="sub" id="stamp">読み込み中…</p></div>
-    <button class="ghost" id="reload" type="button">更新</button>
+<div class="wrap" style="max-width:720px">
+  <div class="pad" style="padding-top:20px;display:flex;flex-direction:column;gap:6px">
+    <span class="brand">AIRNIX</span>
+    <h2>スタッフの画面</h2>
+    <p class="sub">上から順に対応してください。声かけの内容は、カードの文章をそのまま使えます。</p>
   </div>
-  <p class="err" id="err" hidden></p>
-  <section class="card"><div id="list"></div></section>
-
-  <section class="card" id="measCard" hidden>
-    <h2>測定を記録</h2>
-    <p class="sub" id="measWho"></p>
-    <p class="sub">来店直後・運動前に測ってください（条件をそろえるため）。</p>
-    <div class="grid2">
-      <label class="field"><span>体重（kg）</span><input id="mWeight" type="number" step="0.1" inputmode="decimal"></label>
-      <label class="field"><span>ウエスト（cm）</span><input id="mWaist" type="number" step="0.1" inputmode="decimal"></label>
-    </div>
-    <label class="field"><span>メモ（任意）</span><input id="mNote" maxlength="100" placeholder="終了測定"></label>
-    <button class="primary" id="mSave" type="button">記録する</button>
-  </section>
-
-  <section class="card" id="regCard" hidden>
-    <h2>登録（目標と初回メニュー）</h2>
-    <p class="sub" id="regWho"></p>
-    <label class="field"><span>お名前</span><input id="rName" placeholder="山田 花子"></label>
-    <h2>1. 目標</h2>
-    <div class="grid2">
-      <label class="field"><span>身長（cm）</span><input id="rHeight" type="number" step="0.1" inputmode="decimal"></label>
-      <label class="field"><span>性別（ウエストの目安に使う）</span><select id="rSex"><option value="">選ばない</option><option value="m">男性</option><option value="f">女性</option></select></label>
-      <label class="field"><span>開始時の体重（kg）</span><input id="rWeight" type="number" step="0.1"></label>
-      <label class="field"><span>開始時のウエスト（cm）</span><input id="rWaist" type="number" step="0.1"></label>
-    </div>
-    <div class="card" id="hint"><p class="sub">身長・体重・ウエストを入れると、目標の目安が出ます。</p></div>
-    <div class="grid2">
-      <label class="field"><span>目標の体重（kg）</span><input id="rTWeight" type="number" step="0.1"></label>
-      <label class="field"><span>目標のウエスト（cm）</span><input id="rTWaist" type="number" step="0.1"></label>
-    </div>
-    <label class="field"><span>目標の期日</span><input id="rTDate" type="date"></label>
-    <label class="field"><span>終了測定までの回数（歩くメニューを何回やったら終了測定するか）</span><input id="rGoal" type="number" min="1" max="60" value="8"></label>
-    <p class="sub">モニターは8回が基準でした。この回数の報告が終わると「終了」になり、終了測定の案内が出ます。</p>
-    <p class="sub">目標は本人と話して決めてください。体重とウエストのどちらか一方でも登録できます。</p>
-    <div id="menuPart">
-    <h2>2. 初回の歩くメニュー（交代走法）</h2>
-    <p class="sub">モニターで最も結果が出た形で始めます：5分ウォーキング →（3分早歩き・抵抗1＋1分きつめ・抵抗X）×5 → 5分ウォーキング。初回の最初の数分で、本人と一緒に速さと抵抗を確かめてから入れてください。以後は同じマシンを使います。</p>
-    <div class="grid2">
-      <label class="field"><span>マシン（毎回同じ台）</span><select id="rMachine"><option>A</option><option>B</option><option>C</option><option class="noRes">D</option><option class="noRes">E</option><option class="noRes">F</option><option class="noRes">G</option></select></label>
-      <label class="field"><span>型</span><select id="rTemplate">
-        <option value="resist">交代走法（抵抗交代ウォーキング）</option>
-        <option value="walk">ウォーキング型（A〜Cが使えないとき）</option>
-        <option value="runwalk">ラン＋ウォーク型</option>
-        <option value="run">ランニング型</option></select></label>
-      <label class="field f-walk"><span>ウォーキング：会話できる速さ（km/h）</span><input id="rWalk" type="number" step="0.1" inputmode="decimal"></label>
-      <label class="field f-fast"><span>早歩き：少し息が上がる速さ（km/h）</span><input id="rFast" type="number" step="0.1" inputmode="decimal"></label>
-      <label class="field f-hard"><span>きつめの抵抗：歩いていてきついと感じる抵抗（2〜6）</span><input id="rHardRes" type="number" min="2" max="6" step="1" inputmode="numeric" placeholder="モニターでは3"></label>
-      <label class="field f-run"><span>ランニング（km/h）</span><input id="rRun" type="number" step="0.1" inputmode="decimal"></label>
-    </div>
-    <p class="sub">筋トレメニューは段階1から始まり、報告に応じて自動で上がり下がりします。食事は本人があすけんの数値を入れます。</p>
-    </div>
-    <button class="primary" id="rSave" type="button">登録する</button>
-  </section>
+  <div class="pad" style="padding-top:16px"><div class="sum" id="sum"></div></div>
+  <p class="pad err" id="err" hidden></p>
+  <div class="pad" id="list" style="padding-top:16px;display:flex;flex-direction:column;gap:12px"></div>
 </div>
+<div class="overlay" id="overlay" hidden><div></div></div>
 
 <script>
-const $ = (id) => document.getElementById(id);
-let members = [], today = "", target = null, measTarget = null;
-const md = (s) => (s ? Number(s.slice(5, 7)) + "/" + Number(s.slice(8, 10)) : "-");
-const days = (a, b) => Math.floor((new Date(b) - new Date(a)) / 864e5);
-
-function todo(m) {
-  if (m.status === "pending") return [["登録待ち", "p-warn"], "ミニアプリを開いた方。来店時に目標を一緒に決めて登録する"];
-  if (m.status === "check") return [["要確認", "p-danger"], "痛み・体調変化の申告あり。メニューは止めています。本人に状況を確認してから再開"];
-  if (m.status === "done") return [["終了", "p-acc"], "終了測定（来店直後・運動前）→ 結果を一緒に振り返る → 60分（ダブル枠）とスタジオの続け方を案内"];
-  const lm = m.lastMeasure;
-  if (!lm || days(lm.date, today) >= 14) return [["測定時期", "p-warn"], "前回の測定から2週間以上。来店時に体重・ウエストを測る"];
-  if (m.count + 1 >= m.goal) return [["最終回前", "p-warn"], "次回が最終回。終了後の続け方（ダブル枠・スタジオ）を予告"];
-  if (m.last_date && days(m.last_date, today) >= 14) return [["来店なし", "p-danger"], days(m.last_date, today) + "日来店なし。LINEで次の予約日を一緒に決める"];
-  if (m.strength_count === 0 && m.count >= 2) return [["筋トレ未実施", "p-acc"], "歩くメニューに慣れてきた方。スタジオでの筋トレ（当初は無料）を案内"];
-  if (!m.meals7) return [["食事未入力", "p-acc"], "この1週間カロリーの入力なし。あすけんの使い方を確認"];
-  return [["継続中", "p-ok"], "メニューを見ながら一言声掛け"];
-}
-
-function progress(m) {
-  const lm = m.lastMeasure; const out = [];
-  if (m.target_weight != null) out.push(`体重 ${m.start_weight}→${lm?.weight ?? "-"}（目標${m.target_weight}）kg`);
-  if (m.target_waist != null) out.push(`ウエスト ${m.start_waist}→${lm?.waist ?? "-"}（目標${m.target_waist}）cm`);
-  if (m.target_date) out.push(`期日${md(m.target_date)}`);
-  return out.join("・");
-}
-
-function render() {
-  $("list").innerHTML = members.length ? members.map((m, i) => {
-    const [tag, text] = todo(m);
-    const hist = (m.recent || []).map((r) => `${md(r.date)} ${r.kind === "strength" ? "筋トレ" : "歩く"} 達成度${r.done}%・きつさ${r.rpe}${r.pain === "あり" ? "・体調申告" : ""}→${esc(r.result || "")}`).join("　");
-    const meal = m.meals7 ? `食事 直近7日で${m.meals7.days}日入力・平均${m.meals7.avg}kcal${m.kcal_target ? `（目標${m.kcal_target}）` : ""}` : "";
-    const act = m.status === "pending" ? `<button class="ghost" data-reg="${i}">登録する</button>`
-      : `<button class="ghost" data-meas="${i}">測定を記録</button> <button class="ghost" data-edit="${i}">目標を見直す</button>` + (m.status === "check" ? ` <button class="ghost" data-clear="${i}">確認済みにして再開</button>` : "");
-    return `<div class="row"><div><strong>${esc(m.name || m.line_name || "（名前未登録）")}</strong>
-      <div class="meta">歩く ${Math.min(m.count, m.goal)}/${m.goal}回・筋トレ ${m.strength_count}回（段階${m.strength_level}）・最終来店 ${md(m.last_date)}</div></div>
-      <div><span class="pill ${tag[1]}">${tag[0]}</span></div><div class="full">${text}</div>
-      ${m.status !== "pending" ? `<div class="full meta">${esc(progress(m))}</div>` : ""}
-      ${meal ? `<div class="full meta">${esc(meal)}</div>` : ""}${hist ? `<div class="full meta">${hist}</div>` : ""}<div class="full">${act}</div></div>`;
-  }).join("") : `<p class="sub">まだ登録がありません。</p>`;
-  document.querySelectorAll("[data-reg]").forEach((b) => (b.onclick = () => openReg(members[b.dataset.reg])));
-  document.querySelectorAll("[data-meas]").forEach((b) => (b.onclick = () => openMeas(members[b.dataset.meas])));
-  document.querySelectorAll("[data-edit]").forEach((b) => (b.onclick = () => openEdit(members[b.dataset.edit])));
-  document.querySelectorAll("[data-clear]").forEach((b) => (b.onclick = () => post({ action: "clearCheck", lineUserId: members[b.dataset.clear].line_user_id }, b)));
-}
-
-// 目標の目安：BMI（日本肥満学会 18.5／25）・標準体重（BMI22）・腹囲（男85／女90cm）・3か月で体重3%減／ウエスト2cm減（特定保健指導）
-function goalHint() {
-  const h = Number($("rHeight").value) / 100, w = Number($("rWeight").value), c = Number($("rWaist").value), sex = $("rSex").value, box = $("hint");
-  if (!(h > 1 && h < 2.3) || !(w > 20)) { box.innerHTML = `<p class="sub">身長・体重・ウエストを入れると、目標の目安が出ます。</p>`; return; }
-  const bmi = w / (h * h), std = 22 * h * h, lo = 18.5 * h * h, hi = 25 * h * h;
-  const band = bmi < 18.5 ? "低体重" : bmi < 25 ? "普通体重" : "肥満（BMI25以上）";
-  const tw = Math.round(w * 0.97 * 10) / 10, tc = c > 40 ? Math.round((c - 2) * 10) / 10 : null, lim = sex === "m" ? 85 : sex === "f" ? 90 : null;
-  const tW = Number($("rTWeight").value), tC = Number($("rTWaist").value), warn = [];
-  if (tW > 0 && tW < w * 0.9) warn.push(`目標体重が今より10%以上少ない（${Math.round((1 - tW / w) * 100)}%減）`);
-  if (tW > 0 && tW < lo) warn.push("目標体重が「低体重」（BMI18.5未満）の範囲");
-  if (tC > 0 && c > 40 && c - tC > 8) warn.push(`目標ウエストが今より${Math.round((c - tC) * 10) / 10}cm少ない`);
-  box.innerHTML = `<p class="sub"><b>今</b>：BMI ${bmi.toFixed(1)}（${band}）<br><b>標準体重</b>（BMI22）：${std.toFixed(1)}kg／普通体重の範囲（BMI18.5〜25）：${lo.toFixed(1)}〜${hi.toFixed(1)}kg`
-    + (lim && c > 40 ? `<br><b>ウエスト</b>：メタボ健診の目安は${lim}cm未満（今 ${c}cm）` : "") + `</p>`
-    + `<p class="sub"><b>3か月の目安</b>：体重3%減 → ${tw}kg${tc ? `、ウエスト2cm減 → ${tc}cm` : ""}（国の特定保健指導が3か月で目指す水準）</p>`
-    + (warn.length ? `<p class="err">⚠ ${warn.join("／")}。本人と無理のない目標か話してください。</p>` : "")
-    + `<button class="ghost" id="useHint" type="button">この目安を目標に入れる</button>`;
-  $("useHint").onclick = () => { $("rTWeight").value = tw; if (tc) $("rTWaist").value = tc; goalHint(); };
-}
-["rHeight", "rSex", "rWeight", "rWaist", "rTWeight", "rTWaist"].forEach((id) => $(id).addEventListener("input", goalHint));
-
-// 型に応じて必要な欄だけ出す（交代走法はA〜Cのみ）
-function tplFields() {
-  const t = $("rTemplate").value;
-  const show = { "f-walk": true, "f-fast": t === "resist" || t === "walk", "f-hard": t === "resist", "f-run": t === "runwalk" || t === "run" };
-  Object.entries(show).forEach(([c, v]) => document.querySelectorAll("." + c).forEach((e) => (e.hidden = !v)));
-  document.querySelectorAll(".noRes").forEach((o) => (o.disabled = t === "resist"));
-  if (t === "resist" && !/^[ABC]$/.test($("rMachine").value)) $("rMachine").value = "A";
-}
-$("rTemplate").addEventListener("change", tplFields);
-
-let editMode = false;
-function showReg(m, edit) {
-  target = m; editMode = edit;
-  $("regWho").textContent = edit ? (m.name || m.line_name || "") : "LINE表示名：" + (m.line_name || "");
-  $("rName").parentElement.hidden = edit; $("menuPart").hidden = edit;
-  $("rWeight").readOnly = $("rWaist").readOnly = edit;
-  $("rSave").textContent = edit ? "目標を更新する" : "登録する";
-  $("measCard").hidden = true; $("regCard").hidden = false; goalHint(); $("regCard").scrollIntoView({ behavior: "smooth" });
-}
-function openReg(m) {
-  ["rName", "rHeight", "rWeight", "rWaist", "rTWeight", "rTWaist", "rWalk", "rFast", "rHardRes", "rRun"].forEach((id) => ($(id).value = "")); $("rSex").value = "";
-  $("rTemplate").value = "resist"; tplFields();
-  const d = new Date(today); d.setMonth(d.getMonth() + 3); $("rTDate").value = d.toISOString().slice(0, 10);
-  showReg(m, false);
-}
-// 目標の見直し：体重・ウエストは最新の測定を基準に目安を出す
-function openEdit(m) {
-  const lm = m.lastMeasure || {};
-  $("rHeight").value = m.height ?? ""; $("rSex").value = m.sex || "";
-  $("rWeight").value = lm.weight ?? m.start_weight ?? ""; $("rWaist").value = lm.waist ?? m.start_waist ?? "";
-  $("rTWeight").value = m.target_weight ?? ""; $("rTWaist").value = m.target_waist ?? ""; $("rTDate").value = m.target_date || ""; $("rGoal").value = m.goal;
-  showReg(m, true);
-}
-function openMeas(m) {
-  measTarget = m; $("measWho").textContent = m.name || m.line_name || "";
-  ["mWeight", "mWaist", "mNote"].forEach((id) => ($(id).value = ""));
-  $("regCard").hidden = true; $("measCard").hidden = false; $("measCard").scrollIntoView({ behavior: "smooth" });
-}
-
-async function post(body, btn) {
-  btn.disabled = true; $("err").hidden = true;
-  try { await api("/api/staff/members", { method: "POST", body: JSON.stringify(body) }); await load(); return true; }
-  catch (e) { $("err").textContent = e.message; $("err").hidden = false; $("err").scrollIntoView(); return false; }
-  finally { btn.disabled = false; }
-}
-
-$("rSave").onclick = async () => {
-  if (!target) return;
-  const g = { height: $("rHeight").value, sex: $("rSex").value, targetWeight: $("rTWeight").value, targetWaist: $("rTWaist").value,
-    targetDate: $("rTDate").value, goal: Number($("rGoal").value) };
-  if (editMode) {
-    if (await post({ action: "setGoal", lineUserId: target.line_user_id, ...g }, $("rSave"))) { $("regCard").hidden = true; target = null; }
-    return;
-  }
-  const ok = await post({ action: "register", lineUserId: target.line_user_id, name: $("rName").value, height: g.height, sex: g.sex,
-    weight: $("rWeight").value, waist: $("rWaist").value, targetWeight: $("rTWeight").value, targetWaist: $("rTWaist").value,
-    targetDate: $("rTDate").value, goal: Number($("rGoal").value), machine: $("rMachine").value, template: $("rTemplate").value,
-    walk: Number($("rWalk").value), fast: Number($("rFast").value), run: Number($("rRun").value),
-    hardRes: Number($("rHardRes").value) }, $("rSave"));
-  if (ok) { $("regCard").hidden = true; target = null; }
-};
-$("mSave").onclick = async () => {
-  if (!measTarget) return;
-  const ok = await post({ action: "measure", lineUserId: measTarget.line_user_id, weight: $("mWeight").value, waist: $("mWaist").value, note: $("mNote").value }, $("mSave"));
-  if (ok) { $("measCard").hidden = true; measTarget = null; }
-};
+let S = null;
+const LV = { d: "d", w: "w", a: "a", b: "b" };
 
 async function load() {
-  const r = await api("/api/staff/members");
-  today = r.today;
-  const order = { check: 0, pending: 1, active: 2, done: 3 };
-  members = r.members.sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
-  $("stamp").textContent = "更新 " + new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
-  render();
+  S = await api("/api/staff/members");
+  const cnt = (lv) => S.members.filter((m) => m.flags.some((f) => f.level === lv)).length;
+  $("sum").innerHTML = `<div><span class="tiny">すぐ対応</span><b>${cnt("d")}</b></div><div><span class="tiny">気にかける</span><b>${cnt("w")}</b></div><div><span class="tiny">案内のタイミング</span><b>${cnt("a")}</b></div><div><span class="tiny">全体</span><b>${S.members.length}</b></div>`;
+  $("list").innerHTML = S.members.map(card).join("");
+  bind();
 }
-$("reload").onclick = () => load().catch((e) => { $("err").textContent = e.message; $("err").hidden = false; });
+
+function card(m) {
+  const tags = m.flags.length ? m.flags.map((f) => `<span class="tag ${LV[f.level]}">${esc(f.label)}</span>`).join("") : `<span class="tag">順調</span>`;
+  if (m.status === "pending") return `<article class="card"><b style="font-size:18px">${esc(m.lineName || "（LINE名なし）")}</b><div class="tags">${tags}</div><p class="box">${esc(m.flags[0].say)}</p>${regForm(m)}</article>`;
+  const up = m.flags.find((f) => f.level === "a");
+  const r = m.report;
+  return `<article class="card ${m.flags.some((f) => f.level === "d") ? "alert" : ""}">
+  <div><b style="font-size:19px">${esc(m.name)}</b><p class="tiny">${esc(m.plan)}・週${m.weekly}回目標・${m.streak}週連続・最終来店 ${md(m.lastVisit)}</p>
+  <p class="tiny">トレッドミル：段階${"①②③④"[m.ladder.wl - 1]}・マシン${esc(m.ladder.machine)}・早歩き${f1(m.ladder.fp)}km/h／NTC：${esc(m.ntc.name)} ${m.ntc.week}週目／全${m.ntc.weeks}週</p></div>
+  <div class="chips">${Object.entries(S.tracks).map(([k, l]) => `<button type="button" data-track="${esc(m.id)}" data-k="${k}" aria-pressed="${m.ntc.track === k}" style="min-height:30px;padding:2px 10px;font-size:12.5px">${esc(l)}</button>`).join("")}</div>
+  <div class="tags">${tags}</div>
+  ${m.flags.length ? `<p class="box ${m.flags[0].level === "d" ? "d" : m.flags[0].level === "w" ? "w" : ""}">${esc(m.flags[0].say)}</p>` : ""}
+  ${m.status === "check" ? `<button class="btn line" type="button" data-resolve="${esc(m.id)}">体調を確認した（メニューを再開）</button>` : ""}
+  ${up && m.upsell ? `<div class="box"><p class="tiny" style="font-weight:700">直近30日の効果レポート</p><p>来店${r.visits}回・NTC${r.ntc}回${r.km ? `・歩いた距離${r.km}km` : ""}${r.dw != null ? `・体重${sg(r.dw)}kg` : ""}${r.dwa != null ? `・ウエスト${sg(r.dwa)}cm` : ""}</p>
+    <p class="tiny" style="margin-top:6px">案内：${esc(m.upsell.to)}</p><p>「${esc(m.upsell.say)}」</p></div>
+    <div class="two"><button class="btn line" type="button" data-up="${esc(m.id)}" data-r="yes">案内した → 変更する</button><button class="btn line" type="button" data-up="${esc(m.id)}" data-r="no">案内した → 今は見送り</button></div>
+    <p class="tiny">「変更する」のときは、hacomonoでもプランを変更してください。</p>` : ""}
+  ${m.lastReport ? `<p class="tiny">直近の報告 ${md(m.lastReport.date)}：${esc(m.lastReport.note || "")}</p>` : ""}
+  <div class="two"><input type="number" step="0.1" inputmode="decimal" placeholder="体重 kg" data-w="${esc(m.id)}"><input type="number" step="0.1" inputmode="decimal" placeholder="ウエスト cm" data-c="${esc(m.id)}"></div>
+  <div class="two"><button class="btn line" type="button" data-measure="${esc(m.id)}">測定を記録</button><button class="btn line" type="button" data-rep="${esc(m.id)}">効果レポート</button></div>
+</article>`;
+}
+
+function regForm(m) {
+  const id = esc(m.id);
+  return `<div class="field"><span>お名前</span><input data-f="name" data-id="${id}" placeholder="例：山田 花子"></div>
+<div class="two"><label class="field"><span>プラン</span><select data-f="plan" data-id="${id}"><option>メイン</option><option>ライト</option><option>プレミアム</option></select></label>
+<label class="field"><span>週の来店目標</span><select data-f="weekly" data-id="${id}"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label></div>
+<label class="field"><span>NTCの目的</span><select data-f="track" data-id="${id}">${Object.entries(S.tracks).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join("")}</select></label>
+<p class="tiny">トレッドミルの基準は、お客様と一緒にトレッドミルで測定した数字を入れてください。</p>
+<div class="two"><label class="field"><span>マシン</span><select data-f="machine" data-id="${id}">${"ABCDEFG".split("").map((x) => `<option>${x}</option>`).join("")}</select></label>
+<label class="field"><span>きつめの抵抗（A〜C）</span><select data-f="hardRes" data-id="${id}">${[2, 3, 4, 5].map((x) => `<option ${x === 3 ? "selected" : ""}>${x}</option>`).join("")}</select></label></div>
+<div class="two"><label class="field"><span>ゆっくり km/h</span><input type="number" step="0.1" data-f="walk" data-id="${id}" placeholder="4.5"></label>
+<label class="field"><span>早歩き km/h</span><input type="number" step="0.1" data-f="fast" data-id="${id}" placeholder="5.5"></label></div>
+<div class="two"><label class="field"><span>今の体重 kg</span><input type="number" step="0.1" data-f="startWeight" data-id="${id}"></label>
+<label class="field"><span>今のウエスト cm</span><input type="number" step="0.1" data-f="startWaist" data-id="${id}"></label></div>
+<div class="two"><label class="field"><span>目標の体重 kg</span><input type="number" step="0.1" data-f="targetWeight" data-id="${id}"></label>
+<label class="field"><span>目標のウエスト cm</span><input type="number" step="0.1" data-f="targetWaist" data-id="${id}"></label></div>
+<label class="field"><span>目標の期日</span><input type="date" data-f="targetDate" data-id="${id}"></label>
+<button class="btn" type="button" data-register="${id}">登録して開始</button>`;
+}
+
+async function act(body) {
+  $("err").hidden = true;
+  try { await api("/api/staff/members", body); await load(); }
+  catch (e) { $("err").textContent = e.message; $("err").hidden = false; window.scrollTo({ top: 0 }); }
+}
+function bind() {
+  document.querySelectorAll("[data-register]").forEach((b) => b.onclick = () => {
+    const id = b.dataset.register, body = { action: "register", id };
+    document.querySelectorAll(`[data-id="${CSS.escape(id)}"]`).forEach((el) => (body[el.dataset.f] = el.value));
+    body.weekly = Number(body.weekly);
+    act(body);
+  });
+  document.querySelectorAll("[data-measure]").forEach((b) => b.onclick = () => {
+    const id = b.dataset.measure;
+    act({ action: "measure", id, weight: document.querySelector(`[data-w="${CSS.escape(id)}"]`).value, waist: document.querySelector(`[data-c="${CSS.escape(id)}"]`).value });
+  });
+  document.querySelectorAll("[data-resolve]").forEach((b) => b.onclick = () => act({ action: "resolve", id: b.dataset.resolve }));
+  document.querySelectorAll("[data-track]").forEach((b) => b.onclick = () => {
+    if (b.getAttribute("aria-pressed") === "true") return;
+    if (confirm("NTCの目的を変えると、その目的の1本目のプログラムからやり直しになります。変更しますか？")) act({ action: "track", id: b.dataset.track, track: b.dataset.k });
+  });
+  document.querySelectorAll("[data-up]").forEach((b) => b.onclick = () => act({ action: "upsell", id: b.dataset.up, result: b.dataset.r }));
+  document.querySelectorAll("[data-rep]").forEach((b) => b.onclick = () => {
+    const m = S.members.find((x) => x.id === b.dataset.rep);
+    openReport(reportHTML(m.name, m.report, m.target, m.measurements));
+  });
+}
 
 (async () => {
-  try { if (!(await boot())) return; await load(); }
-  catch (e) { $("stamp").textContent = ""; $("err").textContent = e.message; $("err").hidden = false; }
+  try { if (await boot()) await load(); }
+  catch (e) { $("err").textContent = e.message; $("err").hidden = false; }
 })();
 </script>
 </body>

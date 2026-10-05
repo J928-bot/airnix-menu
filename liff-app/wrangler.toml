@@ -14,5 +14,3 @@ binding = "DB"
 database_name = "airnix-menu"
 database_id = "ここにD1のdatabase_id"
 
-# ANTHROPIC_API_KEY はシークレットで登録する：
-#   npx wrangler pages secret put ANTHROPIC_API_KEY
