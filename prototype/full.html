@@ -716,7 +716,8 @@ function score(p){const f=flags(p).map(x=>x[1]);return (f.includes("p-d")?0:f.in
 function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastVisit(p),last=(p.history||[]).slice(-1)[0];
  const lm=lastMeas(p),tg=p.target||{};const prog=[];if(tg.weight!=null)prog.push(`体重 ${p.start.weight}→${lm.weight??"-"}（目標${tg.weight}）`);if(tg.waist!=null)prog.push(`ウエスト ${p.start.waist}→${lm.waist??"-"}（目標${tg.waist}）`);
  return `<article class="mcard ${fl.some(f=>f[1]==="p-d")?"alert":""}">
-  <div class="mhead"><div><b>${esc(p.name)}</b><p class="tiny">${esc(p.plan)}・週${p.weekly}回目標・${streak(p)}週連続・最終来店 ${md(lv)}</p><p class="tiny">NTC：${esc(ntcProg(ntcOf(p)).name)} ${ntcOf(p).week}週目／全${ntcProg(ntcOf(p)).weeks}週</p></div>
+  <div class="mhead"><div><b>${esc(p.name)}</b><p class="tiny">${esc(p.plan)}・週${p.weekly}回目標・${streak(p)}週連続・最終来店 ${md(lv)}</p><p class="tiny">NTC：${esc(ntcProg(ntcOf(p)).name)} ${ntcOf(p).week}週目／全${ntcProg(ntcOf(p)).weeks}週</p>
+  <div class="chips" style="margin-top:6px">${Object.entries(NTC_TRACKS).map(([k,tr])=>`<button type="button" data-track="${i}" data-k="${k}" aria-pressed="${ntcOf(p).track===k}" style="min-height:30px;padding:2px 10px;font-size:12.5px">${tr.label}</button>`).join("")}</div></div>
   </div>
   <div class="pills">${fl.length?fl.map(f=>`<span class="pill ${f[1]}">${esc(f[0])}</span>`).join(""):`<span class="pill p-o">順調</span>`}</div>
   <div class="rate"><span>来店率</span><div class="bar"><i style="width:${r}%"></i></div><b class="num" style="color:var(--ink)">${r}%</b></div>
@@ -732,6 +733,7 @@ function renderStaff(){const ids=Object.keys(members).sort((a,b)=>score(members[
  $("allList").innerHTML=ids.map(cardHTML).join("");
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
  document.querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>openRep(b.dataset.rep));
+ document.querySelectorAll("[data-track]").forEach(b=>b.onclick=async()=>{const id=b.dataset.track;const p=clone(members[id]);if(ntcOf(p).track===b.dataset.k)return;p.ntc=ntcNew(b.dataset.k);members[id]=p;await save(id)});
  document.querySelectorAll("[data-up]").forEach(b=>b.onclick=async()=>{const id=b.dataset.up;const p=clone(members[id]);p.upsellAt=today();
   p.upsellLog=[...(p.upsellLog||[]),{date:today(),from:p.plan,result:b.dataset.r}];if(b.dataset.r==="yes"&&p.plan!=="プレミアム")p.plan="プレミアム";members[id]=p;await save(id)})}
 $("mCancel").onclick=()=>{$("measCard").hidden=true};
