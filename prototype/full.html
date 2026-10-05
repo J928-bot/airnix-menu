@@ -135,54 +135,63 @@ textarea{min-height:52px;resize:vertical}
 [hidden]{display:none!important}
 </style>
 <style>
-/* NTC風の見た目（仕組みの画面と揃える） */
-.ntcbox{background:#111;color:#fff;border-radius:16px;padding:16px}
-.ntch{margin:0 0 6px;font-weight:900;font-size:15px;display:flex;align-items:center;gap:8px}
-.ntclogo{background:#d7ff3a;color:#111;font-weight:900;font-size:12px;border-radius:6px;padding:2px 7px}
-.ntcn{margin:0;font-size:18px;font-weight:900}
-.ntcp{margin:2px 0 0;font-size:12px;color:#bdbdbd}
-.ntcopen{display:block;text-align:center;margin:12px 0 6px;padding:12px;border-radius:999px;background:#d7ff3a;color:#111;font-weight:900;text-decoration:none}
-:root{--soft:#f5f5f5;--ink:#111;--sub:#707072;--line:#e5e5e5;--brand:#111;--brand-soft:#f0f0f0;--amber:#111;--amber-soft:#f5f5f5;--goal:#9e9e9e;
-  --f-display:"Helvetica Neue",Helvetica,"Noto Sans JP",sans-serif;--f-body:"Helvetica Neue",Helvetica,"Noto Sans JP",sans-serif}
-h1,h2,h3{font-weight:900;letter-spacing:-.01em}
-h1{font-size:28px}h2{font-size:22px}h3{font-size:18px}
-.brandmark{color:#111;letter-spacing:.3em}
-#topnav a{border-radius:999px!important;border-color:#f5f5f5!important;background:#f5f5f5!important;color:#111!important}
-#topnav a.on{background:#111!important;border-color:#111!important;color:#fff!important}
-.phone{background:#fff;border:0;border-radius:0;padding:0;gap:16px}
-.hello b{font-size:24px;font-weight:900}
-.card{border:0;background:#f5f5f5;border-radius:16px;padding:16px}
+/* NTCの実画面に合わせた見た目（黒背景・白文字・灰色の説明・白い丸ボタン） */
+:root{--bg:#1f1f1f;--soft:#2c2c2e;--card:#1f1f1f;--ink:#fff;--sub:#8e8e93;--line:#3a3a3c;--brand:#fff;--brand-soft:#2c2c2e;--amber:#fff;--amber-soft:#2c2c2e;--goal:#8e8e93;
+  --ok:#8fd19e;--ok-soft:#2c2c2e;--warn:#f2b866;--warn-soft:#3a3123;--danger:#ff6b5e;--danger-soft:#3a2321;
+  --f-display:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;--f-body:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;color-scheme:dark}
+body{background:var(--bg);color:var(--ink)}
+h1,h2,h3{font-weight:500}
+h1{font-size:24px}h2{font-size:22px}h3{font-size:18px}
+.brandmark{color:#fff;letter-spacing:.3em}
+#topnav a{border-radius:999px!important;border:1px solid #fff!important;background:transparent!important;color:#fff!important;font-weight:500!important}
+#topnav a.on{background:#fff!important;color:#111!important}
+.phone{background:transparent;border:0;border-radius:0;padding:0;gap:0}
+.hello{padding:0 0 12px}.hello b{font-size:26px;font-weight:500}
+.card{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;padding:22px 0}
 .card h3 small{color:var(--sub)}
-.streak{background:#111;color:#fff}.streak .big{color:#d7ff3a}
-.days span{background:#fff}
-.days span.on{background:#111}
-.days span.today{outline-color:#111}
-.stampMsg{background:#111;color:#fff}
-.menu{border:0;border-radius:14px;background:#fff}
-.menu header{background:#111;font-size:15px;padding:12px 14px}
-.menu tr.rep td{background:#f5f5f5}
-.menu td:first-child{color:#111}
-.diff{background:#111;color:#fff}
-.kindTabs button,.chips button{border-radius:999px;background:#fff;border-color:#e5e5e5}
-.kindTabs button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:#111;border-color:#111}
-.primary{border-radius:999px;background:#111;padding:16px}
-.ghost,.stamps button{border-radius:999px;border-color:#cacacb}
-.stamps button[aria-pressed="true"]{background:#111;border-color:#111;color:#fff}
-.okbox{background:#f5f5f5;color:#111}
-.badge .disc{background:#fff;border-color:#e5e5e5}
-.badge.got .disc{background:#111;color:#d7ff3a;border-color:#111}
-.panel{border:0;background:#f5f5f5;border-radius:16px}
-.sum div{background:#f5f5f5;border-radius:16px}
-.sum .o b,.sum .a b{color:#111}
-.mcard{border:0;background:#f5f5f5;border-radius:16px}
-.mcard.alert{box-shadow:0 0 0 2px var(--danger) inset}
-.mhead b{font-size:19px;font-weight:900}
-.p-b{background:#111;color:#fff}.p-o{background:#e9f5ec}
-.bar{background:#fff}.bar i{background:#111}
-.say{background:#fff}
-input,select,textarea{border-radius:12px;background:#fff}
-.seg{border-radius:999px}.seg button{border-radius:999px}
-.seg button[aria-pressed="true"]{background:#111;color:#fff}
+.streak{background:var(--soft);color:#fff}.streak .big{color:#fff}
+.days span{background:var(--soft);color:var(--sub)}
+.days span.on{background:#fff;color:#111}
+.days span.today{outline-color:#fff}
+.stampMsg{background:var(--soft);color:#fff}
+.menu{border:1px solid var(--line);border-radius:12px;background:transparent}
+.menu header{background:transparent;border-bottom:1px solid var(--line);color:#fff;font-size:15px;font-weight:600;padding:12px 14px}
+.menu td{border-top-color:var(--line)}
+.menu tr.rep td{background:var(--soft)}
+.menu tfoot td{background:transparent;color:var(--sub)}
+.prof{background:transparent}
+.diff{background:var(--soft);color:#fff}
+.kindTabs button,.chips button{border-radius:999px;background:transparent;border:1px solid var(--line);color:#fff}
+.kindTabs button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:#fff;border-color:#fff;color:#111;font-weight:600}
+.primary{border-radius:999px;background:#fff;color:#111;padding:17px;font-weight:600}
+.ghost,.stamps button{border-radius:999px;background:transparent;border:1px solid #fff;color:#fff}
+.stamps button[aria-pressed="true"]{background:#fff;color:#111}
+input,select,textarea{border-radius:10px;background:var(--soft);border-color:var(--line);color:#fff}
+.okbox{background:var(--soft);color:#fff}
+.badge .disc{background:var(--soft);border:2px dashed var(--line);color:var(--sub)}
+.badge.got .disc{background:#fff;color:#111;border-color:#fff}
+.panel{border:0;background:transparent;border-top:1px solid var(--line);border-radius:0}
+.sum div{background:var(--soft);border-radius:12px}
+.sum .o b,.sum .a b{color:#fff}
+.mcard{border:1px solid var(--line);background:transparent;border-radius:12px}
+.mcard.alert{border-color:var(--danger)}
+.mhead b{font-size:19px;font-weight:500}
+.p-b{background:#fff;color:#111}
+.bar{background:var(--soft)}.bar i{background:#fff}
+.say{background:var(--soft);color:#fff}
+.seg{background:var(--soft);border-color:var(--line);border-radius:999px}.seg button{border-radius:999px;color:var(--sub)}
+.seg button[aria-pressed="true"]{background:#fff;color:#111}
+.ntcbox{background:transparent;color:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}
+.ntch{margin:0 0 6px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px}
+.ntclogo{background:#fff;color:#111;font-weight:700;font-size:12px;border-radius:4px;padding:2px 7px}
+.ntcn{margin:0;font-size:20px;font-weight:500}
+.ntcp{margin:4px 0 0;font-size:13px;color:var(--sub)}
+.ntcopen{display:block;text-align:center;margin:14px 0 8px;padding:13px;border-radius:999px;background:transparent;border:1px solid #fff;color:#fff;font-weight:600;text-decoration:none}
+#openRep{background:transparent!important;color:#fff!important;border:1px solid #fff;margin:0 0 18px}
+#repBody{background:#1f1f1f!important;color:#fff}
+#repBody [style*="background:#f5f5f5"]{background:#2c2c2e!important}
+#repBody [style*="background:#111"]{background:#2c2c2e!important}
+#repBody [style*="color:#d7ff3a"]{color:#fff!important}
 </style>
 
 <nav id="topnav" style="max-width:1080px;margin:0 auto;padding:12px 16px 0;display:flex;gap:6px">
@@ -208,7 +217,7 @@ input,select,textarea{border-radius:12px;background:#fff}
       <div class="phone">
         <div class="hello"><div><p class="tiny">AIRNIX 用賀店</p><b id="hName"></b></div><span class="pill p-b" id="hPlan"></span></div>
         <div id="custState"></div>
-        <button class="primary" type="button" id="openRep" style="background:#d7ff3a;color:#111">今月の効果レポートを見る</button>
+        <button class="primary" type="button" id="openRep" >今月の効果レポートを見る</button>
 
         <div class="card" id="weekCard">
           <h3>今週の来店<small id="weekRange"></small></h3>
@@ -264,7 +273,7 @@ input,select,textarea{border-radius:12px;background:#fff}
         <div class="card">
           <h3>食事<small>あすけんで記録</small></h3>
           <p style="font-size:14px">食事はあすけん（無料アプリ）で、朝・昼・夕の3食を写真かバーコードで記録してください。AIRNIXでは「今週何日記録したか」だけを伺います。</p>
-          <a class="ntcopen" style="background:#7cc242;color:#fff" href="https://apps.apple.com/jp/app/id687287242" target="_blank" rel="noopener">あすけんを開く</a>
+          <a class="ntcopen" href="https://apps.apple.com/jp/app/id687287242" target="_blank" rel="noopener">あすけんを開く</a>
           <div class="field"><span>今週、あすけんで記録した日</span><div class="chips" id="askenDays"></div></div>
           <p class="tiny" id="mealSum"></p>
         </div>
@@ -671,7 +680,7 @@ function monthReport(p){const from=addDays(today(),-30);const h=(p.history||[]).
  const sg=v=>v>0?"+"+v:String(v);
  return `来店${visits}回・NTC${ntc}回${km?`・歩いた距離${km}km`:""}${dw!=null?`・体重${sg(dw)}kg`:""}${dwa!=null?`・ウエスト${sg(dwa)}cm`:""}`}
 function upsellHTML(i){const p=members[i];if(!flags(p).some(f=>f[0]==="案内のタイミング"))return"";const u=UPSELL[p.plan];if(!u)return"";
- return `<div class="say" style="background:#111;color:#fff"><p class="tiny" style="color:#d7ff3a;font-weight:700">直近30日の効果レポート</p><p>${esc(monthReport(p))}</p>
+ return `<div class="say"><p class="tiny" style="font-weight:700">直近30日の効果レポート</p><p>${esc(monthReport(p))}</p>
  <p class="tiny" style="color:#bdbdbd;margin-top:6px">案内：${esc(u.to)}</p><p>「${esc(u.say)}」</p></div>
  <div class="acts"><button class="ghost" data-up="${i}" data-r="yes">案内した → 変更する</button><button class="ghost" data-up="${i}" data-r="no">案内した → 今は見送り</button></div>`}
 function repData(p){const t=today(),from=addDays(t,-29);const h=(p.history||[]).filter(x=>x.date>=from);
