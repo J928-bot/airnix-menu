@@ -188,7 +188,7 @@ input,select,textarea{border-radius:12px;background:#fff}
   <div class="top">
     <div>
       <p class="brandmark">AIRNIX</p>
-      <h1>個別メニュー（試作 第8版）</h1>
+      <h1>個別メニュー（試作 第11版）</h1>
       <p class="sub">お客様は携帯で「今週の来店・今日のメニュー・報告」、スタッフは週1回まとめを見るだけ。画面の方はすべて見本です。</p>
     </div>
     <div class="seg" role="tablist" id="viewTabs"><button type="button" data-view="cust">お客様の画面</button><button type="button" data-view="staff">スタッフの画面</button></div>
@@ -235,12 +235,12 @@ input,select,textarea{border-radius:12px;background:#fff}
           <div class="field" id="machineField"><span>使ったマシン</span><div class="chips" id="machine"></div></div>
           <div class="field" id="doneField"><span>最後までできた？</span><div class="chips" id="done"></div></div>
           <div class="field" id="changeField"><span>途中で速さや抵抗を変えた？</span><div class="chips" id="change"></div></div>
-          <div class="field" id="strField"><span>種目ごとに（楽＝12回やって余裕がある／ちょうど／きつい＝8回できない・フォームが崩れる）</span><div id="strRows" style="display:flex;flex-direction:column;gap:6px"></div></div>
-          <div class="field"><span>きつさ（1 楽 〜 10 限界）</span><div class="chips rpe" id="rpe"></div></div>
+          <div class="field" id="strField"><span>NTCはできましたか？</span><div class="chips" id="ntcDone"><button type="button" data-v="no">できなかった</button><button type="button" data-v="easy">やった・楽</button><button type="button" data-v="ok">やった・ちょうど</button><button type="button" data-v="hard">やった・きつい</button></div></div>
+          <div class="field" id="rpeField"><span>きつさ（1 楽 〜 10 限界）</span><div class="chips rpe" id="rpe"></div></div>
           <div class="field"><span>痛みや体調の変化</span><div class="chips" id="pain"></div></div>
           <label class="field" id="kmField"><span>トレッドミルの距離（km・終了画面の数字・任意）</span><input id="km" type="number" step="0.01" inputmode="decimal" placeholder="2.80"></label>
           <label class="field"><span>ひとこと（任意）</span><textarea id="comment" placeholder="程よく疲れた／途中で休みたい など"></textarea></label>
-          <div class="field"><span>次回は（任意）</span><div class="chips" id="next"><button type="button" data-v="もう少しきつく">もう少しきつく</button><button type="button" data-v="このまま">このまま</button><button type="button" data-v="少し楽に">少し楽に</button></div></div>
+          <div class="field" id="nextField"><span>次回は（任意）</span><div class="chips" id="next"><button type="button" data-v="もう少しきつく">もう少しきつく</button><button type="button" data-v="このまま">このまま</button><button type="button" data-v="少し楽に">少し楽に</button></div></div>
           <p class="err" id="err" hidden></p>
           <button class="primary" id="send" type="button">送信して次回メニューを受け取る</button>
           </div>
@@ -284,7 +284,7 @@ input,select,textarea{border-radius:12px;background:#fff}
         <p>上げるのは楽にできたとき（きつさ4以下・最後まで・変更なし。人ごとに「じっくり／ふつう／積極的」）か、本人が「もう少しきつく」を選んだとき。きつさ8以上・達成80%未満・「少し楽に」のときは1つ戻します。</p>
         <p>前回から14日あいたら1つ軽く、28日あいたら最初の段階から。速さは機種で違うため目安です。</p>
         <p>痛み・体調の変化が「あり」のときは、次回を1つ軽くします。</p>
-        <p>筋トレ（スタジオ）は脚・お尻・押す・引く・体幹の5種目。種目ごとに「楽」が2回続いたらセットを増やし（1→2→3）、3セットでも楽なら次の段階へ。「きつい」なら1つ戻します。</p>
+        <p>筋トレ・ストレッチはNTC（ナイキ トレーニング クラブ・無料アプリ）に任せ、AIRNIXは「種類・時間・強度・週の回数」を指定します（段階1〜5）。「やった・楽」で1つ上げ、「きつい」か痛みありで1つ戻す。「できなかった」が2回続いたら1つ戻します。</p>
         <p>表示するのは本人の記録の数字だけで、効果をお約束するものではありません。</p>
       </div>
     </aside>
@@ -359,17 +359,9 @@ const PV=new URLSearchParams(location.search).get("view")==="staff"?"staff":"cus
 /* ---------- 定数 ---------- */
 const ACTIONS=["ウォーキング","早歩き","きつめの早歩き","ランニング"];
 const PLANS={"ライト":"ライト（1日1回）","メイン":"メイン（1日1回）","プレミアム":"プレミアム（1日2回・ダブル枠可）"};
-const S=(name,sets,reps,sec,note)=>({name,sets,reps:reps||null,sec:sec||null,note:note||""});
-const STR_CATS=[["leg","脚"],["glute","お尻"],["push","押す"],["pull","引く・背中"],["core","体幹"]];
-const STR={leg:["椅子からの立ち座り","浅いスクワット","スクワット","バックランジ","スプリットスクワット"],
- glute:["ヒップリフト","ヒップリフト（足を閉じる）","ヒップリフト（上で3秒止める）","片脚ヒップリフト（補助あり）","片脚ヒップリフト"],
- push:["壁腕立て","台に手をつく腕立て","膝つき腕立て","膝つき腕立て（ゆっくり下ろす）","腕立て伏せ"],
- pull:["うつ伏せで腕を後ろへ引く","うつ伏せでY字に腕を上げる","Y字・T字を交互に","タオルを使って引く","Y字・T字・W字"],
- core:["デッドバグ","バードドッグ","膝つきプランク","プランク","プランク＋脚上げ"]};
-const strDose=(k,lv)=>k==="core"&&lv>=3?"20〜40秒":(k==="core"?"左右交互 8〜12回":"8〜12回");
-function strInit(p){if(p.str)return p.str;const lv=Math.min(5,Math.max(1,p.strengthLevel||1));const o={};STR_CATS.forEach(([k])=>o[k]={lv,sets:1,streak:0});return o}
-function strUp(c){if(c.sets<3){c.sets++;return`${c.sets}セットに`}if(c.lv<5){c.lv++;c.sets=1;return`段階${c.lv}へ（1セットから）`}return null}
-function strDown(c){if(c.sets>1){c.sets--;return`${c.sets}セットに`}if(c.lv>1){c.lv--;c.sets=2;return`段階${c.lv}へ戻す`}return null}
+const NTC=[{t:"ストレッチ・モビリティ",min:10,lv:"低",n:1},{t:"筋トレ（全身・器具なし）",min:15,lv:"低",n:1},{t:"筋トレ（全身・器具なし）",min:20,lv:"中",n:1},{t:"筋トレ（全身・器具なし）",min:20,lv:"中",n:2},{t:"筋トレ（全身・器具なし）",min:30,lv:"中",n:2}];
+const ntcLv=p=>Math.min(5,Math.max(1,p.nl||p.strengthLevel||1));
+const ntcName=l=>{const x=NTC[l-1];return`${x.t}・${x.min}分・強度${x.lv}・週${x.n}回`};
 const STAMPS=["ナイス継続！","いいペースです","無理せずいきましょう","目標まであと少し"];
 
 /* ---------- 日付 ---------- */
@@ -451,12 +443,11 @@ function chips(id,vals,key,fmt){const box=$(id);box.innerHTML="";vals.forEach(v=
 chips("machine",["A","B","C","D","E","F","G"],"machine");chips("done",[100,90,80,70,60],"done",v=>v+"%");chips("change",["なし","あり"],"change");chips("rpe",[1,2,3,4,5,6,7,8,9,10],"rpe");chips("pain",["なし","あり"],"pain");
 function press(id,t){[...$(id).children].forEach(c=>c.setAttribute("aria-pressed",c.textContent===t?"true":"false"))}
 function preset(){Object.assign(state,{machine:"A",done:90,change:"なし",rpe:6,pain:"なし",next:null});[...$("next").children].forEach(c=>c.setAttribute("aria-pressed","false"));press("machine","A");press("done","90%");press("change","なし");press("rpe","6");press("pain","なし");$("comment").value="";$("km").value=""}
-const sres={};function buildStrRows(){$("strRows").innerHTML=STR_CATS.map(([k,l])=>`<div class="pref"><span>${l}</span><div class="chips" data-sk="${k}">${["楽","ちょうど","きつい"].map(v=>`<button type="button" data-v="${v}" aria-pressed="${sres[k]===v}">${v}</button>`).join("")}</div></div>`).join("");
- $("strRows").querySelectorAll("[data-sk]").forEach(box=>[...box.children].forEach(b=>b.onclick=()=>{sres[box.dataset.sk]=b.dataset.v;[...box.children].forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"))}))}
-STR_CATS.forEach(([k])=>sres[k]="ちょうど");buildStrRows();
+let nres=null;function buildStrRows(){[...$("ntcDone").children].forEach(b=>{b.setAttribute("aria-pressed",b.dataset.v===nres?"true":"false");b.onclick=()=>{nres=b.dataset.v;buildStrRows()}})}
+buildStrRows();
 preset();
 $("openReport").onclick=()=>{const b=$("reportBody");b.hidden=!b.hidden;$("openReport").textContent=b.hidden?"終わったら報告する（1分）":"閉じる";$("openReport").className=b.hidden?"primary":"ghost"};
-const kt=$("kindTabs");[["walk","歩く"],["strength","筋トレ（スタジオ）"]].forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.onclick=()=>{kind=k;$("result").innerHTML="";renderCustomer()};kt.appendChild(b)});
+const kt=$("kindTabs");[["walk","歩く（店内）"],["strength","NTC"]].forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.onclick=()=>{kind=k;$("result").innerHTML="";renderCustomer()};kt.appendChild(b)});
 
 const LVL={"休憩":0,"ウォーキング":1,"早歩き":2,"きつめの早歩き":3,"ランニング":4};
 const sameSeg=(a,b)=>a.min===b.min&&a.action===b.action&&a.pace[0]===b.pace[0]&&a.pace[1]===b.pace[1]&&a.resistance===b.resistance;
@@ -517,7 +508,7 @@ function menuHTML(no,m){const r=/^[ABC]$/.test(m.machine);const total=m.segments
   if(b.between){const x=b.items[0],y=b.between;return `<tr class="rep"><td class="tm">×${b.reps}<span class="tiny">${mins}分</span></td><td>${it(x)}<div class="tiny">あいだに${esc(y.action)} ${y.min}分（${paceTxt(y,r)}）</div></td></tr>`}
   return `<tr class="rep"><td class="tm">×${b.reps}<span class="tiny">${mins}分</span></td><td>${b.items.map(x=>it(x)).join("")}</td></tr>`}).join("");
  return `<div class="menu"><header><span>${no}回目</span><span>マシン${esc(m.machine)}</span></header>${profileSVG(m.segments)}<table><tbody>${rows}</tbody><tfoot><tr><td colspan="2">合計${total}分　<span class="tiny" style="font-weight:500">速さは目安（km/h）</span></td></tr></tfoot></table></div>`}
-function strengthHTML(p){const st=strInit(p);return `<div class="menu"><header><span>筋トレ（スタジオ）</span><span>30分</span></header><table><tbody><tr><td class="tm">5分</td><td><div class="mi"><span>ウォームアップ</span><span class="tiny">足踏み・肩回しなど軽く体を温める</span></div></td></tr>${STR_CATS.map(([k,l])=>{const c=st[k];return `<tr class="rep"><td class="tm">${c.sets}<span class="tiny">セット</span></td><td><div class="mi"><span>${esc(STR[k][c.lv-1])}</span><span class="tiny">${l}・段階${c.lv}・${strDose(k,c.lv)}</span></div></td></tr>`}).join("")}<tr><td class="tm">5分</td><td><div class="mi"><span>ストレッチ</span><span class="tiny">使った筋肉をゆっくり伸ばす</span></div></td></tr></tbody><tfoot><tr><td colspan="2">上から順に。セットの間は60〜90秒休む。あと2〜3回できる余力で止める</td></tr></tfoot></table></div>`}
+function strengthHTML(p){const l=ntcLv(p),x=NTC[l-1];return `<div class="menu"><header><span>NTC・次の来店までに</span><span>段階${l}</span></header><table><tbody><tr><td class="tm">種類</td><td><div class="mi"><span>${esc(x.t)}</span></div></td></tr><tr><td class="tm">時間</td><td><div class="mi"><span>${x.min}分</span></div></td></tr><tr><td class="tm">強度</td><td><div class="mi"><span>${x.lv}</span></div></td></tr><tr><td class="tm">回数</td><td><div class="mi"><span>週${x.n}回・自宅かスタジオで</span></div></td></tr></tbody><tfoot><tr><td colspan="2" style="text-align:left;font-weight:500">NTCアプリで「種類・時間・強度」を絞り込み、好きなものを1つ選んでください。</td></tr></tfoot></table></div>`}
 function menuDiff(prev,cur){if(!prev||!cur)return"";for(let i=0;i<Math.min(prev.segments.length,cur.segments.length);i++){const a=prev.segments[i],b=cur.segments[i];
  if(a.action!==b.action||a.min!==b.min)return"構成が変わりました";
  if(a.pace[0]!==b.pace[0]||a.pace[1]!==b.pace[1])return `${b.action}：${f1(a.pace[0])}〜${f1(a.pace[1])} → ${f1(b.pace[0])}〜${f1(b.pace[1])}km/h`;
@@ -548,8 +539,8 @@ function renderCustomer(){const ga=gapAdjust(members[$("who").value]||{});const 
  else st.innerHTML="";
  [...kt.children].forEach((c,i)=>c.setAttribute("aria-pressed",(i===0)===(kind==="walk")?"true":"false"));
  if(kind==="walk"){$("menuBody").innerHTML=p.menu?menuHTML(p.menu.no,applyPrefs(p.menu,p)):"";$("prefs").hidden=!p.menu;[["pWarm",p.noWarm],["pCool",p.noCool]].forEach(([id,off])=>[...$(id).children].forEach(c=>c.setAttribute("aria-pressed",(c.dataset.v==="off")===!!off?"true":"false")));[...$("pBreak").children].forEach(c=>c.setAttribute("aria-pressed",Number(c.dataset.v)===(p.breaks||0)?"true":"false"));const d=ga.note||menuDiff(p.prevMenu,p.menu);$("diff").innerHTML=d?`<div class="diff"><span>${ga.note?"お知らせ":"前回から"}</span><b style="font-weight:700">${esc(d)}</b></div>`:""}
- else{$("prefs").hidden=true;$("menuBody").innerHTML=strengthHTML(p)+`<p class="tiny">種目は試案です。息を止めずに、フォームが崩れたらその種目は終える。</p>`;$("diff").innerHTML=""}
- $("machineField").hidden=kind!=="walk";$("doneField").hidden=kind!=="walk";$("changeField").hidden=kind!=="walk";$("strField").hidden=kind==="walk";$("kmField").hidden=kind!=="walk";$("formTitle").textContent=kind==="walk"?"終わったら報告（歩く）":"終わったら報告（筋トレ）";
+ else{$("prefs").hidden=true;$("menuBody").innerHTML=strengthHTML(p)+`<p class="tiny">NTC（ナイキ トレーニング クラブ）は無料アプリです。痛みが出たら中止してください。</p>`;$("diff").innerHTML=""}
+ $("machineField").hidden=kind!=="walk";$("doneField").hidden=kind!=="walk";$("changeField").hidden=kind!=="walk";$("strField").hidden=kind==="walk";$("kmField").hidden=kind!=="walk";$("rpeField").hidden=kind!=="walk";$("nextField").hidden=kind!=="walk";$("formTitle").textContent=kind==="walk"?"終わったら報告（歩く）":"NTCの報告";
  const tg=p.target||{};$("goalDate").textContent=tg.date?tg.date.replace(/-/g,"/")+"まで":"";
  $("goalLines").innerHTML=goalBlock(p,"weight","体重","kg")+goalBlock(p,"waist","ウエスト","cm");
  const bl=badgeList(p);$("badgeCount").textContent=`${bl.filter(b=>b[1]).length}/${bl.length}`;
@@ -616,21 +607,18 @@ async function aiMenu(p,input,cls){if(!sample)return null;
 
 async function save(id){renderAll();if(!db||!canWrite)return;try{await db.doc("members/"+id).set(members[id])}catch(e){if(e&&e.code==="invalid_argument"){canWrite=false;$("conn").textContent="閲覧のみのため、入力は保存されません（この画面の中だけで動きます）。"}}}
 
-$("send").onclick=async()=>{const names={machine:"マシン",done:"最後までできたか",change:"途中の変更",rpe:"きつさ",pain:"痛みや体調の変化"};const need=kind==="walk"?Object.keys(names):["rpe","pain"];
+$("send").onclick=async()=>{const names={machine:"マシン",done:"最後までできたか",change:"途中の変更",rpe:"きつさ",pain:"痛みや体調の変化"};const need=kind==="walk"?Object.keys(names):["pain"];if(kind!=="walk"&&!nres){$("err").textContent="未入力：NTCはできましたか";$("err").hidden=false;return}
  const miss=need.filter(k=>state[k]===null);if(miss.length){$("err").textContent="未入力："+miss.map(k=>names[k]).join("・");$("err").hidden=false;return}
  const kmv=$("km").value;const km=kmv===""?null:Number(kmv);if(km!==null&&!(km>0&&km<15)){$("err").textContent="距離は0〜15kmの数字で入れてください";$("err").hidden=false;return}
  const id=$("who").value;const ga=gapAdjust(clone(members[id]));const p=ga.p;const input={machine:state.machine,done:state.done,change:state.change,rpe:state.rpe,pain:state.pain,comment:$("comment").value.trim(),next:state.next||null,kind};
  const rec={date:today(),kind,...input,km:kind==="walk"?km:null};if(kind!=="walk")delete rec.machine;const out=$("result");
  let breakNote="";if(kind==="walk"&&!p.breaks&&/休憩|休み|休ん|止ま|座っ|座り/.test(input.comment)){p.breaks=1;breakNote=`<div class="okbox">ひとことを受けて、次回から途中に休憩を1回（2分）入れました。メニューの下で回数を変えられます。</div>`}
  const painNote=input.pain==="あり"?`<div class="stop">痛みや体調の変化が続くときは、無理をせずお休みしてください。次回のメニューは少し軽くしています。</div>`:"";
- if(kind==="strength"){const st=clone(strInit(p));const ch=[];const fast=(p.paceMode||"normal")==="fast"||input.next==="もう少しきつく";
-  STR_CATS.forEach(([k,l])=>{const c=st[k];let r=sres[k];if(input.next==="少し楽に"&&r!=="きつい")r="きつい";
-   if(r==="きつい"){c.streak=0;const d=strDown(c);if(d)ch.push(`${l}：${d}`)}
-   else if(r==="楽"&&input.pain!=="あり"){c.streak++;if(c.streak>=(fast?1:2)){c.streak=0;const u=strUp(c);if(u)ch.push(`${l}：${u}`)}}
-   else c.streak=0});
-  p.str=st;p.strengthCount+=1;p.history=[...(p.history||[]),{...rec,done:100,change:"なし",str:{...sres},result:ch.length?"調整":"維持"}].slice(-60);members[id]=p;
-  STR_CATS.forEach(([k])=>sres[k]="ちょうど");buildStrRows();
-  out.innerHTML=painNote+`<div class="okbox">記録しました。${ch.length?"次回の変更："+esc(ch.join("／")):"次回も同じ内容です（楽が2回続いたら上がります）。"}</div>`;renderCustomer();await save(id);return}
+ if(kind==="strength"){const a=ntcLv(p);let l=a;const r=input.pain==="あり"?"hard":nres;p.miss=p.miss||0;
+  if(r==="hard"){p.miss=0;if(l>1)l--}else if(r==="no"){p.miss++;if(p.miss>=2&&l>1){l--;p.miss=0}}else{p.miss=0;if(r==="easy"&&l<5)l++}
+  p.nl=l;if(r!=="no")p.strengthCount+=1;p.history=[...(p.history||[]),{...rec,done:r==="no"?0:100,change:"なし",ntc:r,result:l!==a?"調整":"維持"}].slice(-60);members[id]=p;
+  nres=null;buildStrRows();
+  out.innerHTML=painNote+`<div class="okbox">記録しました。${l!==a?"次回のNTC："+esc(ntcName(l)):"次回のNTCも同じ内容です。"}</div>`;renderCustomer();await save(id);return}
  const btn=$("send");btn.disabled=true;out.innerHTML=`<p class="tiny">次回メニューを作成しています…（数十秒かかることがあります）</p>`;
  const count=p.count+1;if(count>=p.goal){p.count=count;p.status="done";p.prevMenu=p.menu;p.menu=null;p.history=[...(p.history||[]),{...rec,result:"終了"}].slice(-60);members[id]=p;out.innerHTML=`<div class="okbox">予定の回数が終わりました。お疲れさまでした。</div>`;btn.disabled=false;await save(id);return}
  if(!input.next&&input.comment&&input.pain!=="あり"){const wsh=await aiWish(input.comment);if(wsh&&wsh!=="このまま")input.next=wsh}
@@ -655,8 +643,8 @@ function flags(p){const t=today(),lv=lastVisit(p),gap=lv?daysBetween(lv,t):999,l
  if(p.status!=="done"&&(!lm.date||daysBetween(lm.date,t)>=14))out.push(["測定なし","p-w","体重・ウエストの入力が2週間以上ありません。"]);
  const up=[];if(hitWeeks(p)>=4)up.push(`週${p.weekly}回を${hitWeeks(p)}週続けて達成`);if(streak(p)>=8)up.push(`${streak(p)}週連続`);if(reached(p))up.push("目標に到達");if(p.status==="done")up.push("予定回数が終了");
  if(up.length&&p.plan!=="プレミアム")out.push(["案内のタイミング","p-a",`${up.join("・")}。ダブル枠（プレミアム）とスタジオを案内する時期。`]);
- else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。スタジオの筋トレを案内する時期。`]);
- if(!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["筋トレ未実施","p-b","スタジオの筋トレ（当初は無料）をまだ使っていません。"]);
+ else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。スタジオのセルフトレーニング（NTC）を案内する時期。`]);
+ if(!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["NTC報告なし","p-b","NTCの報告がまだありません。来店時にアプリの入れ方と今のメニューを案内する。"]);
  return out}
 function score(p){const f=flags(p).map(x=>x[1]);return (f.includes("p-d")?0:f.includes("p-w")?1:f.includes("p-a")?2:3)*1000+rate(p)}
 function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastVisit(p),last=(p.history||[]).slice(-1)[0];
@@ -668,7 +656,7 @@ function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastV
   <div class="rate"><span>来店率</span><div class="bar"><i style="width:${r}%"></i></div><b class="num" style="color:var(--ink)">${r}%</b></div>
   ${fl.length?`<p class="say">${esc(fl[0][2])}</p>`:`<p class="say">順調です。</p>`}
   <p class="tiny">${esc(prog.join("・"))}</p>
-  ${last?`<p class="tiny">直近の報告 ${md(last.date)}：${last.kind==="strength"?"筋トレ":"歩く"} 達成度${last.done}%・きつさ${last.rpe}${last.km?`・${last.km}km`:""}${last.comment?`・「${esc(last.comment)}」`:""}</p>`:""}
+  ${last?`<p class="tiny">直近の報告 ${md(last.date)}：${last.kind==="strength"?`NTC ${{no:"できなかった",easy:"やった・楽",ok:"やった・ちょうど",hard:"やった・きつい"}[last.ntc]||""}`:`歩く 達成度${last.done}%・きつさ${last.rpe}`}${last.km?`・${last.km}km`:""}${last.comment?`・「${esc(last.comment)}」`:""}</p>`:""}
   <div class="acts"><button class="ghost" data-edit="${i}">目標を見直す</button></div>
  </article>`}
 function renderStaff(){const ids=Object.keys(members).sort((a,b)=>score(members[a])-score(members[b]));const t=today();
