@@ -209,7 +209,7 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
   <div class="top">
     <div>
       <p class="brandmark">AIRNIX</p>
-      <h1>個別メニュー（試作 第14版）</h1>
+      <h1>個別メニュー（試作 第15版）</h1>
       <p class="sub">お客様は携帯で「今週の来店・今日のメニュー・報告」、スタッフは週1回まとめを見るだけ。画面の方はすべて見本です。</p>
     </div>
     <div class="seg" role="tablist" id="viewTabs"><button type="button" data-view="cust">お客様の画面</button><button type="button" data-view="staff">スタッフの画面</button></div>
@@ -305,7 +305,7 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
         <p>上げるのは楽にできたとき（きつさ4以下・最後まで・変更なし。人ごとに「じっくり／ふつう／積極的」）か、本人が「もう少しきつく」を選んだとき。きつさ8以上・達成80%未満・「少し楽に」のときは1つ戻します。</p>
         <p>前回から14日あいたら1つ軽く、28日あいたら最初の段階から。速さは機種で違うため目安です。</p>
         <p>痛み・体調の変化が「あり」のときは、次回を1つ軽くします。</p>
-        <p>筋トレ・ストレッチ・ヨガはNTC（ナイキ トレーニング クラブ・無料アプリ）のプログラムに任せます。AIRNIXは目的別の順番でプログラムを指定し（基本：基礎からはじめるフィットネス → トータル ストレングス ビルダー入門 → タラと一緒にHIIT＆筋力）、来店ごとに「今週何回できたか」を聞きます。終了時に実施率70%以上なら次へ、それ以外はもう1回。2週続けて0回なら短いプログラム（毎日の運動チャレンジ）に切り替えます。</p>
+        <p>NTC（ナイキ トレーニング クラブ）はスタジオで使うアプリのため、スタジオ開始に合わせて追加します。それまではトレッドミルのメニューと食事（あすけん）だけです。</p>
         <p>表示するのは本人の記録の数字だけで、効果をお約束するものではありません。</p>
       </div>
     </aside>
@@ -369,7 +369,7 @@ input,select,textarea{border-radius:10px;background:var(--soft);border-color:var
       <p><span class="pill p-d">21日来店なし</span><span class="pill p-w">10日来店なし</span> 最終来店からの日数</p>
       <p><span class="pill p-w">連続が途切れた</span> 先週の来店がなく、連続週が0に戻った</p>
       <p><span class="pill p-w">測定なし</span> 本人の体重・ウエストの入力が14日以上ない</p>
-      <p><span class="pill p-a">案内のタイミング</span> 週の来店目標を4週続けて達成／8週連続／目標に到達／終了 → 効果レポート（直近30日）を見せて案内。ライト・メイン→プレミアム（9,800円・1日2回）、プレミアム→スタジオ。案内したら30日は出さない</p>
+      <p><span class="pill p-a">案内のタイミング</span> 週の来店目標を4週続けて達成／8週連続／目標に到達／終了 → 効果レポート（直近30日）を見せて案内。ライト・メイン→プレミアム（9,800円・1日2回）。プレミアム→スタジオはスタジオ開始後。案内したら30日は出さない</p>
       <p>来店率＝直近4週の来店回数 ÷ 週の来店目標×4。低い人が上に並びます。</p>
     </div>
   </section>
@@ -475,7 +475,7 @@ let nres={c:null,f:null};function buildStrRows(){const p=members[$("who").value]
 buildStrRows();
 preset();
 $("openReport").onclick=()=>{const b=$("reportBody");b.hidden=!b.hidden;$("openReport").textContent=b.hidden?"終わったら報告する（1分）":"閉じる";$("openReport").className=b.hidden?"primary":"ghost"};
-const kt=$("kindTabs");[["walk","歩く（店内）"],["strength","NTC"]].forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.onclick=()=>{kind=k;$("result").innerHTML="";renderCustomer()};kt.appendChild(b)});
+const kt=$("kindTabs");kt.hidden=!NTC_ON;[["walk","歩く（店内）"],["strength","NTC"]].forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.textContent=l;b.onclick=()=>{kind=k;$("result").innerHTML="";renderCustomer()};kt.appendChild(b)});
 
 const LVL={"休憩":0,"ウォーキング":1,"早歩き":2,"きつめの早歩き":3,"ランニング":4};
 const sameSeg=(a,b)=>a.min===b.min&&a.action===b.action&&a.pace[0]===b.pace[0]&&a.pace[1]===b.pace[1]&&a.resistance===b.resistance;
@@ -672,19 +672,21 @@ function flags(p){const t=today(),lv=lastVisit(p),gap=lv?daysBetween(lv,t):999,l
  if(snooze||gap>=10)up.length=0;
  if(up.length&&p.plan!=="プレミアム")out.push(["案内のタイミング","p-a",`${up.join("・")}。効果レポートを見せて、プレミアム（1日2回）を案内する。`]);
  else if(up.length)out.push(["案内のタイミング","p-a",`${up.join("・")}。効果レポートを見せて、スタジオのセルフトレーニングを案内する。`]);
- if(!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["NTC報告なし","p-b","NTCの報告がまだありません。来店時にアプリの入れ方と今のメニューを案内する。"]);
+ if(NTC_ON&&!p.strengthCount&&p.count>=2&&p.status==="active")out.push(["NTC報告なし","p-b","NTCの報告がまだありません。来店時にアプリの入れ方と今のメニューを案内する。"]);
  return out}
 /* 案内（単価アップ）：料金は正本 airnix_store_rules.md 用賀キャンペーン（2026-04〜）。上位変更のみ可 */
 const UPSELL={
  "ライト":{to:"プレミアム（9,800円・1日2回）",say:"このペースで続けていらっしゃるので、1日2回使えるプレミアムにすると、トレッドミルとスタジオを同じ日に組めます。"},
  "メイン":{to:"プレミアム（9,800円・1日2回）",say:"結果が数字に出てきているので、1日2回使えるプレミアムにすると、トレッドミルのあとにスタジオでNTCまで続けてできます。"},
  "プレミアム":{to:"スタジオのセルフトレーニング（料金は未定）",say:"NTCのメニューを、スタジオで集中してやってみませんか。仕切られたスペースで、画面を見ながらできます。"}};
+/* スタジオ開始前（NTC_ON=false）：スタジオ・NTCに触れない。プレミアムの方は案内なし */
+if(!NTC_ON){delete UPSELL["プレミアム"];UPSELL["ライト"].say=UPSELL["メイン"].say="結果が数字に出てきているので、1日2回使えるプレミアムにすると、今のペースをさらに上げられます。"}
 function monthReport(p){const from=addDays(today(),-30);const h=(p.history||[]).filter(x=>x.date>=from);
  const visits=new Set(h.map(x=>x.date)).size;const ntc=h.filter(x=>x.kind==="strength").reduce((a,x)=>a+(x.ntc||0),0);
  const km=Math.round(h.filter(x=>x.km).reduce((a,x)=>a+x.km,0)*10)/10;const m=(p.measurements||[]).filter(x=>x.date>=from),lm=lastMeas(p);
  const dw=m.length&&lm.weight!=null&&m[0].weight!=null?Math.round((lm.weight-m[0].weight)*10)/10:null;const dwa=m.length&&lm.waist!=null&&m[0].waist!=null?Math.round((lm.waist-m[0].waist)*10)/10:null;
  const sg=v=>v>0?"+"+v:String(v);
- return `来店${visits}回・NTC${ntc}回${km?`・歩いた距離${km}km`:""}${dw!=null?`・体重${sg(dw)}kg`:""}${dwa!=null?`・ウエスト${sg(dwa)}cm`:""}`}
+ return `来店${visits}回${NTC_ON?`・NTC${ntc}回`:""}${km?`・歩いた距離${km}km`:""}${dw!=null?`・体重${sg(dw)}kg`:""}${dwa!=null?`・ウエスト${sg(dwa)}cm`:""}`}
 function upsellHTML(i){const p=members[i];if(!flags(p).some(f=>f[0]==="案内のタイミング"))return"";const u=UPSELL[p.plan];if(!u)return"";
  return `<div class="say"><p class="tiny" style="font-weight:700">直近30日の効果レポート</p><p>${esc(monthReport(p))}</p>
  <p class="tiny" style="color:#bdbdbd;margin-top:6px">案内：${esc(u.to)}</p><p>「${esc(u.say)}」</p></div>
@@ -699,25 +701,25 @@ function repData(p){const t=today(),from=addDays(t,-29);const h=(p.history||[]).
 function repHTML(p){const r=repData(p),sg=v=>v==null?"-":(v>0?"+":"")+v;const tg=p.target||{};
  const tile=(v,u,l)=>`<div style="background:#f5f5f5;border-radius:14px;padding:12px"><b style="font-size:26px;font-weight:900">${v}</b><span class="tiny"> ${u}</span><p class="tiny">${l}</p></div>`;
  const good=[];if(r.visits>=p.weekly*4)good.push(`週${p.weekly}回のペースで通えました`);if(r.dwa!=null&&r.dwa<0)good.push(`ウエストが${-r.dwa}cm細くなりました`);if(r.dw!=null&&r.dw<0)good.push(`体重が${-r.dw}kg減りました`);if(r.ntc>0)good.push(`来店以外の日にNTCを${r.ntc}回続けました`);
- const next=r.visits<p.weekly*4?`来月は週${p.weekly}回のペースを目指しましょう。`:r.asken<12?"来月は、あすけんで食事を記録する日を週3日以上に増やしてみましょう。":`この調子で、${ntcProg(r.ntcNow).name}を続けていきましょう。`;
+ const next=r.visits<p.weekly*4?`来月は週${p.weekly}回のペースを目指しましょう。`:r.asken<12?"来月は、あすけんで食事を記録する日を週3日以上に増やしてみましょう。":NTC_ON?`この調子で、${ntcProg(r.ntcNow).name}を続けていきましょう。`:"この調子で、今のペースを続けていきましょう。";
  return `<div class="rhero"></div><div style="display:flex;justify-content:space-between;align-items:center"><span style="letter-spacing:.3em;font-weight:900;font-size:12px">AIRNIX</span><button class="ghost" type="button" id="repClose">閉じる</button></div>
  <div><p class="tiny">${md(r.from)}〜${md(r.t)}の記録</p><h2 style="font-size:24px">${esc(p.name)}の効果レポート</h2></div>
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${tile(r.visits,"回","来店")}${tile(r.km||"-","km","トレッドミルで歩いた距離")}${tile(r.ntc,"回","NTC（自宅・スタジオ）")}${tile(r.asken,"日","あすけんで食事を記録")}</div>
+ <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${tile(r.visits,"回","来店")}${tile(r.km||"-","km","トレッドミルで歩いた距離")}${NTC_ON?tile(r.ntc,"回","NTC（自宅・スタジオ）"):tile(r.streak,"週","連続で来店")}${tile(r.asken,"日","あすけんで食事を記録")}</div>
  <div style="background:#111;color:#fff;border-radius:16px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
   <div><p class="tiny" style="color:#bdbdbd">体重（30日の変化）</p><b style="font-size:24px;color:#d7ff3a">${sg(r.dw)}</b><span> kg</span><p class="tiny" style="color:#bdbdbd">今 ${r.lm.weight??"-"}kg${tg.weight!=null?`／目標 ${tg.weight}kg`:""}</p></div>
   <div><p class="tiny" style="color:#bdbdbd">ウエスト（30日の変化）</p><b style="font-size:24px;color:#d7ff3a">${sg(r.dwa)}</b><span> cm</span><p class="tiny" style="color:#bdbdbd">今 ${r.lm.waist??"-"}cm${tg.waist!=null?`／目標 ${tg.waist}cm`:""}</p></div></div>
  <div><p class="tiny" style="font-weight:700">ウエストの推移（入会から）</p>${trend(p.measurements||[],"waist",tg.waist,"cm")}</div>
  ${good.length?`<div><p style="font-weight:900">今月できたこと</p><p style="font-size:14px">${good.map(esc).join("。")}。</p></div>`:""}
  <div><p style="font-weight:900">来月にむけて</p><p style="font-size:14px">${esc(next)}</p></div>
- <p class="tiny">${r.streak}週連続で来店中。NTCは「${esc(ntcProg(r.ntcNow).name)}」${r.ntcNow.week}週目です。</p>
+ ${NTC_ON?`<p class="tiny">${r.streak}週連続で来店中。NTCは「${esc(ntcProg(r.ntcNow).name)}」${r.ntcNow.week}週目です。</p>`:""}
  <p class="tiny">表示しているのはご本人の記録の数字で、効果をお約束するものではありません。</p>`}
 function openRep(id){$("repBody").innerHTML=repHTML(members[id]);$("rep").hidden=false;$("repClose").onclick=()=>$("rep").hidden=true}
 function score(p){const f=flags(p).map(x=>x[1]);return (f.includes("p-d")?0:f.includes("p-w")?1:f.includes("p-a")?2:3)*1000+rate(p)}
 function cardHTML(i){const p=members[i],t=today(),fl=flags(p),r=rate(p),lv=lastVisit(p),last=(p.history||[]).slice(-1)[0];
  const lm=lastMeas(p),tg=p.target||{};const prog=[];if(tg.weight!=null)prog.push(`体重 ${p.start.weight}→${lm.weight??"-"}（目標${tg.weight}）`);if(tg.waist!=null)prog.push(`ウエスト ${p.start.waist}→${lm.waist??"-"}（目標${tg.waist}）`);
  return `<article class="mcard ${fl.some(f=>f[1]==="p-d")?"alert":""}">
-  <div class="mhead"><div><b>${esc(p.name)}</b><p class="tiny">${esc(p.plan)}・週${p.weekly}回目標・${streak(p)}週連続・最終来店 ${md(lv)}</p><p class="tiny">NTC：${esc(ntcProg(ntcOf(p)).name)} ${ntcOf(p).week}週目／全${ntcProg(ntcOf(p)).weeks}週</p>
-  <div class="chips" style="margin-top:6px">${Object.entries(NTC_TRACKS).map(([k,tr])=>`<button type="button" data-track="${i}" data-k="${k}" aria-pressed="${ntcOf(p).track===k}" style="min-height:30px;padding:2px 10px;font-size:12.5px">${tr.label}</button>`).join("")}</div></div>
+  <div class="mhead"><div><b>${esc(p.name)}</b><p class="tiny">${esc(p.plan)}・週${p.weekly}回目標・${streak(p)}週連続・最終来店 ${md(lv)}</p>${NTC_ON?`<p class="tiny">NTC：${esc(ntcProg(ntcOf(p)).name)} ${ntcOf(p).week}週目／全${ntcProg(ntcOf(p)).weeks}週</p>
+  <div class="chips" style="margin-top:6px">${Object.entries(NTC_TRACKS).map(([k,tr])=>`<button type="button" data-track="${i}" data-k="${k}" aria-pressed="${ntcOf(p).track===k}" style="min-height:30px;padding:2px 10px;font-size:12.5px">${tr.label}</button>`).join("")}</div>`:""}</div>
   </div>
   <div class="pills">${fl.length?fl.map(f=>`<span class="pill ${f[1]}">${esc(f[0])}</span>`).join(""):`<span class="pill p-o">順調</span>`}</div>
   <div class="rate"><span>来店率</span><div class="bar"><i style="width:${r}%"></i></div><b class="num" style="color:var(--ink)">${r}%</b></div>

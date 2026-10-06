@@ -1,4 +1,6 @@
 // NTC（ナイキ トレーニング クラブ）のプログラム。2026-10-05 ジェイさんのiPhoneで確認した内容
+// 2026-10-06 宮内さん：NTCはスタジオ利用時のアプリ。最初はAirNixアプリ（歩く）だけにする → スタジオ開始で true にする
+const NTC_ON = false;
 const NTC_URL = "https://niketrainingclub.sng.link/Ara19/x5kn/";
 const NTC_PROGRAMS = {
   kiso:    { name: "基礎からはじめるフィットネス", weeks: 4, per: 3, lv: "初級", min: "5〜30分", url: "r_a919bb118a" },
