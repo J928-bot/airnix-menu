@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#161c38">
+<meta name="robots" content="noindex">
+<title>AIRNIX 個別メニュー スタッフ</title>
+<link rel="stylesheet" href="/app.css">
+<script src="/common.js" defer></script>
+<script src="/staff.js" defer></script>
+</head>
+<body>
+<div class="splash" id="vLogin" hidden>
+  <img class="logo" src="/logo.png" alt="AIRNIX">
+  <form class="card" id="loginForm">
+    <h1 class="h2">スタッフの画面</h1>
+    <label class="field"><span>お名前</span><input id="sName" autocomplete="nickname" maxlength="20" required placeholder="例：岩村"></label>
+    <label class="field"><span>合言葉</span><input id="sPass" type="password" autocomplete="current-password" required></label>
+    <p class="err" id="loginErr" role="alert" hidden></p>
+    <button class="btn" type="submit" id="sLoginBtn">ログイン</button>
+  </form>
+</div>
+
+<div id="vMain" hidden>
+<div class="wrap" style="max-width:760px">
+  <div class="pad" style="padding-top:calc(22px + env(safe-area-inset-top));display:flex;justify-content:space-between;align-items:center;gap:12px">
+    <img class="logo" src="/logo.png" alt="AIRNIX">
+    <span class="tiny" style="text-align:right"><span id="who"></span>　<button class="link" type="button" id="logout">ログアウト</button></span>
+  </div>
+  <div class="pad" style="padding-top:18px;display:flex;flex-direction:column;gap:6px">
+    <h1 class="h2">個別メニュー スタッフの画面</h1>
+    <p class="sub">上から順に対応してください。声かけの内容は、カードの文章をそのまま使えます。</p>
+  </div>
+  <div class="pad" style="padding-top:16px"><div class="sum" id="sum"></div></div>
+  <div class="pad" style="padding-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn small" type="button" id="newBtn">＋ 新しく登録</button>
+    <div class="chips" id="tab"></div>
+  </div>
+  <p class="pad err" id="err" role="alert" hidden style="padding-top:12px"></p>
+  <div class="pad" id="list" aria-live="polite" style="padding-top:16px;display:flex;flex-direction:column;gap:14px"></div>
+</div>
+</div>
+<div class="overlay" id="overlay" hidden><div></div></div>
+</body>
+</html>

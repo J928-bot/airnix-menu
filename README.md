@@ -1,8 +1,12 @@
 # AIRNIX 個別メニュー（試作・未完成）
 
+版の一覧：https://j928-bot.github.io/airnix-menu/versions/
+
 用賀店の個別メニューのシステム化。お客様が携帯で報告 → 次回の30分メニューが出る → スタッフは声掛けリストで対応。
 
 ## 中身
+- `app/` … 最新のWeb版（AirNixアプリからリンクで開く）。公開手順は `app/README.md`
+- `app-demo/` … Web版のデモ（見本データのみ）：https://j928-bot.github.io/airnix-menu/app-demo/
 - `prototype/index.html` … 試作の画面（見本データのみ）。ダウンロードしてブラウザで開くと動きます
 - `liff-app/` … LINEミニアプリ版のコード（未公開）。公開手順は `liff-app/README.md`
 - `docs/guide.pdf` … 機能説明PDF／`docs/screen.png` … スマホ表示イメージ

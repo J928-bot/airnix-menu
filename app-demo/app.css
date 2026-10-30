@@ -1,0 +1,150 @@
+/* AirNixアプリに合わせた見た目：紺のグラデーション背景・左上の青緑の光・青い線のガラス風カード・青い丸ボタン・オレンジのタグ */
+:root{
+  --bg:#161c38;--bg2:#24306c;--ink:#fff;--sub:#a3abc8;--line:rgba(255,255,255,.14);
+  --panel:rgba(62,72,112,.42);--tile:rgba(150,160,205,.28);--edge:rgba(96,126,255,.65);
+  --blue:#3d5fe6;--blue2:#8ea3f2;--teal:#5fe3b8;--orange:#d9822b;--danger:#ff7a6b;--warn:#f2b866;
+  --walk:#6b74a0;color-scheme:dark
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;font-size:16px;line-height:1.65;-webkit-text-size-adjust:100%;
+  background:radial-gradient(120% 60% at 100% 100%,rgba(80,110,220,.35),transparent 60%),radial-gradient(90% 50% at 0% 0%,rgba(40,60,120,.6),transparent 70%),linear-gradient(180deg,#1b2140 0%,var(--bg) 40%,var(--bg2) 100%);background-attachment:fixed}
+.wrap{max-width:520px;margin:0 auto;padding:0 0 calc(64px + env(safe-area-inset-bottom))}
+html,body{overflow-x:hidden}
+body.noscroll{overflow:hidden}
+img,svg{max-width:100%}
+.pad{padding:0 20px}
+h1,h2,h3{font-weight:600;margin:0;letter-spacing:.02em}
+h2,.h2{font-size:24px}h3{font-size:19px}
+p{margin:0}
+a{color:var(--blue2)}
+.sub{color:var(--sub);font-size:14px}
+.tiny{color:var(--sub);font-size:12.5px}
+.logo{display:block;height:22px;width:auto}
+
+/* 上の写真（右下だけ大きく丸める） */
+.hero{position:relative;height:300px;background:#000 center 35%/cover;border-bottom-right-radius:28px;overflow:hidden;border-right:1.5px solid var(--edge);border-bottom:1.5px solid var(--edge)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,28,56,.6),rgba(22,28,56,.35) 40%,rgba(22,28,56,.88))}
+.hero>*{position:absolute;z-index:1}
+.hero .logo{top:calc(18px + env(safe-area-inset-top));left:20px}
+.hero .who{left:20px;right:20px;bottom:20px}
+.hero .who h1{font-size:30px;line-height:1.25;overflow-wrap:anywhere}
+.hero .who .k{font-size:13px;color:#dfe3f5}
+
+/* 写真に重なる大きなパネル（左上が青緑に光る） */
+.sheet{position:relative;margin-top:-1px;border-top-left-radius:28px;border-top:1.5px solid var(--edge);border-left:1.5px solid var(--edge);
+  background:radial-gradient(70% 40% at 0% 0%,rgba(95,227,184,.35),transparent 70%),linear-gradient(180deg,rgba(60,90,160,.35),rgba(30,38,80,.2));padding:26px 0 8px}
+.sec{padding:22px 20px;display:flex;flex-direction:column;gap:14px}
+.sec+.sec{border-top:1px solid var(--line)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+
+/* ガラス風カード */
+.card{background:var(--panel);border:1.5px solid var(--edge);border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:12px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.card.alert{border-color:var(--danger)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tiles>div{background:var(--tile);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;min-height:84px}
+.tiles .l{color:#dfe3f5;font-size:13px}
+.tiles b{font-size:26px;font-weight:600;margin-top:auto;text-align:right}
+.tiles b small{font-size:13px;font-weight:400;color:var(--sub);margin-left:3px}
+
+/* 青い帯（「• スケジュール (0)」の形） */
+.band{display:flex;align-items:center;gap:10px;background:var(--blue);border-radius:999px;padding:10px 20px;font-weight:600;font-size:17px}
+.band::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff;flex:none}
+.band.soft{background:var(--blue2);color:#fff}
+
+/* 一覧の行（ラベル左・値右・下線） */
+.kv{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.kv span:first-child{color:var(--sub)}
+.kv span:last-child{text-align:right;font-weight:500}
+
+/* メニュー */
+.bar{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--tile)}
+.bar span{display:block;height:100%;border-right:1px solid var(--bg)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--sub)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.row:last-child{border-bottom:0}
+.row .t{font-weight:600}.row .p{color:var(--sub);font-size:13px}
+.tag{display:inline-block;align-self:flex-start;background:var(--orange);color:#fff;font-weight:600;border-radius:999px;padding:6px 16px;font-size:14px}
+
+/* ボタン */
+.btn{display:block;width:100%;border:0;border-radius:999px;padding:16px;font:inherit;font-size:17px;font-weight:600;background:var(--blue);color:#fff;cursor:pointer;text-align:center;text-decoration:none}
+.btn.line{background:rgba(255,255,255,.06);border:1.5px solid var(--edge);font-size:15px;padding:12px}
+.btn.white{background:#fff;color:#2b3a8f}
+.btn.small{display:inline-block;width:auto;padding:8px 16px;font-size:14px}
+.btn.danger{background:transparent;border:1.5px solid var(--danger);color:var(--danger)}
+.btn:disabled{opacity:.45;cursor:default}
+.link{background:none;border:0;color:var(--sub);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:4px}
+
+/* 選択ボタン */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{font:inherit;font-size:15px;border:1.5px solid var(--edge);background:rgba(255,255,255,.04);color:#fff;border-radius:999px;padding:7px 16px;min-height:42px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);font-weight:600}
+
+/* 入力 */
+.field{display:flex;flex-direction:column;gap:8px}
+.field>span{font-weight:600;font-size:15px}
+input,select{font:inherit;color:#fff;background:rgba(150,160,205,.18);border:1.5px solid var(--line);border-radius:14px;padding:11px 12px;width:100%}
+input:focus,select:focus{outline:none;border-color:var(--blue2);box-shadow:0 0 0 3px rgba(142,163,242,.35)}
+/* キーボード操作のときの枠 */
+:focus-visible{outline:3px solid var(--blue2);outline-offset:2px}
+input:focus-visible,select:focus-visible{outline:none}
+section:focus{outline:none}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#a3abc8 50%),linear-gradient(135deg,#a3abc8 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:30px}
+select option{color:#111}
+input.code{font-size:26px;letter-spacing:.18em;text-align:center;text-transform:uppercase;font-weight:600}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.check input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--blue)}
+
+/* お知らせ */
+.box{background:var(--tile);border-radius:16px;padding:12px 14px;font-size:14.5px}
+.box.d{background:rgba(255,122,107,.18);border:1px solid rgba(255,122,107,.5)}
+.box.w{background:rgba(242,184,102,.16);border:1px solid rgba(242,184,102,.45)}
+.box.ok{background:rgba(95,227,184,.14);border:1px solid rgba(95,227,184,.45)}
+.err{color:var(--danger);font-size:14px}
+.ntch{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#dfe3f5}
+.ntclogo{background:#fff;color:#111;font-weight:700;font-size:12px;border-radius:4px;padding:2px 7px}
+
+/* 起動・ログイン画面 */
+/* 写真の上に濃い紺を重ねる（AirNixアプリの起動画面と同じ考え方） */
+.splash{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:28px;padding:calc(40px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+  background:radial-gradient(80% 30% at 50% 100%,rgba(95,227,184,.22),transparent 70%),linear-gradient(180deg,rgba(22,28,56,.86),rgba(22,28,56,.95)),url(hero_run.jpg) center/cover}
+.splash .logo{height:40px;filter:drop-shadow(0 0 12px rgba(160,180,255,.6))}
+.splash .card{width:100%;max-width:400px}
+
+.overlay{position:fixed;inset:0;background:rgba(5,8,25,.78);z-index:50;overflow:auto;overscroll-behavior:contain;padding:calc(16px + env(safe-area-inset-top)) 12px calc(16px + env(safe-area-inset-bottom))}
+.overlay>div:focus{outline:none}
+.overlay>div{max-width:440px;margin:0 auto;background:linear-gradient(180deg,#1d2550,#161c38);border:1.5px solid var(--edge);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:0 0 20px}
+[hidden]{display:none!important}
+.foot{display:flex;justify-content:center;gap:18px;padding:28px 20px 0}
+
+/* スタッフ */
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sum div{background:var(--tile);border-radius:16px;padding:10px 12px}.sum b{display:block;font-size:24px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.flag{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;background:var(--tile)}
+.flag.d{background:rgba(255,122,107,.25);color:#ffb3a8}.flag.w{background:rgba(242,184,102,.22);color:var(--warn)}.flag.a{background:var(--orange);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+details>summary{cursor:pointer;color:var(--blue2);font-size:14px;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+.codebig{font-size:34px;font-weight:700;letter-spacing:.14em;text-align:center;padding:8px 0}
+.tabs{display:flex;gap:8px}
+@media (max-width:420px){.sum{grid-template-columns:repeat(2,1fr)}}
+
+/* メニューを選ぶカード */
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pick{font:inherit;color:#fff;text-align:left;display:flex;flex-direction:column;gap:2px;min-height:112px;padding:14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--edge);background:radial-gradient(80% 60% at 0% 0%,rgba(95,227,184,.28),transparent 70%),var(--panel)}
+.pick .k{font-size:12px;color:#dfe3f5}.pick b{font-size:20px;font-weight:600;margin-top:auto}.pick .tiny{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* 読み込み中・圏外 */
+.spin{width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.offline{position:sticky;top:0;z-index:60;background:#b4472f;color:#fff;text-align:center;font-size:14px;padding:8px 12px calc(8px);padding-top:calc(8px + env(safe-area-inset-top))}
+.btn[aria-busy="true"]{opacity:.7}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+details>summary{display:flex;align-items:center;min-height:44px}
+details>summary::before{content:"＋";margin-right:6px}
+details[open]>summary::before{content:"－"}
+.two>.field{justify-content:flex-end}

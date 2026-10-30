@@ -1,0 +1,116 @@
+<meta name="theme-color" content="#161c38">
+<meta name="robots" content="noindex">
+<title>AIRNIX 個別メニュー デモ</title>
+<link rel="stylesheet" href="app.css">
+<script src="common.js" defer></script>
+<script src="demo.js" defer></script>
+<script src="app.js" defer></script>
+<!-- 読み込み中 -->
+<div class="splash" id="vLoading" aria-busy="true"><img class="logo" src="logo.png" alt="AIRNIX"><div class="spin" aria-hidden="true"></div><p class="sub" id="loadMsg" role="status">読み込み中…</p><button class="btn line small" type="button" id="retry" hidden>もう一度読み込む</button></div>
+
+<!-- ログイン（マイコード） -->
+<div class="splash" id="vLogin" hidden>
+  <img class="logo" src="logo.png" alt="AIRNIX">
+  <form class="card" id="loginForm" autocomplete="off" novalidate>
+    <h1 class="h2">個別メニュー</h1>
+    <p class="sub" id="codeHelp">スタッフからお渡しした「マイコード」（8文字）を入れてください。</p>
+    <input class="code" id="code" maxlength="9" inputmode="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="XXXX-XXXX" aria-label="マイコード" aria-describedby="codeHelp loginErr" enterkeyhint="go">
+    <p class="err" id="loginErr" role="alert" hidden></p>
+    <button class="btn" type="submit" id="loginBtn">はじめる</button>
+    <p class="tiny">マイコードが分からないときは、受付でお声がけください。</p>
+  </form>
+</div>
+
+<!-- 同意 -->
+<div class="splash" id="vConsent" hidden>
+  <img class="logo" src="logo.png" alt="AIRNIX">
+  <form class="card" id="consentForm">
+    <h1 class="h2" id="consentName"></h1>
+    <p style="font-size:15px">個別メニューでは、トレーニングの記録、体重・ウエスト、痛みや体調の変化の有無をお預かりし、メニューの調整とスタッフからのご案内に使います。</p>
+    <a href="privacy.html">プライバシーポリシーを読む</a>
+    <label class="check"><input type="checkbox" id="agree"><span>プライバシーポリシーを読み、内容に同意します</span></label>
+    <p class="err" id="consentErr" role="alert" hidden></p>
+    <button class="btn" type="submit" id="consentBtn">同意してはじめる</button>
+  </form>
+</div>
+
+<!-- メイン -->
+<div id="vMain" hidden>
+<div class="wrap">
+  <div class="hero" style="background-image:url(/hero_cust.jpg)">
+    <img class="logo" src="logo.png" alt="AIRNIX">
+    <div class="who"><p class="k">AIRNIX 用賀店　個別メニュー</p><h1 id="hName"></h1></div>
+  </div>
+
+  <div class="sheet">
+    <div class="pad" id="state"></div>
+
+    <section class="sec" aria-label="メニューを選ぶ">
+      <h2>メニューを選ぶ</h2>
+      <div class="picks">
+        <button class="pick" type="button" data-goto="secTm" id="pickTm"></button>
+        <button class="pick" type="button" data-goto="secNtc" id="pickNtc"></button>
+      </div>
+    </section>
+
+    <section class="sec">
+      <p class="band" id="weekBand"></p>
+      <p class="sub" id="streakMsg"></p>
+      <button class="btn line" type="button" id="openRep">今月の効果レポートを見る</button>
+    </section>
+
+    <section class="sec" id="secTm" tabindex="-1">
+      <div class="head"><h2>今日のメニュー</h2><span class="tag" id="stage"></span></div>
+      <div class="tiles">
+        <div><span class="l">時間</span><b>30<small>分</small></b></div>
+        <div><span class="l">マシン</span><b id="machineName"></b></div>
+      </div>
+      <p class="box" id="lastNote" hidden></p>
+      <div class="card" id="menu"></div>
+    </section>
+
+    <section class="sec" id="secNtc" tabindex="-1">
+      <h2>次の来店までに</h2>
+      <div class="card" id="ntcCard"></div>
+    </section>
+
+    <section class="sec" id="reportSec">
+      <h2>終わったら報告</h2>
+      <p class="box ok" id="doneMsg" role="status" hidden></p>
+      <div class="card">
+        <div class="field"><span id="lFeel">今日のトレーニングはどうでしたか？</span><div class="chips" id="feel" role="group" aria-labelledby="lFeel"></div></div>
+        <div class="field"><span id="lMachine">使ったマシン</span><div class="chips" id="machine" role="group" aria-labelledby="lMachine"></div></div>
+        <div id="ntcAsk" hidden>
+          <div class="field"><span id="ntcQ"></span><div class="chips" id="ntcCount" role="group" aria-labelledby="ntcQ"></div></div>
+          <div class="field" id="ntcFeelBox" hidden style="margin-top:12px"><span id="lNtcFeel">NTCのきつさ</span><div class="chips" id="ntcFeel" role="group" aria-labelledby="lNtcFeel"></div></div>
+        </div>
+        <div class="field"><span id="lPain">痛みや体調の変化</span><div class="chips" id="pain" role="group" aria-labelledby="lPain"></div></div>
+        <label class="field"><span>トレッドミルの距離（km・なくても大丈夫です）</span><input id="km" type="number" step="0.01" min="0" max="15" inputmode="decimal" placeholder="2.80"></label>
+        <p class="err" id="err" role="alert" tabindex="-1" hidden></p>
+        <button class="btn" type="button" id="send">報告する</button>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>食事</h2>
+      <div class="card">
+        <p style="font-size:15px">食事はあすけん（無料アプリ）で、朝・昼・夕の3食を写真かバーコードで記録してください。AIRNIXでは「今週何日記録したか」だけを伺います。</p>
+        <a class="btn white" id="askenLink" href="https://apps.apple.com/jp/app/id687287242" target="_blank" rel="noopener">あすけんを開く</a>
+        <div class="field"><span id="lAsken">今週、あすけんで記録した日</span><div class="chips" id="asken" role="group" aria-labelledby="lAsken"></div></div>
+        <p class="tiny" id="askenMsg" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="head"><h2>目標まで</h2><span class="tiny" id="goalDate"></span></div>
+      <div class="card" id="goal"></div>
+      <p class="tiny">体重・ウエストは、来店直後・運動前にスタッフが測ります。</p>
+    </section>
+  </div>
+
+  <p class="pad tiny" style="padding-top:20px">表示しているのはご本人の記録の数字で、効果をお約束するものではありません。体調がすぐれないときは無理をせず、スタッフにお声がけください。</p>
+  <div class="foot"><a class="tiny" href="privacy.html">プライバシーポリシー</a><button class="link" type="button" id="logout">ログアウト</button></div>
+</div>
+</div>
+<div class="overlay" id="overlay" hidden><div></div></div>
+<noscript><p class="pad" style="padding-top:40px">この画面はJavaScriptを使います。設定でJavaScriptをオンにしてください。</p></noscript>

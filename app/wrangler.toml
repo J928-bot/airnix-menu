@@ -1,0 +1,12 @@
+name = "airnix-menu"
+pages_build_output_dir = "public"
+compatibility_date = "2026-09-01"
+
+# スタッフ画面の合言葉は、コードに書かずに次のコマンドで設定する：
+#   npx wrangler pages secret put STAFF_PASSWORD
+# ローカルで試すときは .dev.vars に STAFF_PASSWORD=... を書く（.gitignore 済み）
+
+[[d1_databases]]
+binding = "DB"
+database_name = "airnix-menu"
+database_id = "ここにD1のdatabase_id"
